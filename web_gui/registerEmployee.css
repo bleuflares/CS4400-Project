@@ -1,0 +1,70 @@
+html,
+body {
+    height: 100%;
+}
+
+body {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    background-color: #f5f5f5;
+}
+
+.form-signin {
+    width: 100%;
+    max-width: 700px;
+    padding: 15px;
+    margin: auto;
+    border: 2px #4472c4 solid;
+}
+
+.row {
+    padding: 3px;
+}
+
+.btn-primary {
+    background: #249cd3 !important;
+}
+
+#titleOfForm {
+    text-align: center;
+}
+
+.label {
+    font-weight: 600;
+    padding-left: 1em;
+    padding-top: .25em;
+    font-size: .95em;
+}
+
+#lastNameLabel,
+#userTypeLabel,
+#confirmPasswordLabel {
+    margin-left: 2em;
+    margin-right: -2em;
+}
+
+#inputFirstName,
+#inputUsername,
+#inputPassword,
+#inputEmail {
+    margin-left: -1em;
+}
+
+#inputUsername {
+    padding-left: 10px !important;
+}
+
+#backButton {
+    padding-left: 3.1em;
+    padding-right: 3.1em;
+}
+
+#registerButton {
+    padding-left: 2.5em;
+    padding-right: 2.5em;
+    margin-left: 4em;
+}
