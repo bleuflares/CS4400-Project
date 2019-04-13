@@ -24,7 +24,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <meta http-equiv="refresh" content="3">
+    <!-- <meta http-equiv="refresh" content="3"> -->
 
     <link rel="stylesheet" href="..\css\_universalStyling.css">
 
@@ -55,16 +55,51 @@
         <div class="container">
 
 
-            <label>Contain Site</label>
-            <select>
-                <?php 
-                    $result = $conn->query("SELECT SiteName FROM site");
+            <div class="row">
+                <div class="col-sm-6">
+                    <label>Contain Site</label>
+                    <select>
+                        <?php 
+                            $result = $conn->query("SELECT SiteName FROM site");
+                            
+                            while ($row = $result->fetch()) {
+                                echo "<option>" . $row['SiteName'] . "</option>";
+                            }
+                        ?>
+                    </select>
+                </div>
+
+
+                <div class="col-sm-4 offset-2">
+                    <label>Transport Type </label>
+                    <select>
+                        <option value="ALL">--ALL--</option>
+                        <option value="MARTA">MARTA</option>
+                        <option value="Bus">Bus</option>
+                        <option value="Bike">Bike</option>
+                    </select>
+                </div>                
+            </div>
+
+            <div class="row">
+                <div class="col-sm-7">
+                    <label>Price Range</label>
+
+                    <input type="text" class="col-sm-4" style="text-align: center;" placeholder="">
                     
-                    while ($row = $result->fetch()) {
-                        echo "<option>" . $row['SiteName'] . "</option>";
-                    }
-                ?>
-            </select>
+                    <label> -- </label>
+
+                    <input type="text" class="col-sm-4"  style="text-align: center;" placeholder="">
+
+                </div>
+
+
+                <div class="col-sm-3 offset-1">
+                    <button class="btn btn-sm btn-primary btn-block" style="border-radius: 5px;">Filter</button>
+                </div>                
+            </div>
+
+
 
 
             <table id="test" class="table table-bordered" style="width:100%">
@@ -79,11 +114,19 @@
 
                 <tbody>
                     <?php 
-                        $result = $conn->query("select transit.TransitRoute, transit.TransitType, transit.TransitPrice, count.Total from transit inner join (select sitename, transitroute, count(*) as total from connect group by transitroute) count on transit.transitroute = count.transitroute;");
+                        $result = $conn->query("select 
+                                                    transit.TransitRoute, 
+                                                    transit.TransitType, 
+                                                    transit.TransitPrice, 
+                                                    count.Total 
+                                                from transit inner join (select 
+                                                                            sitename, 
+                                                                            transitroute, 
+                                                                            count(*) as total 
+                                                                        from connect 
+                                                                        group by transitroute) 
+                                                count on transit.transitroute = count.transitroute;");
 
-
-
-                        
                         while ($row = $result->fetch()) {
                             echo "<tr>";
                             echo    "<td style='padding-left:2.4em;'> 
@@ -97,9 +140,29 @@
                             echo "<tr>";
                         }
                     ?>
-                    
+
                 </tbody>
             </table>
+
+
+
+            <div class="row">
+
+            <div class="col-sm-2">
+                    <button class="btn btn-sm btn-primary btn-block" style="border-radius: 5px;">Back</button>
+                </div>  
+                <div class="col-sm-6 offset-1" style="text-align: right;">
+                    <label>Transit Date</label>
+
+                    <input type="date" class="col-sm-6" style="padding: 0;" placeholder="">
+
+                </div>
+
+
+                <div class="col-sm-3">
+                    <button class="btn btn-sm btn-primary btn-block" style="border-radius: 5px;">Log Transit</button>
+                </div>                
+            </div>
             
 
         </div>
