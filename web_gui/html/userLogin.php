@@ -4,7 +4,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- <meta http-equiv="refresh" content="3"> -->
+    <meta http-equiv="refresh" content="3">
 
     <link rel="stylesheet" href="..\css\userLogin.css">
 
@@ -23,12 +23,6 @@
         <label for="inputPassword" class="sr-only">Password</label>
         <input type="password" id="inputPassword" class="form-control" placeholder="Password">
 
-        <!-- <div class="checkbox mb-3">
-            <label>
-                <input type="checkbox" value="remember-me"> Remember me
-            </label>
-        </div> -->
-
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
@@ -36,9 +30,7 @@
                 </div>
 
                 <div class="col-md-6">
-                    <!-- <button class="btn btn-lg btn-primary btn-block" type="register"> -->
                     <a href="registerNavigation.html" class="btn btn-lg btn-primary btn-block">Register </a>
-                    <!-- </button> -->
                 </div>
 
             </div>
