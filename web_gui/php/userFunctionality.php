@@ -1,3 +1,9 @@
+<?php
+
+session_start();
+
+?>
+
 <!DOCTYPE html>
 <html>
 
@@ -22,20 +28,22 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <button class="btn btn-lg btn-primary btn-block" type="takeTransitButton">Take Transit</button>
+                    <a class="btn btn-lg btn-primary btn-block" type="takeTransitButton" href="./takeTransit.php">Take
+                        Transit</a>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-md-12">
-                    <button class="btn btn-lg btn-primary btn-block" id="viewTransitHistoryButton">View Transit
-                        History</button>
+                    <a class="btn btn-lg btn-primary btn-block" id="viewTransitHistoryButton"
+                        href="./transitHistory.php">View Transit
+                        History</a>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-md-12">
-                    <button class="btn btn-lg btn-primary btn-block" id="backButton">Back</button>
+                    <a class="btn btn-lg btn-primary btn-block" id="backButton" href="./userLogin.php">Back</a>
                 </div>
             </div>
 

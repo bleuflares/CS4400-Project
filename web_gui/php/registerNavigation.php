@@ -1,3 +1,8 @@
+<?php
+// Start the session
+session_start();
+?>
+
 <!DOCTYPE html>
 <html>
 
@@ -15,7 +20,6 @@
 </head>
 
 <body>
-
     <form class="form-signin">
         <h1 class="h3 mb-3 font-weight-heavy" id="titleOfForm">Register Navigation</h1>
         <!-- <div class="checkbox mb-3">
