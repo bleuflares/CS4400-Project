@@ -55,12 +55,12 @@
 
                 <div class="col-sm-12">
 
-                        <label class="col-sm-0">Site</label>
+                        <label class="col-sm-0 offset-1">Site</label>
                     <select style="margin-left: 0em;">
                         <option value="ALL">--ALL--</option>
                
                     </select>
-                    <label>Manager</label>
+                    <label class="col-sm-0 offset-3">Manager</label>
                     <select style="margin-left: 0em;">
                         <option value="ALL">--ALL--</option>
 
