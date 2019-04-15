@@ -1,10 +1,14 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
 <html>
 
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <meta http-equiv="refresh" content="3">
+    <!-- <meta http-equiv="refresh" content="3"> -->
 
     <link rel="stylesheet" href="..\css\staffFunctionality.css">
 
@@ -18,11 +22,6 @@
 
     <form class="form-signin">
         <h1 class="h3 mb-3 font-weight-heavy" id="titleOfForm">Staff Functionality</h1>
-        <!-- <div class="checkbox mb-3">
-            <label>
-                <input type="checkbox" value="remember-me"> Remember me
-            </label>
-        </div> -->
 
         <div class="container">
             <div class="row">

@@ -1,7 +1,5 @@
 <?php
-
 session_start();
-
 ?>
 
 <!DOCTYPE html>
@@ -10,7 +8,7 @@ session_start();
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <meta http-equiv="refresh" content="3">
+    <!-- <meta http-equiv="refresh" content="3"> -->
 
     <link rel="stylesheet" href="..\css\userFunctionality.css">
 

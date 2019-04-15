@@ -1,19 +1,20 @@
-<?php 
-    $servername = "localhost";
-    $username = "root";
-    $password = "1234";
-    $databaseScheme = "cs4400_testdata";
-    global $conn;
+<?php
+// Start the session
+session_start();
 
-    try {
-        $conn = new PDO("mysql:host=$servername;dbname=$databaseScheme", $username, $password);
-        // set the PDO error mode to exception
-        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        // echo "Connected successfully"; 
-    } catch(PDOException $e) {
-        echo "Connection failed: " . $e->getMessage();
-    }
-
+global $conn;
+try {
+    $conn = new PDO(
+        "mysql:host=" . $_SESSION['serverName'] . ";dbname=" . $_SESSION['databaseScheme'] . "",
+        $_SESSION["databaseUserName"],
+        $_SESSION["databasePassword"]
+    );
+    // set the PDO error mode to exception
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    echo '<script>console.log("Connected Successfully to DB")</script>';
+} catch (PDOException $e) {
+    echo '<script>console.log("%cConnection failed: ' . $e->getMessage() . '", "color:red")</script>';
+}
 ?>
 
 
@@ -33,9 +34,9 @@
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    
+
     <script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
-  
+
 
     <!-- <script type="text/javascript">
 
@@ -51,7 +52,7 @@
     <form class="form-signin">
         <h1 class="h3 mb-3 font-weight-heavy" id="titleOfForm">Take Transit</h1>
 
-        
+
         <div class="container">
 
 
@@ -59,12 +60,12 @@
                 <div class="col-sm-6">
                     <label>Contain Site</label>
                     <select>
-                        <?php 
-                            $result = $conn->query("SELECT SiteName FROM site");
-                            
-                            while ($row = $result->fetch()) {
-                                echo "<option>" . $row['SiteName'] . "</option>";
-                            }
+                        <?php
+                        $result = $conn->query("SELECT SiteName FROM site");
+
+                        while ($row = $result->fetch()) {
+                            echo "<option>" . $row['SiteName'] . "</option>";
+                        }
                         ?>
                     </select>
                 </div>
@@ -78,7 +79,7 @@
                         <option value="Bus">Bus</option>
                         <option value="Bike">Bike</option>
                     </select>
-                </div>                
+                </div>
             </div>
 
             <div class="row">
@@ -86,17 +87,17 @@
                     <label>Price Range</label>
 
                     <input type="text" class="col-sm-4" style="text-align: center;" placeholder="">
-                    
+
                     <label> -- </label>
 
-                    <input type="text" class="col-sm-4"  style="text-align: center;" placeholder="">
+                    <input type="text" class="col-sm-4" style="text-align: center;" placeholder="">
 
                 </div>
 
 
                 <div class="col-sm-3 offset-1">
                     <button class="btn btn-sm btn-primary btn-block" style="border-radius: 5px;">Filter</button>
-                </div>                
+                </div>
             </div>
 
 
@@ -113,8 +114,8 @@
                 </thead>
 
                 <tbody>
-                    <?php 
-                        $result = $conn->query("select 
+                    <?php
+                    $result = $conn->query("select 
                                                     transit.TransitRoute, 
                                                     transit.TransitType, 
                                                     transit.TransitPrice, 
@@ -127,18 +128,18 @@
                                                                         group by transitroute) 
                                                 count on transit.transitroute = count.transitroute;");
 
-                        while ($row = $result->fetch()) {
-                            echo "<tr>";
-                            echo    "<td style='padding-left:2.4em;'> 
+                    while ($row = $result->fetch()) {
+                        echo "<tr>";
+                        echo    "<td style='padding-left:2.4em;'> 
                                         <div class='radio'>
                                             <label><input type='radio' id='express' name='optradio'> " . $row['TransitRoute'] . "</label>
                                         </div>
                                     </td>";
-                            echo "<td style='text-align:center'>" . $row['TransitType'] . "</td>";
-                            echo "<td style='text-align:center'> $" . $row['TransitPrice'] . "</td>";
-                            echo "<td style='text-align:center'>" . $row['Total'] . "</td>";
-                            echo "<tr>";
-                        }
+                        echo "<td style='text-align:center'>" . $row['TransitType'] . "</td>";
+                        echo "<td style='text-align:center'> $" . $row['TransitPrice'] . "</td>";
+                        echo "<td style='text-align:center'>" . $row['Total'] . "</td>";
+                        echo "<tr>";
+                    }
                     ?>
 
                 </tbody>
@@ -148,9 +149,9 @@
 
             <div class="row">
 
-            <div class="col-sm-2">
+                <div class="col-sm-2">
                     <button class="btn btn-sm btn-primary btn-block" style="border-radius: 5px;">Back</button>
-                </div>  
+                </div>
                 <div class="col-sm-6 offset-1" style="text-align: right;">
                     <label>Transit Date</label>
 
@@ -161,9 +162,9 @@
 
                 <div class="col-sm-3">
                     <button class="btn btn-sm btn-primary btn-block" style="border-radius: 5px;">Log Transit</button>
-                </div>                
+                </div>
             </div>
-            
+
 
         </div>
 

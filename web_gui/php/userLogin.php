@@ -48,6 +48,11 @@ if (isset($_POST['submit'])  && !empty($_POST['email']) && !empty($_POST['passwo
 
         if (strpos($userType, "Employee") !== false && strpos($userType, "Visitor") === false) {
             echo '<script>console.log("%cUser is EMPLOYEE", "color:blue")</script>';
+
+            $user_userEmail_Result = $conn->query("SELECT u.*, ue.Email 
+                            FROM user AS u INNER JOIN useremail AS ue 
+                            ON u.Username = ue.Username
+                            WHERE ue.Email = '" . $email . "' AND u.Password = '" . $password . "';");
         } else if (strpos($userType, "Employee") === false && strpos($userType, "Visitor") !== false) {
             echo '<script>console.log("%cUser is ONLY a VISITOR", "color:blue")</script>';
 
