@@ -141,7 +141,7 @@ if (isset($_POST['fname'])  && !empty($_POST['lname']) && !empty($_POST['usernam
 
             <div class="form-row">'
                 <div class="form-group row col-sm-12 offset-3">
-                    <button type="submit" class="btn btn-primary" id="backButton">Back</button>
+                    <a type="submit" class="btn btn-primary" id="backButton" href="./registerNavigation.php">Back</a>
                     <button type="submit" class="btn btn-primary" id="registerButton">Register</button>
                 </div>
             </div>

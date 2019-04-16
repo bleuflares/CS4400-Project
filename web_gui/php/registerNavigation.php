@@ -45,33 +45,36 @@ try {
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <button class="btn btn-lg btn-primary btn-block" type="userOnly">User Only</button>
+                    <a class="btn btn-lg btn-primary btn-block" type="userOnly" href="./registerUser.php">User Only</a>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-md-12">
-                    <button class="btn btn-lg btn-primary btn-block" type="visitorOnly">Visitor Only</button>
+                    <a class="btn btn-lg btn-primary btn-block" type="visitorOnly" href="./registerVisitor.php">Visitor
+                        Only</a>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-md-12">
-                    <button class="btn btn-lg btn-primary btn-block" type="employeeOnly">Employee Only</button>
-                </div>
-            </div>
-
-
-            <div class="row">
-                <div class="col-md-12">
-                    <button class="btn btn-lg btn-primary btn-block" type="employeeVisitor">Employee-Visitor</button>
+                    <a class="btn btn-lg btn-primary btn-block" type="employeeOnly"
+                        href="./registerEmployee.php">Employee Only</a>
                 </div>
             </div>
 
 
             <div class="row">
                 <div class="col-md-12">
-                    <button class="btn btn-lg btn-primary btn-block" type="back">Back</button>
+                    <a class="btn btn-lg btn-primary btn-block" type="employeeVisitor"
+                        href="./registerEmployeeVisitor.php">Employee-Visitor</a>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-md-12">
+                    <a class="btn btn-lg btn-primary btn-block" type="back" href="./userLogin.php">Back</a>
                 </div>
             </div>
 
