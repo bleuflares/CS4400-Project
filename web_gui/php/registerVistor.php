@@ -19,49 +19,42 @@ try {
 
 <?php
 
-// echo '<script>console.log("BOOL' . $_POST['zipInput'] . ')</script>';
+if (isset($_POST['registerButton'])  && !empty($_POST['fname'])&& !empty($_POST['lname']) && !empty($_POST['username']) && !empty($_POST['password']) && !empty($_POST['cPass'])&& !empty($_POST['email'])){
 
-
-if (isset($_POST['registerButton'])  && !empty($_POST['fname'])&& !empty($_POST['lname']) && !empty($_POST['username']) && !empty($_POST['pass']) && !empty($_POST['cpass'])&& !empty($_POST['email'])) {
-
-    echo '<script>console.log("%cSuccessful Creation", "color:green")</script>';
-
-    // echo '<script>console.log("Name Input: ' . $_POST['nameInput'] . '")</script>';
-    // echo '<script>console.log("Zip Input: ' . $_POST['zipInput'] . '")</script>';
-    // echo '<script>console.log("address Input: ' . $_POST['addressInput'] . '")</script>';
-    // echo '<script>console.log("manager Input: ' . $_POST['managerInput'] . '")</script>';
-    // echo '<script>console.log("open Input: ' . $_POST['openInput'] . '")</script>';
+   echo '<script>console.log("First Name Input: ' . $_POST['fname'] . '")</script>';
+   echo '<script>console.log(" Last Name Input: ' . $_POST['lname'] . '")</script>';
+   echo '<script>console.log("Username Input: ' . $_POST['username'] . '")</script>';
+   echo '<script>console.log("Password Input: ' . $_POST['password'] . '")</script>';
+   echo '<script>console.log("cPass Input: ' . $_POST['cPass'] . '")</script>';
+   // echo '<script>console.log("email Input: ' . $_POST['email'] . '")</script>'
 
     $fname = $_POST['fname'] ;
     $lname = $_POST['lname'];
     $username = $_POST['username'] ;
-    $pass = $_POST['pass'];
-    $email = $_POST['email'];
-    $cPass = $_POST['cpass'];
-    $password=$_POST['pass'];
-    if($cPass==$pass){
-      $result = $conn->query("INSERT into user VALUES('$username', '$pass', 'pending', '.$fname', '$lname', 'User')");
-    }
-    
-    else{
-        
-    }
+    $password = $_POST['password'];
+    $cPass = $_POST['cPass'] ;
+    $email = $_POST['email'] ;
 
-} else {
-    echo '<script>console.log("%cFailed Creation", "color:red")</script>';
+   if($password == $cPass){
+           $result = $conn->query("INSERT into user VALUES('$username', '$password','Pending', '$fname', '$lname', 'User')");
+          $result = $conn->query("INSERT into useremail VALUES('$username', '$email')");
+    
+   }else {
+    echo '<script>console.log("%cPlease fill in matching password", "color:red")</script>';;
+   }
 }
+
 ?>
+
 <!DOCTYPE html>
 <html>
-
-<!-- style="border:red 1px solid;" -->
 
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- <meta http-equiv="refresh" content="3"> -->
 
-    <link rel="stylesheet" href="..\css\registerUser.css">
+    <link rel="stylesheet" href="..\css\registerVisitor.css">
 
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -70,27 +63,28 @@ if (isset($_POST['registerButton'])  && !empty($_POST['fname'])&& !empty($_POST[
 
 <body>
 
-    <form class="form-signin" method="post">
+    <form class="form-signin" method ="post">
 
-        <h1 class="mb-3 font-weight-heavy" id="titleOfForm">Register User</h3>
+        <h1 class="mb-3 font-weight-heavy" id="titleOfForm">Register Visitor</h3>
 
             <div class="form-row">
 
                 <div class="form-group row col-sm-6">
+
                     <label for="inputFirstName" class="label .col-form-label col-sm-4" id="firstNameLabel">First
                         Name</label>
 
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" id="inputFirstName" name = "fname">
+                        <input type="text" class="form-control" id="inputFirstName" name="fname">
                     </div>
                 </div>
 
                 <div class="form-group row col-sm-6">
-                    <label for="inputLastName" class="label .col-form-label col-sm-4" id="lastNameLabel" >Last
+                    <label for="inputLastName" class="label .col-form-label col-sm-4" id="lastNameLabel">Last
                         Name</label>
 
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" id="inputLastName" name="lname">
+                        <input type="text" class="form-control" id="inputLastName" name ="lname">
                     </div>
                 </div>
 
@@ -103,7 +97,7 @@ if (isset($_POST['registerButton'])  && !empty($_POST['fname'])&& !empty($_POST[
                         id="userNameLabel">Username</label>
 
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" id="inputUsername"name="username">
+                        <input type="text" class="form-control" id="inputUsername" name = "username">
                     </div>
                 </div>
 
@@ -116,7 +110,7 @@ if (isset($_POST['registerButton'])  && !empty($_POST['fname'])&& !empty($_POST[
                         id="passwordLabel">Password</label>
 
                     <div class="col-sm-8">
-                        <input type="password" class="form-control" id="inputPassword" name="pass">
+                        <input type="password" class="form-control" id="inputPassword"name = "password">
                     </div>
                 </div>
 
@@ -125,7 +119,7 @@ if (isset($_POST['registerButton'])  && !empty($_POST['fname'])&& !empty($_POST[
                         id="confirmPasswordLabel">Confirm Password</label>
 
                     <div class="col-sm-8">
-                        <input type="password" class="form-control" id="inputConfirmPassword" name="cpass">
+                        <input type="password" class="form-control" id="inputConfirmPassword" name = "cPass">
                     </div>
                 </div>
 
@@ -138,7 +132,7 @@ if (isset($_POST['registerButton'])  && !empty($_POST['fname'])&& !empty($_POST[
                     <label for="inputEmail" class="label .col-form-label col-sm-2" id="emailLabel">Email</label>
 
                     <div class="col-sm-6">
-                        <input type="text" class="form-control" id="inputEmail" name="email">
+                        <input type="text" class="form-control" id="inputEmail" name = "email">
                     </div>
 
                     <button type="submit" class="btn btn-outline-dark">Add</button>
@@ -149,7 +143,7 @@ if (isset($_POST['registerButton'])  && !empty($_POST['fname'])&& !empty($_POST[
             <div class="form-row">'
                 <div class="form-group row col-sm-12 offset-3">
                     <button type="submit" class="btn btn-primary" id="backButton">Back</button>
-                    <button type="submit" class="btn btn-primary" id="registerButton"name="registerButton">Register</button>
+                    <button type="submit" class="btn btn-primary" id="registerButton" name="registerButton">Register</button>
                 </div>
             </div>
 
