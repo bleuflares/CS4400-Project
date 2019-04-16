@@ -17,6 +17,44 @@ try {
 }
 ?>
 
+
+
+<?php
+
+if (isset($_POST['fname'])&& !empty($_POST['lname'])&& !empty($_POST['username'])&& !empty($_POST['password'])&& !empty($_POST['cPass'])&& !empty($_POST['email'])&& !empty($_POST['phone'])&&!empty($_POST['address'])&& !empty($_POST['city']) && !empty($_POST['state'])&& !empty($_POST['zip'])&& !empty($_POST['type'])){
+    // ){
+    //
+
+   echo '<script>console.log("First Name Input: ' . $_POST['fname'] . '")</script>';
+   echo '<script>console.log(" Last Name Input: ' . $_POST['lname'] . '")</script>';
+   echo '<script>console.log("Username Input: ' . $_POST['username'] . '")</script>';
+   echo '<script>console.log("Password Input: ' . $_POST['password'] . '")</script>';
+   echo '<script>console.log("cPass Input: ' . $_POST['cPass'] . '")</script>';
+   // echo '<script>console.log("email Input: ' . $_POST['email'] . '")</script>'
+
+    $fname = $_POST['fname'] ;
+    $lname = $_POST['lname'];
+    $username = $_POST['username'] ;
+    $password = $_POST['password'];
+    $cPass = $_POST['cPass'] ;
+    $email = $_POST['email'] ;
+    $phone = $_POST['phone'];
+    $address = $_POST['address'];
+    $city = $_POST['city'];
+    $state = $_POST['state'];
+    $zip = $_POST['zip'];
+    $type = $_POST['type'];
+
+   if($password == $cPass){
+          $result = $conn->query("INSERT into user VALUES('$username', '$password','Pending', '$fname', '$lname', 'Employee, Visitor')");
+          $result = $conn->query("INSERT into Employee VALUES('$username', null,'$phone','$address','$city','$state','$zip','@type')");
+    
+    
+   }
+}
+
+?>
+
 <!DOCTYPE html>
 <html>
 
@@ -34,7 +72,7 @@ try {
 
 <body>
 
-    <form class="form-signin">
+    <form class="form-signin" method="POST">
 
         <h1 class="mb-3 font-weight-heavy" id="titleOfForm">Register Employee-Visitor</h3>
 
@@ -45,7 +83,7 @@ try {
                         Name</label>
 
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" id="inputFirstName">
+                        <input type="text" class="form-control" id="inputFirstName" name="fname">
                     </div>
                 </div>
 
@@ -54,7 +92,7 @@ try {
                         Name</label>
 
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" id="inputLastName">
+                        <input type="text" class="form-control" id="inputLastName" name ="lname">
                     </div>
                 </div>
 
@@ -67,7 +105,7 @@ try {
                         id="userNameLabel">Username</label>
 
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" id="inputUsername">
+                        <input type="text" class="form-control" id="inputUsername" name = "username">
                     </div>
                 </div>
 
@@ -76,7 +114,7 @@ try {
                         Type</label>
 
                     <div class="col-sm-8">
-                        <select id="userTypeSelect" class="form-control">
+                        <select id="userTypeSelect" class="form-control" name ="type">
                             <option selected>Manager</option>
                             <option>Staff</option>
                         </select>
@@ -92,7 +130,7 @@ try {
                         id="passwordLabel">Password</label>
 
                     <div class="col-sm-8">
-                        <input type="password" class="form-control" id="inputPassword">
+                        <input type="password" class="form-control" id="inputPassword" name = "password">
                     </div>
                 </div>
 
@@ -101,7 +139,7 @@ try {
                         id="confirmPasswordLabel">Confirm Password</label>
 
                     <div class="col-sm-8">
-                        <input type="password" class="form-control" id="inputConfirmPassword">
+                        <input type="password" class="form-control" id="inputConfirmPassword" name = "cPass">
                     </div>
                 </div>
 
@@ -114,16 +152,16 @@ try {
                     <label for="inputPassword" class="label .col-form-label col-sm-4" id="passwordLabel">Phone</label>
 
                     <div class="col-sm-8">
-                        <input type="tel" class="form-control" id="inputPassword">
+                        <input type="tel" class="form-control" id="inputPassword1" name="phone">
                     </div>
                 </div>
 
                 <div class="form-group row col-sm-6">
                     <label for="inputConfirmPassword" class="label .col-form-label col-sm-4"
-                        id="confirmPasswordLabel">Address</label>
+                        id="confirmPasswordLabel2">Address</label>
 
                     <div class="col-sm-8">
-                        <input type="password" class="form-control" id="inputConfirmPassword">
+                        <input type="password" class="form-control" id="inputConfirmPassword3" name ="address">
                     </div>
                 </div>
 
@@ -134,7 +172,7 @@ try {
                 <div class="form-group row col-sm-4">
                     <label for="inputCity" class="label .col-form-label col-sm-2">City</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="inputCity">
+                        <input type="text" class="form-control" id="inputCity" name = "city">
                     </div>
                 </div>
 
@@ -142,7 +180,7 @@ try {
                     <label for="inputState" class="label .col-form-label col-sm-3">State</label>
 
                     <div class="col-sm-9">
-                        <select id="inputState" class="form-control">
+                        <select id="inputState" class="form-control" name ="state">
                             <option value="AK">AK</option>
                             <option value="AL">AL</option>
                             <option value="AR">AR</option>
@@ -204,7 +242,7 @@ try {
                     <label for="inputZip" class="label .col-form-label col-sm-2">Zip</label>
 
                     <div class="col-sm-9">
-                        <input type="text" class="form-control" id="inputZip">
+                        <input type="text" class="form-control" id="inputZip" name="zip">
                     </div>
 
                 </div>
@@ -218,7 +256,7 @@ try {
                     <label for="inputEmail" class="label .col-form-label col-sm-2" id="emailLabel">Email</label>
 
                     <div class="col-sm-6">
-                        <input type="text" class="form-control" id="inputEmail">
+                        <input type="text" class="form-control" id="inputEmail" name="email">
                     </div>
 
                     <button type="submit" class="btn btn-outline-dark">Add</button>
