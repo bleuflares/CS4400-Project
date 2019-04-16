@@ -24,7 +24,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <meta http-equiv="refresh" content="3">
+    <!-- <meta http-equiv="refresh" content="3"> -->
 
     <link rel="stylesheet" href="..\css\_universalStyling.css">
 
@@ -57,47 +57,45 @@
 
             <div class="row">
                 <div class="col-sm-1 offset-0">
-                    <label>Name </label>
+                    <label>Name</label>
                 </div>
-                    <div class="col-sm-3 offset-1">
+                    <div class="col-sm-3 offset-0">
                     <input type="text" class="form-control col-sm-0 offset-0" id="inputAdress">
 
                 </div>
 
 
-                <div class="col-sm-1 offset-0">
-                    <label>Description Keyword </label>
+                <div class="col-sm-4 offset-0">
+                    <label>Description Keyword</label>
                 </div>
-                    <div class="col-sm-3 offset-1">
+                    <div class="col-sm-3 offset-0">
                     <input type="text" class="form-control col-sm-0 offset-0" id="inputAdress">
 
                 </div>
             </div>
 
             <div class="row">
-                <div class="col-sm-7">
-                    <label>Contain Site</label>
-                                        <select>
-                        <?php
-                            $result = $conn->query("SELECT SiteName FROM site");
-
-                            while ($row = $result->fetch()) {
-                                echo "<option>" . $row['SiteName'] . "</option>";
-                            }
-                        ?>
-                    </select>
-
-<!--                     <input type="text" class="col-sm-4" style="text-align: center;" placeholder="">
-
-                    <label> -- </label>
-
-                    <input type="text" class="col-sm-4"  style="text-align: center;" placeholder=""> -->
+                <div class="col-sm-1 offset-0">
+                    <label>Start Date</label>
+                </div>
+                    <div class="col-sm-3 offset-0">
+                    <input type="text" class="form-control col-sm-0 offset-0" id="inputAdress">
 
                 </div>
 
 
+                <div class="col-sm-3 offset-1">
+                    <label>End Date</label>
+                </div>
+                    <div class="col-sm-3 offset-0">
+                    <input type="text" class="form-control col-sm-0 offset-0" id="inputAdress">
+
+                </div>
+            </div>
+
+            <div class="row">
                 <div class="col-sm-0 offset-0">
-                    <label>Price Range</label>
+                    <label>Duration Range</label>
                 </div>
                     <div class="col-sm-3">
 
@@ -108,13 +106,43 @@
                     <input type="text" class="col-sm-1"  style="text-align: center;" placeholder="">
                 </div>
 
+
+               <div class="col-sm-0 offset-0">
+                    <label>Total Visits Range</label>
+                </div>
+                    <div class="col-sm-3">
+
+                    <input type="text" class="col-sm-1" style="text-align: center;" placeholder="">
+
+                    <label> -- </label>
+
+                    <input type="text" class="col-sm-1"  style="text-align: center;" placeholder="">
+                </div>
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-4 offset-2">
+                    <label>Total Revenue Range</label>
+                </div>
+                    <div class="col-sm-3">
+
+                    <input type="text" class="col-sm-1" style="text-align: center;" placeholder="">
+
+                    <label> -- </label>
+
+                    <input type="text" class="col-sm-1"  style="text-align: center;" placeholder="">
+                </div>
+            </div>
+
             <div class="row col-sm-12">
 
-            <div class="col-sm-0 offset-3">
+            <div class="col-sm-0 offset-2">
                     <button class="btn btn-sm btn-primary btn-block col-sm-0" style="border-radius: 5px;">Filter</button>
                 </div>
 
-                <div class="col-sm-0 offset-3" style="text-align: right;">
+                <div class="col-sm-0 offset-2" style="text-align: right;">
                     <input id ="button" class="btn btn-sm btn-primary btn-block col-sm-0"  type="submit" name="button" onclick="filter();" value="Create"/>
 
 
@@ -122,7 +150,7 @@
 
 
                 <div class="col-sm-0 offset-1">
-                    <input id ="button" class="btn btn-sm btn-primary btn-block col-sm-0"  type="submit" name="button" onclick="myFunction();" value="Edit"/>
+                    <input id ="button" class="btn btn-sm btn-primary btn-block col-sm-0"  type="submit" name="button" onclick="myFunction();" value="View/Edit"/>
                 </div>
                  <div class="col-sm-0 offset-1">
                     <input id ="button" class="btn btn-sm btn-primary btn-block col-sm-0"  type="submit" name="button" onclick="myFunction();" value="Delete"/>
@@ -139,42 +167,15 @@
             <table id="test" class="table table-bordered" style="width:100%">
                 <thead>
                     <tr>
-                        <th style='text-align:center'>Route</th>
-                        <th style='text-align:center'>Transport Type</th>
-                        <th style='text-align:center'>Price</th>
-                        <th style='text-align:center'># Connected Sites</th>
-                         <th style='text-align:center'># Transit Loggged</th>
+                        <th style='text-align:center'>Name</th>
+                        <th style='text-align:center'>Staff Count</th>
+                        <th style='text-align:center'>Duration (Days)</th>
+                        <th style='text-align:center'>Total Visits</th>
+                         <th style='text-align:center'>Total Revenue ($)</th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    <?php
-                        $result = $conn->query("select
-                                                    transit.TransitRoute,
-                                                    transit.TransitType,
-                                                    transit.TransitPrice,
-                                                    count.Total
-                                                from transit inner join (select
-                                                                            sitename,
-                                                                            transitroute,
-                                                                            count(*) as total
-                                                                        from connect
-                                                                        group by transitroute)
-                                                count on transit.transitroute = count.transitroute;");
-
-                        while ($row = $result->fetch()) {
-                            echo "<tr>";
-                            echo    "<td style='padding-left:2.4em;'>
-                                        <div class='radio'>
-                                            <label><input type='radio' id='express' name='optradio'> " . $row['TransitRoute'] . "</label>
-                                        </div>
-                                    </td>";
-                            echo "<td style='text-align:center'>" . $row['TransitType'] . "</td>";
-                            echo "<td style='text-align:center'> $" . $row['TransitPrice'] . "</td>";
-                            echo "<td style='text-align:center'>" . $row['Total'] . "</td>";
-                            echo "<tr>";
-                        }
-                    ?>
 
                 </tbody>
             </table>
