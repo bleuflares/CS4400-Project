@@ -22,7 +22,7 @@ try {
 // echo '<script>console.log("BOOL' . $_POST['zipInput'] . ')</script>';
 
 
-if (isset($_POST['registerButton'])  && !empty($_POST['fname'])&& !empty($_POST['lname']) && !empty($_POST['username']) && !empty($_POST['pass']) && !empty($_POST['cpass'])&& !empty($_POST['email'])) {
+if (isset($_POST['registerButton'])  && !empty($_POST['fname']) && !empty($_POST['lname']) && !empty($_POST['username']) && !empty($_POST['pass']) && !empty($_POST['cpass']) && !empty($_POST['email'])) {
 
     echo '<script>console.log("%cSuccessful Creation", "color:green")</script>';
 
@@ -32,18 +32,22 @@ if (isset($_POST['registerButton'])  && !empty($_POST['fname'])&& !empty($_POST[
     // echo '<script>console.log("manager Input: ' . $_POST['managerInput'] . '")</script>';
     // echo '<script>console.log("open Input: ' . $_POST['openInput'] . '")</script>';
 
-    $fname = $_POST['fname'] ;
+    $fname = $_POST['fname'];
     $lname = $_POST['lname'];
-    $username = $_POST['username'] ;
+    $username = $_POST['username'];
     $pass = $_POST['pass'];
     $email = $_POST['email'];
     $cPass = $_POST['cpass'];
-    $password=$_POST['pass'];
-    if($cPass==$pass){
-      $result = $conn->query("INSERT into user VALUES('$username', '$pass', 'pending', '.$fname', '$lname', 'User')");
-             $result = $conn->query("INSERT into useremail VALUES('$username', '$email')");
-    
-} }else {
+    $password = $_POST['pass'];
+    if ($cPass == $pass) {
+        $result = $conn->query("INSERT into user VALUES('$username', '$pass', 'pending', '.$fname', '$lname', 'User')");
+        $result = $conn->query("INSERT into useremail VALUES('$username', '$email')");
+    } else {
+        echo '<script language="javascript">';
+        echo 'alert("Passwords Do Not Match. Please try registering again.")';
+        echo '</script>';
+    }
+} else {
     echo '<script>console.log("%cFailed Creation", "color:red")</script>';
 }
 ?>
@@ -77,12 +81,12 @@ if (isset($_POST['registerButton'])  && !empty($_POST['fname'])&& !empty($_POST[
                         Name</label>
 
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" id="inputFirstName" name = "fname">
+                        <input type="text" class="form-control" id="inputFirstName" name="fname">
                     </div>
                 </div>
 
                 <div class="form-group row col-sm-6">
-                    <label for="inputLastName" class="label .col-form-label col-sm-4" id="lastNameLabel" >Last
+                    <label for="inputLastName" class="label .col-form-label col-sm-4" id="lastNameLabel">Last
                         Name</label>
 
                     <div class="col-sm-8">
@@ -99,7 +103,7 @@ if (isset($_POST['registerButton'])  && !empty($_POST['fname'])&& !empty($_POST[
                         id="userNameLabel">Username</label>
 
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" id="inputUsername"name="username">
+                        <input type="text" class="form-control" id="inputUsername" name="username">
                     </div>
                 </div>
 
@@ -145,7 +149,8 @@ if (isset($_POST['registerButton'])  && !empty($_POST['fname'])&& !empty($_POST[
             <div class="form-row">'
                 <div class="form-group row col-sm-12 offset-3">
                     <button type="submit" class="btn btn-primary" id="backButton">Back</button>
-                    <button type="submit" class="btn btn-primary" id="registerButton"name="registerButton">Register</button>
+                    <button type="submit" class="btn btn-primary" id="registerButton"
+                        name="registerButton">Register</button>
                 </div>
             </div>
 
