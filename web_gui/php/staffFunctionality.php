@@ -26,35 +26,38 @@ session_start();
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <button class="btn btn-lg btn-primary btn-block" type="userOnly">Manage Profile</button>
+                    <a class="btn btn-lg btn-primary btn-block" type="userOnly" href="./manageProfile.php">Manage
+                        Profile</a>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-md-12">
-                    <button class="btn btn-lg btn-primary btn-block" type="visitorOnly">View Schedule</button>
+                    <a class="btn btn-lg btn-primary btn-block" type="visitorOnly" href="./viewSchedule.php">View
+                        Schedule</a>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-md-12">
-                    <button class="btn btn-lg btn-primary btn-block" type="employeeOnly">Take Transit</button>
-                </div>
-            </div>
-
-
-            <div class="row">
-                <div class="col-md-12">
-                    <button class="btn btn-lg btn-primary btn-block" type="employeeVisitor"
-                        style="padding-left: 0px; padding-right: 0px;">View Transit
-                        History</button>
+                    <a class="btn btn-lg btn-primary btn-block" type="employeeOnly" href="./takeTransit.php">Take
+                        Transit</a>
                 </div>
             </div>
 
 
             <div class="row">
                 <div class="col-md-12">
-                    <button class="btn btn-lg btn-primary btn-block" type="back">Back</button>
+                    <a class="btn btn-lg btn-primary btn-block" type="employeeVisitor"
+                        style="padding-left: 0px; padding-right: 0px;" href="./transitHistory.php">View Transit
+                        History</a>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-md-12">
+                    <a class="btn btn-lg btn-primary btn-block" type="back" href="./userLogin.php">Back</a>
                 </div>
             </div>
 

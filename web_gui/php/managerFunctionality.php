@@ -31,33 +31,38 @@ session_start();
                 </div>
 
                 <div class="col-md-4 offset-2">
-                    <button class="btn btn-lg btn-primary btn-block" type="userOnly">View Site Report</button>
+                    <a class="btn btn-lg btn-primary btn-block" type="userOnly" href="./siteReport.php">View Site
+                        Report</a>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-md-4 offset-1">
-                    <button class="btn btn-lg btn-primary btn-block" type="visitorOnly">Manage Event</button>
+                    <a class="btn btn-lg btn-primary btn-block" type="visitorOnly" href="./manageEvent.php">Manage
+                        Event</a>
                 </div>
                 <div class="col-md-4 offset-2">
-                    <button class="btn btn-lg btn-primary btn-block" type="back">Take Transit</button>
+                    <a class="btn btn-lg btn-primary btn-block" type="back" href="./takeTransit.php">Take
+                        Transit</a>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-md-4 offset-1">
-                    <button class="btn btn-lg btn-primary btn-block" type="employeeOnly">View Staff</button>
+                    <a class="btn btn-lg btn-primary btn-block" type="employeeOnly" href="./viewStaff.php">View
+                        Staff</a>
                 </div>
 
                 <div class="col-md-4 offset-2">
-                    <button class="btn btn-lg btn-primary btn-block" type="back"
-                        style="padding-left: 0px; padding-right: 0px;">Veiw Transit History</button>
+                    <a class="btn btn-lg btn-primary btn-block" type="back"
+                        style="padding-left: 0px; padding-right: 0px;" href="./transitHistory.php">Veiw Transit
+                        History</a>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-md-4 offset-4">
-                    <button class="btn btn-lg btn-primary btn-block" type="employeeVisitor">Back</button>
+                    <a class="btn btn-lg btn-primary btn-block" type="employeeVisitor" href="./userLogin.php">Back</a>
                 </div>
             </div>
 

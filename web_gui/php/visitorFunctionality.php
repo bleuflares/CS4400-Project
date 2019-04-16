@@ -26,32 +26,37 @@ session_start();
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <button class="btn btn-lg btn-primary btn-block" type="userOnly">Explore Event</button>
+                    <a class="btn btn-lg btn-primary btn-block" type="userOnly" href="./exploreEvent.php">Explore
+                        Event</a>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-md-12">
-                    <button class="btn btn-lg btn-primary btn-block" type="visitorOnly">Explore Site</button>
+                    <a class="btn btn-lg btn-primary btn-block" type="visitorOnly" href="./exploreSite.php">Explore
+                        Site</a>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-md-12">
-                    <button class="btn btn-lg btn-primary btn-block" type="employeeOnly">View Visit History</button>
+                    <a class="btn btn-lg btn-primary btn-block" type="employeeOnly" href="./visitorHistory.php">View
+                        Visit History</a>
                 </div>
             </div>
 
 
             <div class="row">
                 <div class="col-md-12">
-                    <button class="btn btn-lg btn-primary btn-block" type="employeeVisitor">Take Transit</button>
+                    <a class="btn btn-lg btn-primary btn-block" type="employeeVisitor" href="./takeTransit.php">Take
+                        Transit</a>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-md-12">
-                    <a class="btn btn-lg btn-primary btn-block" type="back" href="./transitHistory.php">View Transit
+                    <a class="btn btn-lg btn-primary btn-block" type="back" href="./transitHistory.php"
+                        href="./transitHistory.php">View Transit
                         History</a>
                 </div>
             </div>
@@ -59,7 +64,7 @@ session_start();
 
             <div class="row">
                 <div class="col-md-12">
-                    <button class="btn btn-lg btn-primary btn-block" type="back">Back</button>
+                    <a class="btn btn-lg btn-primary btn-block" type="back" href="./userLogin.php">Back</a>
                 </div>
             </div>
 
