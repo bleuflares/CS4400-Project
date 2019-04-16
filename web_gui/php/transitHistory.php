@@ -35,16 +35,22 @@ try {
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+
     <script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
 
 
-    <!-- <script type="text/javascript">
-
+    <script type="text/javascript">
     $(document).ready(function() {
-        $('#test').DataTable();
-    } );
+        var table = $('#table1').DataTable({
+            // "stateSave": true
 
-    </script> -->
+        });
+
+    });
+    </script>
+
+
     <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
 </head>
 
@@ -104,7 +110,7 @@ try {
                 </div>
             </div>
 
-            <table id="test" class="table table-bordered" style="width:100%">
+            <table id="table1" class="table table-bordered" style="width:100%">
                 <thead>
                     <tr>
                         <th style='text-align:center'>Date</th>
