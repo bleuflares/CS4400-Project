@@ -78,17 +78,17 @@
                 <div class="col-sm-1 offset-0">
                     <label>Start Date</label>
                 </div>
-                    <div class="col-sm-3 offset-0">
-                    <input type="text" class="form-control col-sm-0 offset-0" id="inputAdress">
+                    <div class="col-sm-4 offset-0">
+                    <input type="Date" class="form-control col-sm-0 offset-0" id="inputAdress">
 
                 </div>
 
 
-                <div class="col-sm-3 offset-1">
+                <div class="col-sm-2 offset-0">
                     <label>End Date</label>
                 </div>
-                    <div class="col-sm-3 offset-0">
-                    <input type="text" class="form-control col-sm-0 offset-0" id="inputAdress">
+                    <div class="col-sm-4 offset-0">
+                    <input type="Date" class="form-control col-sm-0 offset-0" id="inputAdress">
 
                 </div>
             </div>
