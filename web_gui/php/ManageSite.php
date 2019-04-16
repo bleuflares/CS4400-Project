@@ -48,24 +48,20 @@
 </head>
 
 <body>
-    <form class="form-signin">
-        <h1 class="h3 mb-3 font-weight-heavy" id="titleOfForm">Manage User</h1>
 
 
-        <div class="container">
 
             <div class="row">
-                <div class="col-sm-12">
-                    <label>Username</label>
 
-                    <input type="text" class="col-sm-1" style="text-align: center; margin-left: 0.5\em; padding: 0em;" placeholder="">
-                        <label>Site </label>
-                    <select style="margin-left: 1em;">
+                <div class="col-sm-12">
+
+                        <label class="col-sm-0 offset-1">Site</label>
+                    <select style="margin-left: 0em;">
                         <option value="ALL">--ALL--</option>
                
                     </select>
-                    <label>Manager</label>
-                    <select style="margin-left: 1em;">
+                    <label class="col-sm-0 offset-3">Manager</label>
+                    <select style="margin-left: 0em;">
                         <option value="ALL">--ALL--</option>
 
 
@@ -90,11 +86,11 @@
 
 
             <div class="form-row">'
-                <div class="form-group row col-sm-12 offset-3">
-                    <button type="submit" class="btn btn-primary" id="backButton">Filter</button>
-                    <button type="submit" class="btn btn-primary" id="registerButton">Create</button>
-                    <button type="submit" class="btn btn-primary" id="registerButton">Edit</button>
-                    <button type="submit" class="btn btn-primary" id="registerButton">Delete</button>
+                <div class="form-group row col-sm-12">
+                    <button type="submit" class="btn btn-primary offset-2" id="backButton">Filter</button>
+                    <button type="submit" class="btn btn-primary offset-1" id="registerButton">Create</button>
+                    <button type="submit" class="btn btn-primary offset-1" id="registerButton">Edit</button>
+                    <button type="submit" class="btn btn-primary offset-1" id="registerButton">Delete</button>
                 </div>
 
 
