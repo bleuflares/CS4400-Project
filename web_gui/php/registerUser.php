@@ -41,13 +41,9 @@ if (isset($_POST['registerButton'])  && !empty($_POST['fname'])&& !empty($_POST[
     $password=$_POST['pass'];
     if($cPass==$pass){
       $result = $conn->query("INSERT into user VALUES('$username', '$pass', 'pending', '.$fname', '$lname', 'User')");
-    }
+             $result = $conn->query("INSERT into useremail VALUES('$username', '$email')");
     
-    else{
-        
-    }
-
-} else {
+} }else {
     echo '<script>console.log("%cFailed Creation", "color:red")</script>';
 }
 ?>
