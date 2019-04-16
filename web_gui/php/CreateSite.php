@@ -24,15 +24,24 @@ try {
 // echo '<script>console.log("BOOL' . $_POST['zipInput'] . ')</script>';
 
 
-if (isset($_POST['createSite'])  && !empty($_POST['nameInput'])) {
+if (isset($_POST['nameInput'])  && !empty($_POST['zipInput']) && !empty($_POST['addressInput']) && !empty($_POST['managerInput']) && !empty($_POST['openInput'])) {
 
     echo '<script>console.log("%cSuccessful Creation", "color:green")</script>';
 
     echo '<script>console.log("Name Input: ' . $_POST['nameInput'] . '")</script>';
+    echo '<script>console.log("Zip Input: ' . $_POST['zipInput'] . '")</script>';
+    echo '<script>console.log("address Input: ' . $_POST['addressInput'] . '")</script>';
+    echo '<script>console.log("manager Input: ' . $_POST['managerInput'] . '")</script>';
+    echo '<script>console.log("open Input: ' . $_POST['openInput'] . '")</script>';
 
-
-    // Insert into 
-    // $result = $conn->query("INSERT site VALUES('name2','address2', 12345,'N/A','no-one2');");
+    $nameInput = $_POST['nameInput'] ;
+    $zipInput = $_POST['zipInput'];
+    $addressInput = $_POST['addressInput'] ;
+    $managerInput = $_POST['managerInput'];
+    $openInput = $_POST['openInput'] ;
+      $result = $conn->query("INSERT into site VALUES('$nameInput', '$addressInput', '$zipInput', '.$openInput', '.$managerInput.')");
+    
+    // $result = $conn->query("INSERT into site VALUES(".$_POST['nameInput'].", ".$_POST['addressInput'].", ".$_POST['zipInput']", ".$_POST['openInput'].", ".$_POST['managerInput'].")");
 
 
 } else {
@@ -82,7 +91,7 @@ if (isset($_POST['createSite'])  && !empty($_POST['nameInput'])) {
                         value="j">Zipcode</label>
 
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" id="inputLastName">
+                        <input type="text" class="form-control" id="inputLastName" name = "zipInput">
                     </div>
                 </div>
 
@@ -91,11 +100,10 @@ if (isset($_POST['createSite'])  && !empty($_POST['nameInput'])) {
             <div class="form-row">
 
                 <div class="form-group row col-sm-12">
-                    <label for="inputFirstName" class="label .col-form-label col-sm-0 offset-0" id="firstNameLabel"
-                        name="addressInput">Address</label>
+                    <label for="inputFirstName" class="label .col-form-label col-sm-0 offset-0" id="firstNameLabel">Address</label>
 
 
-                    <input type="text" class="form-control col-sm-9 offset-1" id="inputAdress">
+                    <input type="text" class="form-control col-sm-9 offset-1" id="inputAdress" name = "addressInput">
 
                 </div>
 
@@ -110,10 +118,10 @@ if (isset($_POST['createSite'])  && !empty($_POST['nameInput'])) {
 
                 <div class="form-group row col-sm-6">
                     <label for="inputFirstName" class="label .col-form-label col-sm-4" id="firstNameLabel"
-                        name="managerInput">Manager</label>
-                    <select class="col-sm-6" style="margin-left: 1em;">
-                        <option value="Yes">Option1</option>
-                        <option value="No">Option2</option>
+                        >Manager</label>
+                    <select class="col-sm-6" style="margin-left: 1em;" name = "managerInput">
+                        <option value="Option1">Option1</option>
+                        <option value="Option2">Option2</option>
 
                     </select>
 
@@ -121,10 +129,9 @@ if (isset($_POST['createSite'])  && !empty($_POST['nameInput'])) {
 
 
                 <div class="form-group row col-sm-6">
-                    <label for="inputLastName" class="label .col-form-label col-sm-6" id="lastNameLabel"
-                        name="openInput">Open
+                    <label for="inputLastName" class="label .col-form-label col-sm-6" id="lastNameLabel">Open
                         Everyday</label>
-                    <select style="margin-left: 1em;">
+                    <select style="margin-left: 1em;" name="openInput">
                         <option value="Yes">Yes</option>
                         <option value="No">No</option>
 
