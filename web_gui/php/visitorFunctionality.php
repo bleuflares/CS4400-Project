@@ -51,7 +51,8 @@ session_start();
 
             <div class="row">
                 <div class="col-md-12">
-                    <button class="btn btn-lg btn-primary btn-block" type="back">View Transit History</button>
+                    <a class="btn btn-lg btn-primary btn-block" type="back" href="./transitHistory.php">View Transit
+                        History</a>
                 </div>
             </div>
 

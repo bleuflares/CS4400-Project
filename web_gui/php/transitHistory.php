@@ -107,38 +107,28 @@ try {
             <table id="test" class="table table-bordered" style="width:100%">
                 <thead>
                     <tr>
+                        <th style='text-align:center'>Date</th>
                         <th style='text-align:center'>Route</th>
                         <th style='text-align:center'>Transport Type</th>
                         <th style='text-align:center'>Price</th>
-                        <th style='text-align:center'># Connected Sites</th>
                     </tr>
                 </thead>
 
                 <tbody>
                     <?php
-                    $result = $conn->query("select 
-                                                    transit.TransitRoute, 
-                                                    transit.TransitType, 
-                                                    transit.TransitPrice, 
-                                                    count.Total 
-                                                from transit inner join (select 
-                                                                            sitename, 
-                                                                            transitroute, 
-                                                                            count(*) as total 
-                                                                        from connect 
-                                                                        group by transitroute) 
-                                                count on transit.transitroute = count.transitroute;");
+                    $result = $conn->query("SELECT tt.*, t.TransitPrice 
+                                            FROM taketransit as tt 
+                                                    INNER JOIN transit AS t 
+                                                    ON tt.TransitType = t.TransitType 
+                                                    AND tt.TransitRoute = t.TransitRoute 
+                                            WHERE tt.Username = '" . $_SESSION["userName"] . "';");
 
                     while ($row = $result->fetch()) {
                         echo "<tr>";
-                        echo    "<td style='padding-left:2.4em;'> 
-                                        <div class='radio'>
-                                            <label><input type='radio' id='express' name='optradio'> " . $row['TransitRoute'] . "</label>
-                                        </div>
-                                    </td>";
+                        echo "<td style='text-align:center'>" . $row['TransitDate'] . "</td>";
+                        echo "<td style='text-align:center'>" . $row['TransitRoute'] . "</td>";
                         echo "<td style='text-align:center'>" . $row['TransitType'] . "</td>";
-                        echo "<td style='text-align:center'> $" . $row['TransitPrice'] . "</td>";
-                        echo "<td style='text-align:center'>" . $row['Total'] . "</td>";
+                        echo "<td style='text-align:center'>" . $row['TransitPrice'] . "</td>";
                         echo "<tr>";
                     }
                     ?>

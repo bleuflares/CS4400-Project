@@ -73,80 +73,36 @@ try {
 
 
     <form class="form-signin">
-        <h1 class="h3 mb-3 font-weight-heavy" id="titleOfForm">Manage Profile</h1>
+        <h1 class="h3 mb-3 font-weight-heavy" id="titleOfForm">Edit Transit</h1>
 
 
         <div class="container">
 
             <div class="row">
-                <div class="col-sm-6">
-                    <label>First Name</label>
+                <div class="col-sm-5">
+                    <label>Transport Type</label>
                     <?php
-                    echo '<input type="text" class="col-sm-6" style="padding: 0; margin-left: 2em;" value="' . $row['Firstname'] . '">';
+                    echo '<span style="font-weight: 600; margin-left: 1em;">' . $row['Username'] . '</span>';
                     ?>
                 </div>
 
-                <div class="col-sm-6">
-                    <label>Last Name</label>
+                <div class="col-sm-4">
+                    <label>Route</label>
                     <?php
-                    echo '<input type="text" class="col-sm-6" style="padding: 0; margin-left: 2em;" value="' . $row['Lastname'] . '">'
-                    ?>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-sm-6">
-                    <label>Username</label>
-                    <?php
-                    echo '<span style="font-weight: 600; margin-left: 2.25em;">' . $row['Username'] . '</span>';
+                    echo '<input type="text" class="col-sm-4" style="padding: 0; margin-left: 0.5em;" value="' . $row['Lastname'] . '">'
                     ?>
                 </div>
 
-                <div class="col-sm-6">
-                    <label>Site Name</label>
+                <div class="col-sm-3">
+                    <label>Price ($)</label>
                     <?php
-                    if ($siteRow) {
-                        echo '<span style="font-weight: 600; margin-left: 2.25em;">' .  $siteRow['SiteName'] . '</span>';
-                    } else {
-                        echo '<span style="font-weight: 600; margin-left: 2.25em;">N/a</span>';
-                    }
+                    echo '<input type="text" class="col-sm-5" style="padding: 0; margin-left: 0.5em;" value="' . $row['Lastname'] . '">'
                     ?>
                 </div>
             </div>
 
 
-            <div class="row">
-                <div class="col-sm-6">
-                    <label>Employee ID</label>
-                    <?php
-                    echo '<span style="font-weight: 600; margin-left: 1.15em;">' . $row['EmployeeID'] . '</span>'
-                    ?>
-                </div>
-
-                <div class="col-sm-6">
-                    <label>Phone</label>
-                    <?php
-                    echo '<input type="tel" class="col-sm-6" style="padding: 0; margin-left: 3.85em;" value="' . $row['Phone'] . '">'
-                    ?>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-sm-9">
-                    <label>Address</label>
-                    <?php
-                    echo '<span style="font-weight: 600; margin-left: 3.15em;">'
-                        . $row['EmployeeAddress'] . ', '
-                        . $row['EmployeeCity'] . ', '
-                        . $row['EmployeeState'] . ' '
-                        . $row['EmployeeZipcode'] .
-                        '</span>'
-                    ?>
-                </div>
-            </div>
-
-
-            <div class="form-row">
+            <!-- <div class="form-row">
                 <div class="form-group row col-sm-12">
                     <label for="inputEmail" class="label .col-form-label col-sm-2" id="emailLabel">Email</label>
 
@@ -166,25 +122,25 @@ try {
                     ?>
 
                 </div>
+            </div> -->
 
-            </div>
 
-            <div class="row">
-                <div class="col-sm-4 offset-5">
 
-                    <?php
-                    if (strpos($row['UserType'], "Visit") !== false) {
-                        echo '<input type="checkbox" class="col-sm-1" 
-                            style="text-align: center; margin-left: 0.5em; padding: 0em;" placeholder="" checked>';
-                    } else {
-                        echo '<input type="checkbox" class="col-sm-1" 
-                            style="text-align: center; margin-left: 0.5em; padding: 0em;" placeholder="">';
-                    }
+            <div>
 
-                    echo '<label>Visitor Account</label>';
-                    ?>
+                <label for="exampleFormControlSelect2" style="">Example
+                    multiple
+                    select</label>
 
-                </div>
+                <select multiple style="display: inline ;" class="form-control col-sm-6 offset-2"
+                    id="exampleFormControlSelect2">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                </select>
+
             </div>
 
 
