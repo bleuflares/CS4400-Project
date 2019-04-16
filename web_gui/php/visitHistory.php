@@ -40,7 +40,7 @@
 <script type="text/javascript">
     $(document).ready(function() {
         var table = $('#test').DataTable({
-        
+
 
         });
 
@@ -77,14 +77,14 @@
                 <div class="col-sm-0 offset-1">
                     <label>Site</label>
                     <select>
-                        <?php 
+                        <?php
                             $result = $conn->query("SELECT SiteName FROM Site");
-                            
+
                             while ($row = $result->fetch()) {
                                 echo "<option>" . $row['SiteName'] . "</option>";
                             }
                         ?>
-                    </select> 
+                    </select>
             </div>
 
             <div class="row col-sm-12">
@@ -97,7 +97,7 @@
 
 
 
- 
+
                 <div class="col-sm-0 offset-1">
                     <label>End Date</label>
 
@@ -130,7 +130,7 @@
                         <th style='text-align:center'>Event</th>
                         <th style='text-align:center'>Site</th>
                         <th style='text-align:center'>Price</th>
-                        
+
                     </tr>
                 </thead>
 
@@ -138,6 +138,12 @@
 
                 </tbody>
             </table>
+
+        <div class="container">
+            <div class="col-sm-2 offset-5">
+                    <button class="btn btn-sm btn-primary btn-block col-sm-0" style="border-radius: 5px;">Back</button>
+                </div>
+        </div>
 
 
 

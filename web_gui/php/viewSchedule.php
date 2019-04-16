@@ -49,7 +49,7 @@
 
 <body>
     <form class="form-signin">
-        <h1 class="h3 mb-3 font-weight-heavy" id="titleOfForm">Manage Event</h1>
+        <h1 class="h3 mb-3 font-weight-heavy" id="titleOfForm">View Schedule</h1>
 
 
         <div class="container">

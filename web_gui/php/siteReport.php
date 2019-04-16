@@ -163,9 +163,11 @@
                 </tbody>
             </table>
 
-
-
-
+            <div class="container">
+            <div class="col-sm-2 offset-5">
+                    <button class="btn btn-sm btn-primary btn-block col-sm-0" style="border-radius: 5px;">Back</button>
+                </div>
+            </div>
 
     </form>
 
