@@ -47,7 +47,8 @@ if (isset($_POST['registerButton']) && !empty($_POST['fname']) && !empty($_POST[
 
     if ($password == $cPass) {
         $result = $conn->query("INSERT into user VALUES('$username', '$password','Pending', '$fname', '$lname', 'Employee, Visitor')");
-        $result = $conn->query("INSERT into Employee VALUES('$username', null,'$phone','$address','$city','$state','$zip','@type')");
+        $result = $conn->query("INSERT into Employee VALUES('$username', null,'$phone','$address','$city','$state','$zip','$type')");
+        $result = $conn->query("INSERT into useremail VALUES('$username', '$email')");
     } else {
         echo '<script language="javascript">';
         echo 'alert("Passwords Do Not Match. Please register again.")';
