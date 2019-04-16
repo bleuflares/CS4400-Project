@@ -53,11 +53,9 @@
 
 
         <div class="container">
-
-
             <div class="row">
-                <div class="col-sm-1 offset-0">
-                    <label>Name</label>
+                <div class="col-sm-3 offset-0">
+                    <label>Event Name</label>
                 </div>
                     <div class="col-sm-3 offset-0">
                     <input type="text" class="form-control col-sm-0 offset-0" id="inputAdress">
@@ -68,14 +66,14 @@
                 <div class="col-sm-4 offset-0">
                     <label>Description Keyword</label>
                 </div>
-                    <div class="col-sm-3 offset-0">
+                    <div class="col-sm-2 offset-0">
                     <input type="text" class="form-control col-sm-0 offset-0" id="inputAdress">
 
                 </div>
             </div>
 
             <div class="row">
-                <div class="col-sm-1 offset-0">
+                <div class="col-sm-3 offset-0">
                     <label>Start Date</label>
                 </div>
                     <div class="col-sm-3 offset-0">
@@ -84,7 +82,7 @@
                 </div>
 
 
-                <div class="col-sm-3 offset-1">
+                <div class="col-sm-3 offset-0">
                     <label>End Date</label>
                 </div>
                     <div class="col-sm-3 offset-0">
@@ -93,67 +91,13 @@
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-sm-0 offset-0">
-                    <label>Duration Range</label>
-                </div>
-                    <div class="col-sm-3">
-
-                    <input type="text" class="col-sm-1" style="text-align: center;" placeholder="">
-
-                    <label> -- </label>
-
-                    <input type="text" class="col-sm-1"  style="text-align: center;" placeholder="">
-                </div>
-
-
-               <div class="col-sm-0 offset-0">
-                    <label>Total Visits Range</label>
-                </div>
-                    <div class="col-sm-3">
-
-                    <input type="text" class="col-sm-1" style="text-align: center;" placeholder="">
-
-                    <label> -- </label>
-
-                    <input type="text" class="col-sm-1"  style="text-align: center;" placeholder="">
-                </div>
-
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-sm-4 offset-2">
-                    <label>Total Revenue Range</label>
-                </div>
-                    <div class="col-sm-3">
-
-                    <input type="text" class="col-sm-1" style="text-align: center;" placeholder="">
-
-                    <label> -- </label>
-
-                    <input type="text" class="col-sm-1"  style="text-align: center;" placeholder="">
-                </div>
-            </div>
-
             <div class="row col-sm-12">
 
             <div class="col-sm-0 offset-2">
                     <button class="btn btn-sm btn-primary btn-block col-sm-0" style="border-radius: 5px;">Filter</button>
                 </div>
-
-                <div class="col-sm-0 offset-2" style="text-align: right;">
-                    <input id ="button" class="btn btn-sm btn-primary btn-block col-sm-0"  type="submit" name="button" onclick="filter();" value="Create"/>
-
-
-                </div>
-
-
-                <div class="col-sm-0 offset-1">
-                    <input id ="button" class="btn btn-sm btn-primary btn-block col-sm-0"  type="submit" name="button" onclick="myFunction();" value="View/Edit"/>
-                </div>
-                 <div class="col-sm-0 offset-1">
-                    <input id ="button" class="btn btn-sm btn-primary btn-block col-sm-0"  type="submit" name="button" onclick="myFunction();" value="Delete"/>
+                <div class="col-sm-0 offset-5">
+                    <input id ="button" class="btn btn-sm btn-primary btn-block col-sm-"  type="submit" name="button" onclick="myFunction();" value="View Event"/>
                 </div>
             </div>
 
@@ -167,11 +111,11 @@
             <table id="test" class="table table-bordered" style="width:100%">
                 <thead>
                     <tr>
-                        <th style='text-align:center'>Name</th>
+                        <th style='text-align:center'>Event Name</th>
+                        <th style='text-align:center'>Site Name</th>
+                        <th style='text-align:center'>Start Date</th>
+                        <th style='text-align:center'>End Date</th>
                         <th style='text-align:center'>Staff Count</th>
-                        <th style='text-align:center'>Duration (Days)</th>
-                        <th style='text-align:center'>Total Visits</th>
-                         <th style='text-align:center'>Total Revenue ($)</th>
                     </tr>
                 </thead>
 
@@ -179,14 +123,15 @@
 
                 </tbody>
             </table>
-
         <div class="container">
             <div class="col-sm-2 offset-5">
                     <button class="btn btn-sm btn-primary btn-block col-sm-0" style="border-radius: 5px;">Back</button>
                 </div>
             </div>
-        </div>
 
+
+        </div>
+            </div>
 
 
 
