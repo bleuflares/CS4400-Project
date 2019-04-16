@@ -75,7 +75,7 @@ try {
 
 
     <form class="form-signin">
-        <h1 class="h3 mb-3 font-weight-heavy" id="titleOfForm">Edit Transit</h1>
+        <h1 class="h3 mb-3 font-weight-heavy" id="titleOfForm">Create Transit</h1>
 
 
         <div class="container">
@@ -83,9 +83,13 @@ try {
             <div class="row">
                 <div class="col-sm-5">
                     <label>Transport Type</label>
-                    <?php
-                    echo '<span style="font-weight: 600; margin-left: 1em;">' . $row['Username'] . '</span>';
-                    ?>
+                    <select>
+                        <option value="ALL">--ALL--</option>
+                        <option value="MARTA">MARTA</option>
+                        <option value="Bus">Bus</option>
+                        <option value="Bike">Bike</option>
+                    </select>
+
                 </div>
 
                 <div class="col-sm-4">
@@ -132,7 +136,7 @@ try {
 
                 <label for="exampleFormControlSelect2" style="">Connected Sites</label>
 
-                <select multiple style="display: inline ;" class="form-control col-sm-6 offset-2"
+                <select multiple style="display: inline ;" class="form-control col-sm-6 offset-3"
                     id="exampleFormControlSelect2">
                     <option>1</option>
                     <option>2</option>
@@ -147,9 +151,9 @@ try {
             <div class="form-row">'
                 <div class="form-group row col-sm-12 offset-3">
                     <button type="submit" class="btn btn-primary" id="backButton"
-                        style="padding-left: 2.5em; padding-right: 2.5em; margin-left: .5em;">Update</button>
+                        style="padding-left: 2.5em; padding-right: 2.5em; margin-left: .75em;">Back</button>
                     <button type="submit" class="btn btn-primary" id="registerButton"
-                        style="padding-left: 3.25em; padding-right: 3.25em; margin-left: 4em;">Back</button>
+                        style="padding-left: 2.5em; padding-right: 2.5em; margin-left: 4em;">Create</button>
                 </div>
             </div>
 
