@@ -19,7 +19,7 @@ try {
 
 <?php
 
-if (isset($_POST['fname'])  && !empty($_POST['lname']) && !empty($_POST['username']) && !empty($_POST['password']) && !empty($_POST['cPass']) && !empty($_POST['email'])) {
+if (isset($_POST['registerButton'])  && !empty($_POST['fname']) && !empty($_POST['lname']) && !empty($_POST['username']) && !empty($_POST['password']) && !empty($_POST['cPass']) && !empty($_POST['email'])) {
 
     echo '<script>console.log("First Name Input: ' . $_POST['fname'] . '")</script>';
     echo '<script>console.log(" Last Name Input: ' . $_POST['lname'] . '")</script>';
@@ -141,8 +141,9 @@ if (isset($_POST['fname'])  && !empty($_POST['lname']) && !empty($_POST['usernam
 
             <div class="form-row">'
                 <div class="form-group row col-sm-12 offset-3">
-                    <a type="submit" class="btn btn-primary" id="backButton" href="./registerNavigation.php">Back</a>
-                    <button type="submit" class="btn btn-primary" id="registerButton">Register</button>
+                    <button type="submit" class="btn btn-primary" id="backButton">Back</button>
+                    <button type="submit" class="btn btn-primary" id="registerButton"
+                        name="registerButton">Register</button>
                 </div>
             </div>
 
