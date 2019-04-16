@@ -1,19 +1,25 @@
 <?php
-    $servername = "localhost";
-    $username = "root";
-    $password = "1234";
-    $databaseScheme = "cs4400_testdata";
-    global $conn;
+// Start the session
+session_start();
 
-    try {
-        $conn = new PDO("mysql:host=$servername;dbname=$databaseScheme", $username, $password);
-        // set the PDO error mode to exception
-        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        // echo "Connected successfully";
-    } catch(PDOException $e) {
-        echo "Connection failed: " . $e->getMessage();
-    }
+if (!$_SESSION["logged_in"]) {
+    header("Location: http://localhost/web_gui/php/userLogin.php");
+    exit();
+}
 
+global $conn;
+try {
+    $conn = new PDO(
+        "mysql:host=" . $_SESSION['serverName'] . ";dbname=" . $_SESSION['databaseScheme'] . "",
+        $_SESSION["databaseUserName"],
+        $_SESSION["databasePassword"]
+    );
+    // set the PDO error mode to exception
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    echo '<script>console.log("Connected Successfully to DB")</script>';
+} catch (PDOException $e) {
+    echo '<script>console.log("%cConnection failed: ' . $e->getMessage() . '", "color:red")</script>';
+}
 ?>
 
 
@@ -58,8 +64,9 @@
                 <div class="col-sm-12">
                     <label>Username</label>
 
-                    <input type="text" class="col-sm-1" style="text-align: center; margin-left: 0.5\em; padding: 0em;" placeholder="">
-                        <label>Type </label>
+                    <input type="text" class="col-sm-1" style="text-align: center; margin-left: 0.5\em; padding: 0em;"
+                        placeholder="">
+                    <label>Type </label>
                     <select style="margin-left: 1em;">
                         <option value="ALL">User</option>
                         <option value="MARTA">Visitor</option>
@@ -90,18 +97,18 @@
 
 
 
-            <table id="test" class="table table-bordered" style="width:100%">
-                <thead>
-                    <tr>
-                        <th style='text-align:center'>Username</th>
-                        <th style='text-align:center'>Email Count</th>
-                        <th style='text-align:center'>User Type</th>
-                        <th style='text-align:center'>Status </th>
-                    </tr>
-                </thead>
+                <table id="test" class="table table-bordered" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th style='text-align:center'>Username</th>
+                            <th style='text-align:center'>Email Count</th>
+                            <th style='text-align:center'>User Type</th>
+                            <th style='text-align:center'>Status </th>
+                        </tr>
+                    </thead>
 
-                <tbody>
-                    <?php
+                    <tbody>
+                        <?php
                         $result = $conn->query("select 
                                                     user.Username, 
                                                     user.Status, 
@@ -123,18 +130,19 @@
                             echo "<td style='text-align:center'>" . $row['Status'] . "</td>";
                             echo "<tr>";
                         }
-                    ?>
+                        ?>
 
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
 
-            <div class="row">
-                <div class="col-sm-2 offset-5" >
-                        <button class="btn btn-sm btn-primary btn-block" style="border-radius: 5px; margin-left: .25em;">Back</button>
+                <div class="row">
+                    <div class="col-sm-2 offset-5">
+                        <button class="btn btn-sm btn-primary btn-block"
+                            style="border-radius: 5px; margin-left: .25em;">Back</button>
+                    </div>
                 </div>
-            </div>
 
-        </div>
+            </div>
 
     </form>
 

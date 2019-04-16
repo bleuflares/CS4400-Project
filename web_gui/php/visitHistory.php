@@ -1,19 +1,25 @@
 <?php
-    $servername = "localhost";
-    $username = "root";
-    $password = "1234";
-    $databaseScheme = "cs4400_testdata";
-    global $conn;
+// Start the session
+session_start();
 
-    try {
-        $conn = new PDO("mysql:host=$servername;dbname=$databaseScheme", $username, $password);
-        // set the PDO error mode to exception
-        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        // echo "Connected successfully";
-    } catch(PDOException $e) {
-        echo "Connection failed: " . $e->getMessage();
-    }
+if (!$_SESSION["logged_in"]) {
+    header("Location: http://localhost/web_gui/php/userLogin.php");
+    exit();
+}
 
+global $conn;
+try {
+    $conn = new PDO(
+        "mysql:host=" . $_SESSION['serverName'] . ";dbname=" . $_SESSION['databaseScheme'] . "",
+        $_SESSION["databaseUserName"],
+        $_SESSION["databasePassword"]
+    );
+    // set the PDO error mode to exception
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    echo '<script>console.log("Connected Successfully to DB")</script>';
+} catch (PDOException $e) {
+    echo '<script>console.log("%cConnection failed: ' . $e->getMessage() . '", "color:red")</script>';
+}
 ?>
 
 
@@ -28,16 +34,16 @@
 
     <link rel="stylesheet" href="..\css\_universalStyling.css">
 
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 
     <script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
-      <script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
+    <script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
 
-<script type="text/javascript">
+    <script type="text/javascript">
     $(document).ready(function() {
         var table = $('#test').DataTable({
 
@@ -49,11 +55,9 @@
 
 
     <script type="text/javascript">
-
     $(document).ready(function() {
         $('#test').DataTable();
-    } );
-
+    });
     </script>
     <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
 </head>
@@ -68,7 +72,7 @@
                 <div class="col-sm-0 offset-0">
                     <label>Event</label>
                 </div>
-                    <div class="col-sm-3 offset-0">
+                <div class="col-sm-3 offset-0">
                     <input type="text" class="form-control col-sm-0 offset-0" id="inputAdress">
 
                 </div>
@@ -78,46 +82,46 @@
                     <label>Site</label>
                     <select>
                         <?php
-                            $result = $conn->query("SELECT SiteName FROM Site");
+                        $result = $conn->query("SELECT SiteName FROM Site");
 
-                            while ($row = $result->fetch()) {
-                                echo "<option>" . $row['SiteName'] . "</option>";
-                            }
+                        while ($row = $result->fetch()) {
+                            echo "<option>" . $row['SiteName'] . "</option>";
+                        }
                         ?>
                     </select>
-            </div>
+                </div>
 
-            <div class="row col-sm-12">
-                <div class="col-sm-0 offset-0">
-                    <label>Start Date</label>
+                <div class="row col-sm-12">
+                    <div class="col-sm-0 offset-0">
+                        <label>Start Date</label>
 
-                    <input type="date" class="col-sm-0" style="padding: 0;" placeholder="">
+                        <input type="date" class="col-sm-0" style="padding: 0;" placeholder="">
 
+                    </div>
+
+
+
+
+                    <div class="col-sm-0 offset-1">
+                        <label>End Date</label>
+
+                        <input type="date" class="col-sm-0 offset-0" style="padding: 0;" placeholder="">
+
+                    </div>
                 </div>
 
 
 
+                <div class="row col-sm-12">
 
-                <div class="col-sm-0 offset-1">
-                    <label>End Date</label>
-
-                    <input type="date" class="col-sm-0 offset-0" style="padding: 0;" placeholder="">
-
-                </div>
-            </div>
-
-
-
-            <div class="row col-sm-12">
-
-            <div class="col-sm-0 offset-6">
-                    <button class="btn btn-sm btn-primary btn-block col-sm-0  " style= " height:40px;
+                    <div class="col-sm-0 offset-6">
+                        <button class="btn btn-sm btn-primary btn-block col-sm-0  " style=" height:40px;
     width:60px;border-radius: 5px;">Filter</button>
+                    </div>
+
+
+
                 </div>
-
-
-
-        </div>
             </div>
 
 
@@ -139,11 +143,11 @@
                 </tbody>
             </table>
 
-        <div class="container">
-            <div class="col-sm-2 offset-5">
+            <div class="container">
+                <div class="col-sm-2 offset-5">
                     <button class="btn btn-sm btn-primary btn-block col-sm-0" style="border-radius: 5px;">Back</button>
                 </div>
-        </div>
+            </div>
 
 
 

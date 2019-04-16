@@ -2,6 +2,11 @@
 // Start the session
 session_start();
 
+if (!$_SESSION["logged_in"]) {
+    header("Location: http://localhost/web_gui/php/userLogin.php");
+    exit();
+}
+
 global $conn;
 try {
     $conn = new PDO(

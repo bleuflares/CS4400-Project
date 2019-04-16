@@ -2,6 +2,11 @@
 // Start the session
 session_start();
 
+if (!$_SESSION["logged_in"]) {
+    header("Location: http://localhost/web_gui/php/userLogin.php");
+    exit();
+}
+
 global $conn;
 try {
     $conn = new PDO(
@@ -34,13 +39,13 @@ if (isset($_POST['nameInput'])  && !empty($_POST['zipInput']) && !empty($_POST['
     echo '<script>console.log("manager Input: ' . $_POST['managerInput'] . '")</script>';
     echo '<script>console.log("open Input: ' . $_POST['openInput'] . '")</script>';
 
-    $nameInput = $_POST['nameInput'] ;
+    $nameInput = $_POST['nameInput'];
     $zipInput = $_POST['zipInput'];
-    $addressInput = $_POST['addressInput'] ;
+    $addressInput = $_POST['addressInput'];
     $managerInput = $_POST['managerInput'];
-    $openInput = $_POST['openInput'] ;
-      $result = $conn->query("INSERT into site VALUES('$nameInput', '$addressInput', '$zipInput', '.$openInput', '.$managerInput.')");
-    
+    $openInput = $_POST['openInput'];
+    $result = $conn->query("INSERT into site VALUES('$nameInput', '$addressInput', '$zipInput', '.$openInput', '.$managerInput.')");
+
     // $result = $conn->query("INSERT into site VALUES(".$_POST['nameInput'].", ".$_POST['addressInput'].", ".$_POST['zipInput']", ".$_POST['openInput'].", ".$_POST['managerInput'].")");
 
 
@@ -91,7 +96,7 @@ if (isset($_POST['nameInput'])  && !empty($_POST['zipInput']) && !empty($_POST['
                         value="j">Zipcode</label>
 
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" id="inputLastName" name = "zipInput">
+                        <input type="text" class="form-control" id="inputLastName" name="zipInput">
                     </div>
                 </div>
 
@@ -100,10 +105,11 @@ if (isset($_POST['nameInput'])  && !empty($_POST['zipInput']) && !empty($_POST['
             <div class="form-row">
 
                 <div class="form-group row col-sm-12">
-                    <label for="inputFirstName" class="label .col-form-label col-sm-0 offset-0" id="firstNameLabel">Address</label>
+                    <label for="inputFirstName" class="label .col-form-label col-sm-0 offset-0"
+                        id="firstNameLabel">Address</label>
 
 
-                    <input type="text" class="form-control col-sm-9 offset-1" id="inputAdress" name = "addressInput">
+                    <input type="text" class="form-control col-sm-9 offset-1" id="inputAdress" name="addressInput">
 
                 </div>
 
@@ -117,9 +123,9 @@ if (isset($_POST['nameInput'])  && !empty($_POST['zipInput']) && !empty($_POST['
             <div class="form-group row">
 
                 <div class="form-group row col-sm-6">
-                    <label for="inputFirstName" class="label .col-form-label col-sm-4" id="firstNameLabel"
-                        >Manager</label>
-                    <select class="col-sm-6" style="margin-left: 1em;" name = "managerInput">
+                    <label for="inputFirstName" class="label .col-form-label col-sm-4"
+                        id="firstNameLabel">Manager</label>
+                    <select class="col-sm-6" style="margin-left: 1em;" name="managerInput">
                         <option value="Option1">Option1</option>
                         <option value="Option2">Option2</option>
 

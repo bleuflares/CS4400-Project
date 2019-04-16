@@ -1,19 +1,25 @@
 <?php
-    $servername = "localhost";
-    $username = "root";
-    $password = "1234";
-    $databaseScheme = "cs4400_testdata";
-    global $conn;
+// Start the session
+session_start();
 
-    try {
-        $conn = new PDO("mysql:host=$servername;dbname=$databaseScheme", $username, $password);
-        // set the PDO error mode to exception
-        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        // echo "Connected successfully";
-    } catch(PDOException $e) {
-        echo "Connection failed: " . $e->getMessage();
-    }
+if (!$_SESSION["logged_in"]) {
+    header("Location: http://localhost/web_gui/php/userLogin.php");
+    exit();
+}
 
+global $conn;
+try {
+    $conn = new PDO(
+        "mysql:host=" . $_SESSION['serverName'] . ";dbname=" . $_SESSION['databaseScheme'] . "",
+        $_SESSION["databaseUserName"],
+        $_SESSION["databasePassword"]
+    );
+    // set the PDO error mode to exception
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    echo '<script>console.log("Connected Successfully to DB")</script>';
+} catch (PDOException $e) {
+    echo '<script>console.log("%cConnection failed: ' . $e->getMessage() . '", "color:red")</script>';
+}
 ?>
 
 
@@ -57,7 +63,7 @@
                 <div class="col-sm-2 offset-0">
                     <label>Start Date</label>
                 </div>
-                    <div class="col-sm-4 offset-0">
+                <div class="col-sm-4 offset-0">
                     <input type="Date" class="form-control col-sm-0 offset-0" id="inputAdress">
 
                 </div>
@@ -66,7 +72,7 @@
                 <div class="col-sm-2 offset-0">
                     <label>End Date</label>
                 </div>
-                    <div class="col-sm-4 offset-0">
+                <div class="col-sm-4 offset-0">
                     <input type="Date" class="form-control col-sm-0 offset-0" id="inputAdress">
 
                 </div>
@@ -76,98 +82,99 @@
                 <div class="col-sm-0 offset-1">
                     <label>Event Count Range</label>
                 </div>
-                    <div class="col-sm-3">
+                <div class="col-sm-3">
 
                     <input type="text" class="col-sm-1" style="text-align: center;" placeholder="">
 
                     <label> -- </label>
 
-                    <input type="text" class="col-sm-1"  style="text-align: center;" placeholder="">
+                    <input type="text" class="col-sm-1" style="text-align: center;" placeholder="">
                 </div>
 
 
-               <div class="col-sm-0 offset-0">
+                <div class="col-sm-0 offset-0">
                     <label>Staff Count Range</label>
                 </div>
-                    <div class="col-sm-3">
+                <div class="col-sm-3">
 
                     <input type="text" class="col-sm-1" style="text-align: center;" placeholder="">
 
                     <label> -- </label>
 
-                    <input type="text" class="col-sm-1"  style="text-align: center;" placeholder="">
+                    <input type="text" class="col-sm-1" style="text-align: center;" placeholder="">
                 </div>
 
-                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-0 offset-1">
+                <label>Total Visits Range</label>
+            </div>
+            <div class="col-sm-3">
+
+                <input type="text" class="col-sm-1" style="text-align: center;" placeholder="">
+
+                <label> -- </label>
+
+                <input type="text" class="col-sm-1" style="text-align: center;" placeholder="">
             </div>
 
-            <div class="row">
-                <div class="col-sm-0 offset-1">
-                    <label>Total Visits Range</label>
-                </div>
-                    <div class="col-sm-3">
 
-                    <input type="text" class="col-sm-1" style="text-align: center;" placeholder="">
+            <div class="col-sm-0 offset-0">
+                <label>Total Revenue Range</label>
+            </div>
+            <div class="col-sm-3">
 
-                    <label> -- </label>
+                <input type="text" class="col-sm-1" style="text-align: center;" placeholder="">
 
-                    <input type="text" class="col-sm-1"  style="text-align: center;" placeholder="">
-                </div>
+                <label> -- </label>
 
-
-               <div class="col-sm-0 offset-0">
-                    <label>Total Revenue Range</label>
-                </div>
-                    <div class="col-sm-3">
-
-                    <input type="text" class="col-sm-1" style="text-align: center;" placeholder="">
-
-                    <label> -- </label>
-
-                    <input type="text" class="col-sm-1"  style="text-align: center;" placeholder="">
-                </div>
-
-                </div>
+                <input type="text" class="col-sm-1" style="text-align: center;" placeholder="">
             </div>
 
-            <div class="row col-sm-12">
+        </div>
+        </div>
+
+        <div class="row col-sm-12">
 
             <div class="col-sm-0 offset-2">
-                    <button class="btn btn-sm btn-primary btn-block col-sm-0" style="border-radius: 5px;">Filter</button>
-                </div>
-                <div class="col-sm-0 offset-7">
-                    <input id ="button" class="btn btn-sm btn-primary btn-block col-sm-"  type="submit" name="button" onclick="myFunction();" value="Daily Detail"/>
-                </div>
+                <button class="btn btn-sm btn-primary btn-block col-sm-0" style="border-radius: 5px;">Filter</button>
             </div>
+            <div class="col-sm-0 offset-7">
+                <input id="button" class="btn btn-sm btn-primary btn-block col-sm-" type="submit" name="button"
+                    onclick="myFunction();" value="Daily Detail" />
+            </div>
+        </div>
 
 
         </div>
-            </div>
+        </div>
 
 
 
 
-            <table id="test" class="table table-bordered" style="width:100%">
-                <thead>
-                    <tr>
-                        <th style='text-align:center'>Date</th>
-                        <th style='text-align:center'>Event Count</th>
-                        <th style='text-align:center'>Staff Count</th>
-                        <th style='text-align:center'>Total Visits</th>
-                         <th style='text-align:center'>Total Revenue ($)</th>
-                    </tr>
-                </thead>
+        <table id="test" class="table table-bordered" style="width:100%">
+            <thead>
+                <tr>
+                    <th style='text-align:center'>Date</th>
+                    <th style='text-align:center'>Event Count</th>
+                    <th style='text-align:center'>Staff Count</th>
+                    <th style='text-align:center'>Total Visits</th>
+                    <th style='text-align:center'>Total Revenue ($)</th>
+                </tr>
+            </thead>
 
-                <tbody>
+            <tbody>
 
-                </tbody>
-            </table>
+            </tbody>
+        </table>
 
-            <div class="container">
+        <div class="container">
             <div class="col-sm-2 offset-5">
-                    <button class="btn btn-sm btn-primary btn-block col-sm-0" style="border-radius: 5px;">Back</button>
-                </div>
+                <button class="btn btn-sm btn-primary btn-block col-sm-0" style="border-radius: 5px;">Back</button>
             </div>
+        </div>
 
     </form>
 

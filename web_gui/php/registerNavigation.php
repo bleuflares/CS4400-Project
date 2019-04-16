@@ -1,6 +1,25 @@
 <?php
 // Start the session
 session_start();
+
+if (!$_SESSION["logged_in"]) {
+    header("Location: http://localhost/web_gui/php/userLogin.php");
+    exit();
+}
+
+global $conn;
+try {
+    $conn = new PDO(
+        "mysql:host=" . $_SESSION['serverName'] . ";dbname=" . $_SESSION['databaseScheme'] . "",
+        $_SESSION["databaseUserName"],
+        $_SESSION["databasePassword"]
+    );
+    // set the PDO error mode to exception
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    echo '<script>console.log("Connected Successfully to DB")</script>';
+} catch (PDOException $e) {
+    echo '<script>console.log("%cConnection failed: ' . $e->getMessage() . '", "color:red")</script>';
+}
 ?>
 
 <!DOCTYPE html>

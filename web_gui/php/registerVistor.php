@@ -2,6 +2,11 @@
 // Start the session
 session_start();
 
+if (!$_SESSION["logged_in"]) {
+    header("Location: http://localhost/web_gui/php/userLogin.php");
+    exit();
+}
+
 global $conn;
 try {
     $conn = new PDO(
@@ -19,29 +24,28 @@ try {
 
 <?php
 
-if (isset($_POST['fname'])  && !empty($_POST['lname']) && !empty($_POST['username']) && !empty($_POST['password']) && !empty($_POST['cPass'])&& !empty($_POST['email'])){
+if (isset($_POST['fname'])  && !empty($_POST['lname']) && !empty($_POST['username']) && !empty($_POST['password']) && !empty($_POST['cPass']) && !empty($_POST['email'])) {
 
-   echo '<script>console.log("First Name Input: ' . $_POST['fname'] . '")</script>';
-   echo '<script>console.log(" Last Name Input: ' . $_POST['lname'] . '")</script>';
-   echo '<script>console.log("Username Input: ' . $_POST['username'] . '")</script>';
-   echo '<script>console.log("Password Input: ' . $_POST['password'] . '")</script>';
-   echo '<script>console.log("cPass Input: ' . $_POST['cPass'] . '")</script>';
-   // echo '<script>console.log("email Input: ' . $_POST['email'] . '")</script>'
+    echo '<script>console.log("First Name Input: ' . $_POST['fname'] . '")</script>';
+    echo '<script>console.log(" Last Name Input: ' . $_POST['lname'] . '")</script>';
+    echo '<script>console.log("Username Input: ' . $_POST['username'] . '")</script>';
+    echo '<script>console.log("Password Input: ' . $_POST['password'] . '")</script>';
+    echo '<script>console.log("cPass Input: ' . $_POST['cPass'] . '")</script>';
+    // echo '<script>console.log("email Input: ' . $_POST['email'] . '")</script>'
 
-    $fname = $_POST['fname'] ;
+    $fname = $_POST['fname'];
     $lname = $_POST['lname'];
-    $username = $_POST['username'] ;
+    $username = $_POST['username'];
     $password = $_POST['password'];
-    $cPass = $_POST['cPass'] ;
-    $email = $_POST['email'] ;
+    $cPass = $_POST['cPass'];
+    $email = $_POST['email'];
 
-   if($password == $cPass){
-           $result = $conn->query("INSERT into user VALUES('$username', '$password','Pending', '$fname', '$lname', 'User')");
-          $result = $conn->query("INSERT into useremail VALUES('$username', '$email')");
-    
-   }else {
-    echo '<script>console.log("%cPlease fill in matching password", "color:red")</script>';;
-   }
+    if ($password == $cPass) {
+        $result = $conn->query("INSERT into user VALUES('$username', '$password','Pending', '$fname', '$lname', 'User')");
+        $result = $conn->query("INSERT into useremail VALUES('$username', '$email')");
+    } else {
+        echo '<script>console.log("%cPlease fill in matching password", "color:red")</script>';;
+    }
 }
 
 ?>
@@ -63,7 +67,7 @@ if (isset($_POST['fname'])  && !empty($_POST['lname']) && !empty($_POST['usernam
 
 <body>
 
-    <form class="form-signin" method ="post">
+    <form class="form-signin" method="post">
 
         <h1 class="mb-3 font-weight-heavy" id="titleOfForm">Register Visitor</h3>
 
@@ -84,7 +88,7 @@ if (isset($_POST['fname'])  && !empty($_POST['lname']) && !empty($_POST['usernam
                         Name</label>
 
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" id="inputLastName" name ="lname">
+                        <input type="text" class="form-control" id="inputLastName" name="lname">
                     </div>
                 </div>
 
@@ -97,7 +101,7 @@ if (isset($_POST['fname'])  && !empty($_POST['lname']) && !empty($_POST['usernam
                         id="userNameLabel">Username</label>
 
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" id="inputUsername" name = "username">
+                        <input type="text" class="form-control" id="inputUsername" name="username">
                     </div>
                 </div>
 
@@ -110,7 +114,7 @@ if (isset($_POST['fname'])  && !empty($_POST['lname']) && !empty($_POST['usernam
                         id="passwordLabel">Password</label>
 
                     <div class="col-sm-8">
-                        <input type="password" class="form-control" id="inputPassword"name = "password">
+                        <input type="password" class="form-control" id="inputPassword" name="password">
                     </div>
                 </div>
 
@@ -119,7 +123,7 @@ if (isset($_POST['fname'])  && !empty($_POST['lname']) && !empty($_POST['usernam
                         id="confirmPasswordLabel">Confirm Password</label>
 
                     <div class="col-sm-8">
-                        <input type="password" class="form-control" id="inputConfirmPassword" name = "cPass">
+                        <input type="password" class="form-control" id="inputConfirmPassword" name="cPass">
                     </div>
                 </div>
 
@@ -132,7 +136,7 @@ if (isset($_POST['fname'])  && !empty($_POST['lname']) && !empty($_POST['usernam
                     <label for="inputEmail" class="label .col-form-label col-sm-2" id="emailLabel">Email</label>
 
                     <div class="col-sm-6">
-                        <input type="text" class="form-control" id="inputEmail" name = "email">
+                        <input type="text" class="form-control" id="inputEmail" name="email">
                     </div>
 
                     <button type="submit" class="btn btn-outline-dark">Add</button>

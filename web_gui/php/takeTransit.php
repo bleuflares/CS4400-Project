@@ -2,6 +2,11 @@
 // Start the session
 session_start();
 
+if (!$_SESSION["logged_in"]) {
+    header("Location: http://localhost/web_gui/php/userLogin.php");
+    exit();
+}
+
 global $conn;
 try {
     $conn = new PDO(
@@ -16,7 +21,6 @@ try {
     echo '<script>console.log("%cConnection failed: ' . $e->getMessage() . '", "color:red")</script>';
 }
 ?>
-
 
 
 <!DOCTYPE html>

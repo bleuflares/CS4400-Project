@@ -2,11 +2,10 @@
 // Start the session
 session_start();
 
-// Set session variables
-$_SESSION["serverName"] = "localhost";
-$_SESSION["databaseUserName"] = "root";
-$_SESSION["databasePassword"] = "1234";
-$_SESSION["databaseScheme"] = "cs4400_testdata";
+if (!$_SESSION["logged_in"]) {
+    header("Location: http://localhost/web_gui/php/userLogin.php");
+    exit();
+}
 
 global $conn;
 try {

@@ -1,5 +1,11 @@
 <?php
 session_start();
+
+if (!$_SESSION["logged_in"]) {
+    header("Location: http://localhost/web_gui/php/userLogin.php");
+    exit();
+}
+
 ?>
 
 <!DOCTYPE html>

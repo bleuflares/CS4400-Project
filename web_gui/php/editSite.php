@@ -1,3 +1,28 @@
+<?php
+// Start the session
+session_start();
+
+if (!$_SESSION["logged_in"]) {
+    header("Location: http://localhost/web_gui/php/userLogin.php");
+    exit();
+}
+
+global $conn;
+try {
+    $conn = new PDO(
+        "mysql:host=" . $_SESSION['serverName'] . ";dbname=" . $_SESSION['databaseScheme'] . "",
+        $_SESSION["databaseUserName"],
+        $_SESSION["databasePassword"]
+    );
+    // set the PDO error mode to exception
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    echo '<script>console.log("Connected Successfully to DB")</script>';
+} catch (PDOException $e) {
+    echo '<script>console.log("%cConnection failed: ' . $e->getMessage() . '", "color:red")</script>';
+}
+?>
+
+
 <!DOCTYPE html>
 <html>
 
@@ -42,14 +67,15 @@
             <div class="form-row">
 
                 <div class="form-group row col-sm-12">
-                    <label for="inputFirstName" class="label .col-form-label col-sm-0 offset-0" id="firstNameLabel">Address</label>
+                    <label for="inputFirstName" class="label .col-form-label col-sm-0 offset-0"
+                        id="firstNameLabel">Address</label>
 
-                    
-                        <input type="text" class="form-control col-sm-9 offset-1" id="inputAdress">
-                    
+
+                    <input type="text" class="form-control col-sm-9 offset-1" id="inputAdress">
+
                 </div>
 
-                
+
 
             </div>
 
@@ -59,22 +85,24 @@
             <div class="form-group row">
 
                 <div class="form-group row col-sm-6">
-                    <label for="inputFirstName" class="label .col-form-label col-sm-4" id="firstNameLabel">Manager</label>
-                    <select class = "col-sm-6" style="margin-left: 1em;">
+                    <label for="inputFirstName" class="label .col-form-label col-sm-4"
+                        id="firstNameLabel">Manager</label>
+                    <select class="col-sm-6" style="margin-left: 1em;">
                         <option value="Yes">Option1</option>
-                         <option value="No">Option2</option>
-               
+                        <option value="No">Option2</option>
+
                     </select>
 
                 </div>
 
 
-               <div class="form-group row col-sm-6">
-                    <label for="inputLastName" class="label .col-form-label col-sm-6" id="lastNameLabel">Open Everyday</label>
+                <div class="form-group row col-sm-6">
+                    <label for="inputLastName" class="label .col-form-label col-sm-6" id="lastNameLabel">Open
+                        Everyday</label>
                     <select style="margin-left: 1em;">
                         <option value="Yes">Yes</option>
-                         <option value="No">No</option>
-               
+                        <option value="No">No</option>
+
                     </select>
                 </div>
 
