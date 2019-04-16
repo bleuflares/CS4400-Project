@@ -56,15 +56,11 @@
 
 
             <div class="row">
-                <div class="col-sm-6">
-
-                    <label>Transport type</label>
-                                        <select>
-                        <option value="ALL">--ALL--</option>
-                        <option value="MARTA">MARTA</option>
-                        <option value="Bus">Bus</option>
-                        <option value="Bike">Bike</option>
-                    </select>
+                <div class="col-sm-1 offset-0">
+                    <label>Name </label>
+                </div>
+                    <div class="col-sm-3 offset-1">
+                    <input type="text" class="form-control col-sm-0 offset-0" id="inputAdress">
 
                 </div>
 
