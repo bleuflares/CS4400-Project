@@ -56,18 +56,19 @@
 
 
             <div class="row col-sm-12" >
+            <div class="row">
                 <div class="col-sm-0 offset-0">
                     <label class = 'offset-0'>Name</label>
                     <select>
-                        <?php 
+                        <?php
                             $result = $conn->query("SELECT SiteName FROM Site");
-                            
+
                             while ($row = $result->fetch()) {
                                 echo "<option>" . $row['SiteName'] . "</option>";
                             }
                         ?>
-                    </select> 
-
+                    </select>
+                <div class="col-sm-4 offset-1">
                     <label>Description Keyword</label>
                 </div>
                     <input type="text" class="form-control col-sm-1 offset-0 width:200px" width:200px id="inputAdress">
@@ -76,20 +77,20 @@
             </div>
 
             <div class="row">
-                <div class="col-sm-1 offset-0">
+                <div class="col-sm-2 offset-0">
                     <label>Start Date</label>
                 </div>
-                    <div class="col-sm-3 offset-0">
-                    <input type="text" class="form-control col-sm-0 offset-0" id="inputAdress">
+                    <div class="col-sm-4 offset-0">
+                    <input type="Date" class="form-control col-sm-0 offset-0" id="inputAdress">
 
                 </div>
 
 
-                <div class="col-sm-3 offset-1">
+                <div class="col-sm-2 offset-0">
                     <label>End Date</label>
                 </div>
-                    <div class="col-sm-3 offset-0">
-                    <input type="text" class="form-control col-sm-0 offset-0" id="inputAdress">
+                    <div class="col-sm-4 offset-0">
+                    <input type="date" class="form-control col-sm-0 offset-0" id="inputAdress">
 
                 </div>
             </div>
@@ -127,7 +128,7 @@
                 <div class="col-sm-4 offset-5">
                         <label for="inputLastName" class="label .col-form-label col-sm-6" id="lastNameLabel">Open Everyday</label>
                     <input type="checkbox" class="col-sm-1">
-               
+
             </div>
 
             <div class="row col-sm-12">
