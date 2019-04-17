@@ -41,6 +41,10 @@ if (isset($_POST['registerButton'])  && !empty($_POST['fname']) && !empty($_POST
     } else {
         echo '<script>console.log("%cPlease fill in matching password", "color:red")</script>';;
     }
+} else {
+    echo '<script language="javascript">';
+    echo 'alert("Failed to Register. There was an empty field. Please register again.")';
+    echo '</script>';
 }
 
 ?>
@@ -109,7 +113,7 @@ if (isset($_POST['registerButton'])  && !empty($_POST['fname']) && !empty($_POST
                         id="passwordLabel">Password</label>
 
                     <div class="col-sm-8">
-                        <input type="password" class="form-control" id="inputPassword" name="password">
+                        <input type="password" class="form-control" id="inputPassword" name="password" pattern=".{8,25}" placeholder="At least 8 characters">
                     </div>
                 </div>
 
@@ -118,7 +122,7 @@ if (isset($_POST['registerButton'])  && !empty($_POST['fname']) && !empty($_POST
                         id="confirmPasswordLabel">Confirm Password</label>
 
                     <div class="col-sm-8">
-                        <input type="password" class="form-control" id="inputConfirmPassword" name="cPass">
+                        <input type="password" class="form-control" id="inputConfirmPassword" name="cPass" pattern=".{8,25}" placeholder="At least 8 characters">
                     </div>
                 </div>
 
@@ -131,7 +135,8 @@ if (isset($_POST['registerButton'])  && !empty($_POST['fname']) && !empty($_POST
                     <label for="inputEmail" class="label .col-form-label col-sm-2" id="emailLabel">Email</label>
 
                     <div class="col-sm-6">
-                        <input type="text" class="form-control" id="inputEmail" name="email">
+                        <input type="text" class="form-control" id="inputEmail" name="email"
+                                pattern="[a-z0-9]+@[a-z0-9]+\.[a-z0-9]{1,}$">
                     </div>
 
                     <button type="submit" class="btn btn-outline-dark">Add</button>

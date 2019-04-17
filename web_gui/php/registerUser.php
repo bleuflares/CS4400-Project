@@ -48,8 +48,11 @@ if (isset($_POST['registerButton'])  && !empty($_POST['fname']) && !empty($_POST
         echo '</script>';
     }
 } else {
-    echo '<script>console.log("%cFailed Creation", "color:red")</script>';
+    echo '<script language="javascript">';
+    echo 'alert("Failed to Register. There was an empty field. Please register again.")';
+    echo '</script>';
 }
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -113,10 +116,11 @@ if (isset($_POST['registerButton'])  && !empty($_POST['fname']) && !empty($_POST
 
                 <div class="form-group row col-sm-6">
                     <label for="inputPassword" class="label .col-form-label col-sm-4"
-                        id="passwordLabel">Password</label>
+                        id="passwordLabel" >Password</label>
 
                     <div class="col-sm-8">
-                        <input type="password" class="form-control" id="inputPassword" name="pass">
+                        <input type="password" class="form-control" id="inputPassword" name="pass" pattern=".{8,25}"
+                            placeholder="At least 8 characters">
                     </div>
                 </div>
 
@@ -125,7 +129,8 @@ if (isset($_POST['registerButton'])  && !empty($_POST['fname']) && !empty($_POST
                         id="confirmPasswordLabel">Confirm Password</label>
 
                     <div class="col-sm-8">
-                        <input type="password" class="form-control" id="inputConfirmPassword" name="cpass">
+                        <input type="password" class="form-control" id="inputConfirmPassword" name="cpass" pattern=".{8,25}"
+                            placeholder="At least 8 characters">
                     </div>
                 </div>
 
@@ -138,7 +143,8 @@ if (isset($_POST['registerButton'])  && !empty($_POST['fname']) && !empty($_POST
                     <label for="inputEmail" class="label .col-form-label col-sm-2" id="emailLabel">Email</label>
 
                     <div class="col-sm-6">
-                        <input type="text" class="form-control" id="inputEmail" name="email">
+                        <input type="text" class="form-control" id="inputEmail" name="email"
+                                pattern="[a-z0-9]+@[a-z0-9]+\.[a-z0-9]{1,}$">
                     </div>
 
                     <button type="submit" class="btn btn-outline-dark">Add</button>

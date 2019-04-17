@@ -23,6 +23,7 @@ try {
 ?>
 
 
+
 <!DOCTYPE html>
 <html>
 
@@ -58,7 +59,8 @@ try {
                     <label for="inputLastName" class="label .col-form-label col-sm-4" id="lastNameLabel">Zipcode</label>
 
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" id="inputLastName">
+                        <input type="text" class="form-control" id="inputLastName"
+                                pattern='^\+?\d{5}' placeholder="5 digits">
                     </div>
                 </div>
 
