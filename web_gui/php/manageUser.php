@@ -2,6 +2,8 @@
 // Start the session
 session_start();
 
+$_SESSION['manageUser_Filtered'] = false;
+
 if (!$_SESSION["logged_in"]) {
     header("Location: http://localhost/web_gui/php/userLogin.php");
     exit();
@@ -20,6 +22,83 @@ try {
 } catch (PDOException $e) {
     echo '<script>console.log("%cConnection failed: ' . $e->getMessage() . '", "color:red")</script>';
 }
+?>
+
+
+<?php
+
+if (isset($_POST['filterButton'])) {
+
+    echo '<script>console.log("%cSuccessful Filter", "color:green")</script>';
+
+
+
+    echo '<script>console.log("user Input: ' . $_POST['usernameInput'] . '")</script>';
+    echo '<script>console.log("typeInput Input: ' . $_POST['typeInput'] . '")</script>';
+    echo '<script>console.log("statusInput Input: ' . $_POST['statusInput'] . '")</script>';
+
+
+
+    echo '<script>console.log("%cFilter ALL", "color:green")</script>';
+
+    if (!empty($_POST['usernameInput'])) {
+        $username = $_POST['usernameInput'];
+    } else {
+        $username = "%%";
+    }
+
+    $type = $_POST['typeInput'];
+    $status = $_POST['statusInput'];
+
+    if ($type == 'Visitor' || $type == 'User') {
+        $result = $conn->query("SELECT u.username, ue.emailCount, u.userType, u.status 
+                                from (select username, count(*) as EmailCount from UserEmail group by Username) 
+                                as ue inner join (select username, userType, status from User) 
+                                as u on ue.Username = u.Username 
+                                where u.Username like '$username' and UserType like '$type' and Status like '$status';");
+        $_SESSION['manageUser_Filtered_Employee'] = false;
+    } else {
+        $result = $conn->query("SELECT ue.username, emailCount, status,employeetype 
+        from (select username, count(*) as emailCount from UserEmail group by Username) 
+        as ue inner join (select u.username, u.status, e.employeeType from User as u inner join Employee as e on u.username = e.Username) 
+        as t on ue.Username = t.Username where ue.username LIKE '$username' and status = '$status' and employeetype = '$type';");
+        $_SESSION['manageUser_Filtered_Employee'] = true;
+    }
+
+
+    $_SESSION['manageUser_Filtered'] = true;
+} else {
+    echo '<script>console.log("%cFailed Filter", "color:red")</script>';
+}
+
+
+if (isset($_POST['approveButton']) && isset($_POST['optRadio'])) {
+
+    $selectUsername = $_POST['optRadio'];
+
+    // echo '<script>console.log("%cSelected Username: ' . $selectUsername . '", "color:green")</script>';
+
+    echo '<script language="javascript">';
+    echo 'alert("The User selected is: ' . $selectUsername . ' ")';
+    echo '</script>';
+
+    $result = $conn->query("Update user set status = 'Approve' where user.username = '$selectUsername';");
+}
+
+if (isset($_POST['declineButton']) && isset($_POST['optRadio'])) {
+
+    $selectUsername = $_POST['optRadio'];
+
+    // echo '<script>console.log("%cSelected Username: ' . $selectUsername . '", "color:green")</script>';
+
+    echo '<script language="javascript">';
+    echo 'alert("The User selected is: ' . $selectUsername . ' ")';
+    echo '</script>';
+
+    $result = $conn->query("Update user set status = 'Declined' where user.username = '$selectUsername';");
+}
+
+
 ?>
 
 
@@ -45,7 +124,7 @@ try {
     <script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
 
 
-    <script type="text/javascript">
+    <!-- <script type="text/javascript">
     $(document).ready(function() {
         var table = $('#table1').DataTable({
             // "stateSave": true
@@ -53,13 +132,13 @@ try {
         });
 
     });
-    </script>
+    </script> -->
 
     <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
 </head>
 
 <body>
-    <form class="form-signin">
+    <form class="form-signin" method="post">
         <h1 class="h3 mb-3 font-weight-heavy" id="titleOfForm">Manage User</h1>
 
 
@@ -69,20 +148,20 @@ try {
                 <div class="col-sm-12">
                     <label>Username</label>
 
-                    <input type="text" class="col-sm-1" style="text-align: center; margin-left: 0.5\em; padding: 0em;"
-                        placeholder="">
-                    <label>Type </label>
-                    <select style="margin-left: 1em;">
-                        <option value="ALL">User</option>
-                        <option value="MARTA">Visitor</option>
-                        <option value="Bus">Staff</option>
-                        <option value="Bike">Manager</option>
+                    <input type="text" class="col-sm-2" style="text-align: center; margin-left: 0.5\em; padding: 0em;"
+                        name="usernameInput" placeholder="">
+                    <label class="offset-1">Type </label>
+                    <select style="margin-left: 1em;" name="typeInput">
+                        <option value="User">User</option>
+                        <option value="Visitor">Visitor</option>
+                        <option value="Staff">Staff</option>
+                        <option value="Manager">Manager</option>
                     </select>
-                    <label>Status</label>
-                    <select style="margin-left: 1em;">
-                        <option value="ALL">Approved</option>
-                        <option value="MARTA">Pending</option>
-                        <option value="Bus">Declined</option>
+                    <label class="offset-1">Status</label>
+                    <select style="margin-left: 1em;" name="statusInput">
+                        <option value="Approved">Approved</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Declined">Declined</option>
 
                     </select>
 
@@ -94,9 +173,11 @@ try {
 
             <div class="form-row">'
                 <div class="form-group row col-sm-12 offset-3">
-                    <button type="submit" class="btn btn-primary" id="backButton">Filter</button>
-                    <button type="submit" class="btn btn-primary" id="registerButton">Approve</button>
-                    <button type="submit" class="btn btn-primary" id="registerButton">Decline</button>
+                    <button type="submit" class="btn btn-primary" id="backButton" name="filterButton">Filter</button>
+                    <button type="submit" class="btn btn-primary" id="registerButton"
+                        name="approveButton">Approve</button>
+                    <button type="submit" class="btn btn-primary" id="registerButton"
+                        name="declineButton">Decline</button>
                 </div>
 
 
@@ -114,26 +195,61 @@ try {
 
                     <tbody>
                         <?php
-                        $result = $conn->query("select 
-                                                    user.Username, 
-                                                    user.Status, 
-                                                    user.UserType, 
-                                                    user.Status from USER;
-                                                
-                                                ;");
 
-                        while ($row = $result->fetch()) {
-                            echo "<tr>";
-                            echo    "<td style='padding-left:2.4em;'> 
-                                        <div class='radio'>
-                                            <label><input type='radio' id='express' name='optradio'> " . $row['Username'] . "</label>
-                                        </div>
-                                    </td>";
+                        if ($_SESSION['manageUser_Filtered'] && $_SESSION['manageUser_Filtered_Employee'] == true) {
+                            while ($row = $result->fetch()) {
+                                echo "<tr >";
+                                echo    "<td style='padding-left:2.4em;'> 
+                                            <div class='radio'>
+                                                <label name ='selectUsername'><input type='radio' id='express' name ='optRadio'> " . $row['username'] . "</label>
+                                            </div>
+                                        </td>";
 
-                            echo "<td style='text-align:center'>" . $row['Status'] . "</td>";
-                            echo "<td style='text-align:center'>" . $row['UserType'] . "</td>";
-                            echo "<td style='text-align:center'>" . $row['Status'] . "</td>";
-                            echo "<tr>";
+                                echo "<td style='text-align:center'>" . $row['emailCount'] . "</td>";
+                                echo "<td style='text-align:center'>" . $row['employeeType'] . "</td>";
+                                echo "<td style='text-align:center'>" . $row['status'] . "</td>";
+                                echo "<tr>";
+                            }
+
+                            $_SESSION['manageUser_Filtered'] = false;
+                        } else if ($_SESSION['manageUser_Filtered'] && $_SESSION['manageUser_Filtered_Employee'] == false) {
+
+                            while ($row = $result->fetch()) {
+                                $username = $row['username'];
+                                echo "<tr>";
+                                echo    "<td style='padding-left:2.4em;'> 
+                                            <div class='radio'>
+                                                <label name ='selectUsername'>
+                                                    <input type='radio' id='express' name='$username' value='kljsdkl'> " . $row['username'] . "
+                                                </label>
+                                            </div>
+                                        </td>";
+
+                                echo "<td style='text-align:center'>" . $row['emailCount'] . "</td>";
+                                echo "<td style='text-align:center'>" . $row['userType'] . "</td>";
+                                echo "<td style='text-align:center'>" . $row['status'] . "</td>";
+                                echo "<tr>";
+                            }
+
+                            $_SESSION['manageUser_Filtered'] = false;
+                        } else {
+                            $result = $conn->query("select u.username, ue.emailCount, u.userType, u.status from (select username, count(*) as emailCount from UserEmail group by Username) 
+                            as ue inner join (select username, userType, status from User) as u on ue.Username = u.Username;");
+
+                            while ($row = $result->fetch()) {
+                                $username = $row['username'];
+                                echo "<tr>";
+                                echo    "<td style='padding-left:2.4em;'> 
+                                            <div class='radio'>
+                                                <label name ='selectUsername'><input type='radio' id='express' name='optRadio' value='$username'> " . $row['username'] . "</label>
+                                            </div>
+                                        </td>";
+
+                                echo "<td style='text-align:center'>" . $row['emailCount'] . "</td>";
+                                echo "<td style='text-align:center'>" . $row['userType'] . "</td>";
+                                echo "<td style='text-align:center'>" . $row['status'] . "</td>";
+                                echo "<tr>";
+                            }
                         }
                         ?>
 
@@ -152,5 +268,15 @@ try {
     </form>
 
 </body>
+
+<script>
+// DO NOT DELETE
+// $('input:radio').on('click', function(e) {
+//     // console.log(e.currentTarget.value);
+//     console.log(e.currentTarget.name);
+
+//     var test = e.currentTarget.name;
+// });
+</script>
 
 </html>
