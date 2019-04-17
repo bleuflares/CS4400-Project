@@ -31,13 +31,42 @@ if (isset($_POST['backButton'])) {
     if (strpos($userType, "Employee") !== false && strpos($userType, "Visitor") === false) {
         echo '<script>console.log("%cUser is EMPLOYEE", "color:blue")</script>';
 
-        header('Location: http://localhost/web_gui/php/administratorFunctionality.php');
-        exit();
+        // $employeeType = $_SESSION["user_employeeType"];
+
+        if (strpos($_SESSION["user_employeeType"], "Admin") !== false) {
+            header('Location: http://localhost/web_gui/php/administratorFunctionality.php');
+            exit();
+        } else if (strpos($_SESSION["user_employeeType"], "Manager") !== false) {
+            header('Location: http://localhost/web_gui/php/managerFunctionality.php');
+            exit();
+        } else if (strpos($_SESSION["user_employeeType"], "Staff") !== false) {
+            header('Location: http://localhost/web_gui/php/staffFunctionality.php');
+            exit();
+        } else {
+            echo '<script>console.log("%cUser is EMPLOYEE, BUT they are NOT a Admin, Manager, or Staff", "color:red")</script>';;
+        }
+
+        // header('Location: http://localhost/web_gui/php/administratorFunctionality.php');
+        // exit();
     } else if (strpos($userType, "Employee") !== false && strpos($userType, "Visitor") !== false) {
         echo '<script>console.log("%cUser is BOTH an EMPLOYEE and VISITOR", "color:blue")</script>';
 
-        header('Location: http://localhost/web_gui/php/administratorVisitorFunctionality.php');
-        exit();
+
+        if (strpos($_SESSION["user_employeeVisitorType"], "Admin") !== false) {
+            header('Location: http://localhost/web_gui/php/administratorVisitorFunctionality.php');
+            exit();
+        } else if (strpos($_SESSION["user_employeeVisitorType"], "Manager") !== false) {
+            header('Location: http://localhost/web_gui/php/managerVisitorFunctionality.php');
+            exit();
+        } else if (strpos($_SESSION["user_employeeVisitorType"], "Staff") !== false) {
+            header('Location: http://localhost/web_gui/php/staffVisitorFunctionality.php');
+            exit();
+        } else {
+            echo '<script>console.log("%cUser is EMPLOYEE and VISITOR, BUT they are NOT a Admin, Manager, or Staff", "color:red")</script>';;
+        }
+
+        // header('Location: http://localhost/web_gui/php/administratorVisitorFunctionality.php');
+        // exit();
     }
 }
 
