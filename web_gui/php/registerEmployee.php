@@ -20,7 +20,7 @@ try {
 
 <?php
 
-if (isset($_POST['registerButton']) && !empty($_POST['lname']) && !empty($_POST['lname'])&& !empty($_POST['username']) && !empty($_POST['password'])&& !empty($_POST['cPass'])&& !empty($_POST['email'])&& !empty($_POST['phone'])&& 
+if (isset($_POST['registerButton']) && !empty($_POST['lname']) && !empty($_POST['lname'])&& !empty($_POST['username']) && !empty($_POST['password'])&& !empty($_POST['cPass'])&& !empty($_POST['email'])&& !empty($_POST['phone'])&&
     !empty($_POST['address'])&& !empty($_POST['city'])&& !empty($_POST['state'])&& !empty($_POST['zip'])&& !empty($_POST['type'])){
 
    echo '<script>console.log("First Name Input: ' . $_POST['fname'] . '")</script>';
@@ -46,9 +46,13 @@ if (isset($_POST['registerButton']) && !empty($_POST['lname']) && !empty($_POST[
    if($password == $cPass){
           $result = $conn->query("INSERT into user VALUES('$username', '$password','Pending', '$fname', '$lname', 'Employee')");
           $result = $conn->query("INSERT into Employee VALUES('$username', null,'$phone','$address','$city','$state','$zip','@type')");
-    
-    
+
+
    }
+} else {
+    echo '<script language="javascript">';
+    echo 'alert("Failed to Register. There was an empty field. Please register again.")';
+    echo '</script>';
 }
 
 ?>
@@ -129,7 +133,7 @@ if (isset($_POST['registerButton']) && !empty($_POST['lname']) && !empty($_POST[
                         id="passwordLabel">Password</label>
 
                     <div class="col-sm-8">
-                        <input type="password" class="form-control" id="inputPassword" name = "password">
+                        <input type="password" class="form-control" id="inputPassword" name = "password" pattern=".{8,25}" placeholder="At least 8 characters">
                     </div>
                 </div>
 
@@ -138,7 +142,7 @@ if (isset($_POST['registerButton']) && !empty($_POST['lname']) && !empty($_POST[
                         id="confirmPasswordLabel">Confirm Password</label>
 
                     <div class="col-sm-8">
-                        <input type="password" class="form-control" id="inputConfirmPassword" name="cPass">
+                        <input type="password" class="form-control" id="inputConfirmPassword" name="cPass" pattern=".{8,25}" placeholder="At least 8 characters">
                     </div>
                 </div>
 
@@ -151,7 +155,8 @@ if (isset($_POST['registerButton']) && !empty($_POST['lname']) && !empty($_POST[
                     <label for="inputPassword1" class="label .col-form-label col-sm-4" id="passwordLabel">Phone</label>
 
                     <div class="col-sm-8">
-                        <input type="tel" class="form-control" id="inputPassword1" name="phone">
+                        <input type="tel" class="form-control" id="inputPassword1" name="phone"
+                                 pattern='^\+?\d{10}' placeholder="10 digit number">
                     </div>
                 </div>
 
@@ -241,7 +246,8 @@ if (isset($_POST['registerButton']) && !empty($_POST['lname']) && !empty($_POST[
                     <label for="inputZip" class="label .col-form-label col-sm-2">Zip</label>
 
                     <div class="col-sm-9">
-                        <input type="text" class="form-control" id="inputZip" name = "zip">
+                        <input type="text" class="form-control" id="inputZip" name = "zip"
+                                pattern='^\+?\d{5}' placeholder="5 digits">
                     </div>
 
                 </div>
@@ -255,7 +261,8 @@ if (isset($_POST['registerButton']) && !empty($_POST['lname']) && !empty($_POST[
                     <label for="inputEmail" class="label .col-form-label col-sm-2" id="emailLabel">Email</label>
 
                     <div class="col-sm-6">
-                        <input type="text" class="form-control" id="inputEmail" name ="email">
+                        <input type="text" class="form-control" id="inputEmail" name ="email"
+                                pattern="[a-z0-9]+@[a-z0-9]+\.[a-z0-9]{1,}$">
                     </div>
 
                     <button type="submit" class="btn btn-outline-dark">Add</button>

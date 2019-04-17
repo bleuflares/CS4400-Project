@@ -96,7 +96,7 @@ if (isset($_POST['nameInput'])  && !empty($_POST['zipInput']) && !empty($_POST['
                         value="j">Zipcode</label>
 
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" id="inputLastName" name="zipInput">
+                        <input type="text" class="form-control" id="inputLastName" name="zipInput" pattern='^\+?\d{5}' placeholder="5 digits">
                     </div>
                 </div>
 

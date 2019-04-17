@@ -161,8 +161,7 @@ if (isset($_POST['registerButton']) && !empty($_POST['fname']) && !empty($_POST[
                     <label for="inputPassword" class="label .col-form-label col-sm-4" id="passwordLabel">Phone</label>
 
                     <div class="col-sm-8">
-                        <input type="tel" class="form-control" id="inputPassword1" name="phone" pattern='^\+?\d{10}'
-                            placeholder="10 digit number">
+                        <input type="tel" class="form-control" id="inputPassword1" name="phone" pattern='^\+?\d{10}' placeholder="10 digit number">
                     </div>
                 </div>
 
@@ -265,9 +264,9 @@ if (isset($_POST['registerButton']) && !empty($_POST['fname']) && !empty($_POST[
 
                 <div class="form-group row col-sm-12">
                     <label for="inputEmail" class="label .col-form-label col-sm-2" id="emailLabel">Email</label>
-
                     <div class="col-sm-6">
-                        <input type="text" class="form-control" id="inputEmail" name="email">
+                        <input type="text" class="form-control" id="inputEmail" name="email"
+                                pattern="[a-z0-9]+@[a-z0-9]+\.[a-z0-9]{1,}$">
                     </div>
 
                     <button type="submit" class="btn btn-outline-dark">Add</button>

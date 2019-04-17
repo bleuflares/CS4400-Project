@@ -22,6 +22,29 @@ try {
 }
 ?>
 
+<?php
+
+if (isset($_POST['backButton'])) {
+
+    $userType  = $_SESSION["userType"];
+
+    if (strpos($userType, "Employee") !== false && strpos($userType, "Visitor") === false) {
+        echo '<script>console.log("%cUser is EMPLOYEE", "color:blue")</script>';
+
+        header('Location: http://localhost/web_gui/php/administratorFunctionality.php');
+        exit();
+    } else if (strpos($userType, "Employee") !== false && strpos($userType, "Visitor") !== false) {
+        echo '<script>console.log("%cUser is BOTH an EMPLOYEE and VISITOR", "color:blue")</script>';
+
+        header('Location: http://localhost/web_gui/php/administratorVisitorFunctionality.php');
+        exit();
+    }
+}
+
+
+
+?>
+
 
 
 <!DOCTYPE html>
@@ -55,13 +78,13 @@ try {
 <body>
 
     <?php
-    $result = $conn->query("select  e.*, u.Password, 
-                                            u.Status, 
-                                            u.Firstname, 
-                                            u.Lastname, 
-                                            u.UserType 
-                                    from employee e inner join user u 
-                                    on e.Username = u.Username 
+    $result = $conn->query("select  e.*, u.Password,
+                                            u.Status,
+                                            u.Firstname,
+                                            u.Lastname,
+                                            u.UserType
+                                    from employee e inner join user u
+                                    on e.Username = u.Username
                                     where u.Username = '" . $_SESSION["userName"] . "';");
 
     $row = $result->fetch();
@@ -77,7 +100,7 @@ try {
     ?>
 
 
-    <form class="form-signin">
+    <form class="form-signin" method="post">
         <h1 class="h3 mb-3 font-weight-heavy" id="titleOfForm">Manage Profile</h1>
 
 
@@ -131,7 +154,7 @@ try {
                 <div class="col-sm-6">
                     <label>Phone</label>
                     <?php
-                    echo '<input type="tel" class="col-sm-6" style="padding: 0; margin-left: 3.85em;" value="' . $row['Phone'] . '">'
+                    echo '<input type="tel" pattern="^\+?\d{10}" placeholder="10 digit number" class="col-sm-6" style="padding: 0; margin-left: 3.85em;" value="' . $row['Phone'] . '">'
                     ?>
                 </div>
             </div>
@@ -179,10 +202,10 @@ try {
 
                     <?php
                     if (strpos($row['UserType'], "Visit") !== false) {
-                        echo '<input type="checkbox" class="col-sm-1" 
+                        echo '<input type="checkbox" class="col-sm-1"
                             style="text-align: center; margin-left: 0.5em; padding: 0em;" placeholder="" checked>';
                     } else {
-                        echo '<input type="checkbox" class="col-sm-1" 
+                        echo '<input type="checkbox" class="col-sm-1"
                             style="text-align: center; margin-left: 0.5em; padding: 0em;" placeholder="">';
                     }
 
@@ -195,9 +218,9 @@ try {
 
             <div class="form-row">'
                 <div class="form-group row col-sm-12 offset-3">
-                    <button type="submit" class="btn btn-primary" id="backButton"
+                    <button type="submit" class="btn btn-primary" id="backButton" name="updateButton"
                         style="padding-left: 2.5em; padding-right: 2.5em; margin-left: .5em;">Update</button>
-                    <button type="submit" class="btn btn-primary" id="registerButton"
+                    <button type="submit" class="btn btn-primary" id="registerButton" name="backButton"
                         style="padding-left: 3.25em; padding-right: 3.25em; margin-left: 4em;">Back</button>
                 </div>
             </div>
