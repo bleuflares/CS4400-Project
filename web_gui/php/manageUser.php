@@ -27,12 +27,10 @@ try {
 
 <?php
 
+// Performs a filtering on the Database Results Table 
 if (isset($_POST['filterButton'])) {
 
     echo '<script>console.log("%cSuccessful Filter", "color:green")</script>';
-
-
-
     echo '<script>console.log("user Input: ' . $_POST['usernameInput'] . '")</script>';
     echo '<script>console.log("typeInput Input: ' . $_POST['typeInput'] . '")</script>';
     echo '<script>console.log("statusInput Input: ' . $_POST['statusInput'] . '")</script>';
@@ -72,30 +70,57 @@ if (isset($_POST['filterButton'])) {
 }
 
 
+// Updating DB by changing User Status to Approved
 if (isset($_POST['approveButton']) && isset($_POST['optRadio'])) {
 
     $selectUsername = $_POST['optRadio'];
 
-    // echo '<script>console.log("%cSelected Username: ' . $selectUsername . '", "color:green")</script>';
-
     echo '<script language="javascript">';
-    echo 'alert("The User selected is: ' . $selectUsername . ' ")';
+    echo 'alert("The User selected is: ' . $selectUsername . ' and their status has been set to approved.")';
     echo '</script>';
 
-    $result = $conn->query("Update user set status = 'Approve' where user.username = '$selectUsername';");
+    $result = $conn->query("UPDATE user SET STATUS = 'Approved' WHERE user.username = '$selectUsername';");
 }
 
+// Updating DB by changing User Status to Declined
 if (isset($_POST['declineButton']) && isset($_POST['optRadio'])) {
 
     $selectUsername = $_POST['optRadio'];
 
-    // echo '<script>console.log("%cSelected Username: ' . $selectUsername . '", "color:green")</script>';
-
     echo '<script language="javascript">';
-    echo 'alert("The User selected is: ' . $selectUsername . ' ")';
+    echo 'alert("The User selected is: ' . $selectUsername . ' and their status has been set to declined.")';
     echo '</script>';
 
-    $result = $conn->query("Update user set status = 'Declined' where user.username = '$selectUsername';");
+    $result = $conn->query("UPDATE user SET STATUS = 'Declined' WHERE user.username = '$selectUsername';");
+}
+
+
+// Navigation of Back Button
+if (isset($_POST['backButton'])) {
+
+    $userType  = $_SESSION["userType"];
+
+    if (strpos($userType, "Employee") !== false && strpos($userType, "Visitor") === false) {
+        echo '<script>console.log("%cUser is EMPLOYEE", "color:blue")</script>';
+        // $employeeType = $_SESSION["user_employeeType"];
+
+        if (strpos($_SESSION["user_employeeType"], "Admin") !== false) {
+            header('Location: http://localhost/web_gui/php/administratorFunctionality.php');
+            exit();
+        } else {
+            echo '<script>console.log("%cUser is EMPLOYEE, BUT they are NOT a Admin.", "color:red")</script>';;
+        }
+    } else if (strpos($userType, "Employee") !== false && strpos($userType, "Visitor") !== false) {
+        echo '<script>console.log("%cUser is BOTH an EMPLOYEE and VISITOR", "color:blue")</script>';
+
+
+        if (strpos($_SESSION["user_employeeVisitorType"], "Admin") !== false) {
+            header('Location: http://localhost/web_gui/php/administratorVisitorFunctionality.php');
+            exit();
+        } else {
+            echo '<script>console.log("%cUser is EMPLOYEE and VISITOR, BUT they are NOT a Admin.", "color:red")</script>';;
+        }
+    }
 }
 
 
@@ -256,13 +281,14 @@ if (isset($_POST['declineButton']) && isset($_POST['optRadio'])) {
                     </tbody>
                 </table>
 
-                <div class="row">
-                    <div class="col-sm-2 offset-5">
-                        <button class="btn btn-sm btn-primary btn-block"
-                            style="border-radius: 5px; margin-left: .25em;">Back</button>
-                    </div>
-                </div>
 
+            </div>
+
+            <div class="row">
+                <div class="col-sm-3 offset-4">
+                    <button class="btn btn-sm btn-primary btn-block" style="border-radius: 5px; margin-left: 1.5em;"
+                        name="backButton">Back</button>
+                </div>
             </div>
 
     </form>
