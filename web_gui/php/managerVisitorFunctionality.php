@@ -58,7 +58,8 @@ try {
 
             <div class="row">
                 <div class="col-md-4 offset-1">
-                    <a class="btn btn-lg btn-primary btn-block" type="visitorOnly" href="./viewStaff.php">View Staff</a>
+                    <a class="btn btn-lg btn-primary btn-block" type="visitorOnly" href="./manageStaff.php">View
+                        Staff</a>
                 </div>
                 <div class="col-md-4 offset-2">
                     <a class="btn btn-lg btn-primary btn-block" type="back" href="./siteReport.php">View Site Report</a>

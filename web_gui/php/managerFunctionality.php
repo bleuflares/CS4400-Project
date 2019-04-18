@@ -69,7 +69,7 @@ try {
 
             <div class="row">
                 <div class="col-md-4 offset-1">
-                    <a class="btn btn-lg btn-primary btn-block" type="employeeOnly" href="./viewStaff.php">View
+                    <a class="btn btn-lg btn-primary btn-block" type="employeeOnly" href="./manageStaff.php">View
                         Staff</a>
                 </div>
 
