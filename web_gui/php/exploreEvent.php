@@ -23,6 +23,38 @@ try {
 ?>
 
 
+<?php
+
+if (isset($_POST['backButton'])) {
+
+    $userType  = $_SESSION["userType"];
+
+    if (strpos($userType, "Employee") !== false && strpos($userType, "Visitor") !== false) {
+        echo '<script>console.log("%cUser is BOTH an EMPLOYEE and VISITOR", "color:blue")</script>';
+
+
+        if (strpos($_SESSION["user_employeeVisitorType"], "Admin") !== false) {
+            header('Location: http://localhost/web_gui/php/administratorVisitorFunctionality.php');
+            exit();
+        } else if (strpos($_SESSION["user_employeeVisitorType"], "Manager") !== false) {
+            header('Location: http://localhost/web_gui/php/managerVisitorFunctionality.php');
+            exit();
+        } else if (strpos($_SESSION["user_employeeVisitorType"], "Staff") !== false) {
+            header('Location: http://localhost/web_gui/php/staffVisitorFunctionality.php');
+            exit();
+        } else {
+            echo '<script>console.log("%cUser is EMPLOYEE and VISITOR, BUT they are NOT a Admin, Manager, or Staff", "color:red")</script>';;
+        }
+    } else if (strpos($userType, "Employee") === false && strpos($userType, "Visitor") !== false) {
+        echo '<script>console.log("%cUser is ONLY a VISITOR", "color:blue")</script>';
+        header('Location: http://localhost/web_gui/php/visitorFunctionality.php');
+        exit();
+    }
+}
+
+?>
+
+
 
 <!DOCTYPE html>
 <html>
@@ -54,13 +86,10 @@ try {
 </head>
 
 <body>
-    <form class="form-signin">
+    <form class="form-signin" method="post">
         <h1 class="h3 mb-3 font-weight-heavy" id="titleOfForm">Explore Event</h1>
 
-
         <div class="container">
-
-
             <div class="row col-sm-12">
                 <div class="row">
                     <div class="col-sm-0 offset-0">
@@ -92,7 +121,6 @@ try {
 
                     </div>
 
-
                     <div class="col-sm-2 offset-0">
                         <label>End Date</label>
                     </div>
@@ -115,7 +143,6 @@ try {
                         <input type="text" class="col-sm-1" style="text-align: center;" placeholder="">
                     </div>
 
-
                     <div class="col-sm-0 offset-0">
                         <label>Event Count Range</label>
                     </div>
@@ -127,7 +154,6 @@ try {
 
                         <input type="text" class="col-sm-1" style="text-align: center;" placeholder="">
                     </div>
-
                 </div>
             </div>
 
@@ -136,7 +162,6 @@ try {
                     <label for="inputLastName" class="label .col-form-label col-sm-6" id="lastNameLabel">Open
                         Everyday</label>
                     <input type="checkbox" class="col-sm-1">
-
                 </div>
 
                 <div class="row col-sm-12">
@@ -149,8 +174,6 @@ try {
                     <div class="col-sm-0 offset-2" style="text-align: right;">
                         <input id="button" class="btn btn-sm btn-primary btn-block col-sm-0" type="submit" name="button"
                             onclick="filter();" value="Site Detail" />
-
-
                     </div>
 
 
@@ -158,15 +181,9 @@ try {
                         <input id="button" class="btn btn-sm btn-primary btn-block col-sm-0 offset-6" type="submit"
                             name="button" onclick="myFunction();" value="Transit Detail" />
                     </div>
-
                 </div>
-
-
             </div>
         </div>
-
-
-
 
         <table id="test" class="table table-bordered" style="width:100%">
             <thead>
@@ -177,25 +194,18 @@ try {
                     <th style='text-align:center'>My Visits</th>
                 </tr>
             </thead>
-
             <tbody>
 
             </tbody>
         </table>
 
-
-
         <div class="col-sm-0 offset-6">
             <button class="btn btn-sm btn-primary btn-block col-sm-0  " style=" height:40px;
-    width:60px;border-radius: 5px;">Back</button>
+    width:60px;border-radius: 5px;" name="backButton">Back</button>
         </div>
-
 
     </form>
 
-
 </body>
-
-
 
 </html>
