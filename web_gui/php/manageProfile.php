@@ -45,9 +45,6 @@ if (isset($_POST['backButton'])) {
         } else {
             echo '<script>console.log("%cUser is EMPLOYEE, BUT they are NOT a Admin, Manager, or Staff", "color:red")</script>';;
         }
-
-        // header('Location: http://localhost/web_gui/php/administratorFunctionality.php');
-        // exit();
     } else if (strpos($userType, "Employee") !== false && strpos($userType, "Visitor") !== false) {
         echo '<script>console.log("%cUser is BOTH an EMPLOYEE and VISITOR", "color:blue")</script>';
 
@@ -64,12 +61,8 @@ if (isset($_POST['backButton'])) {
         } else {
             echo '<script>console.log("%cUser is EMPLOYEE and VISITOR, BUT they are NOT a Admin, Manager, or Staff", "color:red")</script>';;
         }
-
-        // header('Location: http://localhost/web_gui/php/administratorVisitorFunctionality.php');
-        // exit();
     }
 }
-
 
 
 ?>
