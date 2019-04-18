@@ -22,6 +22,37 @@ try {
 }
 ?>
 
+<?php
+
+if (isset($_POST['backButton'])) {
+
+    $userType  = $_SESSION["userType"];
+
+    if (strpos($userType, "Employee") !== false && strpos($userType, "Visitor") !== false) {
+        echo '<script>console.log("%cUser is BOTH an EMPLOYEE and VISITOR", "color:blue")</script>';
+
+
+        if (strpos($_SESSION["user_employeeVisitorType"], "Admin") !== false) {
+            header('Location: http://localhost/web_gui/php/administratorVisitorFunctionality.php');
+            exit();
+        } else if (strpos($_SESSION["user_employeeVisitorType"], "Manager") !== false) {
+            header('Location: http://localhost/web_gui/php/managerVisitorFunctionality.php');
+            exit();
+        } else if (strpos($_SESSION["user_employeeVisitorType"], "Staff") !== false) {
+            header('Location: http://localhost/web_gui/php/staffVisitorFunctionality.php');
+            exit();
+        } else {
+            echo '<script>console.log("%cUser is EMPLOYEE and VISITOR, BUT they are NOT a Admin, Manager, or Staff", "color:red")</script>';;
+        }
+    } else if (strpos($userType, "Employee") === false && strpos($userType, "Visitor") !== false) {
+        echo '<script>console.log("%cUser is ONLY a VISITOR", "color:blue")</script>';
+        header('Location: http://localhost/web_gui/php/visitorFunctionality.php');
+        exit();
+    }
+}
+
+?>
+
 
 
 <!DOCTYPE html>
@@ -63,7 +94,7 @@ try {
 </head>
 
 <body>
-    <form class="form-signin">
+    <form class="form-signin" method="post">
         <h1 class="h3 mb-3 font-weight-heavy" id="titleOfForm">Visit History</h1>
 
 
@@ -99,9 +130,6 @@ try {
 
                     </div>
 
-
-
-
                     <div class="col-sm-0 offset-1">
                         <label>End Date</label>
 
@@ -110,8 +138,6 @@ try {
                     </div>
                 </div>
 
-
-
                 <div class="row col-sm-12">
 
                     <div class="col-sm-0 offset-6">
@@ -119,13 +145,8 @@ try {
     width:60px;border-radius: 5px;">Filter</button>
                     </div>
 
-
-
                 </div>
             </div>
-
-
-
 
             <table id="test" class="table table-bordered" style="width:100%">
                 <thead>
@@ -145,19 +166,13 @@ try {
 
             <div class="container">
                 <div class="col-sm-2 offset-5">
-                    <button class="btn btn-sm btn-primary btn-block col-sm-0" style="border-radius: 5px;">Back</button>
+                    <button class="btn btn-sm btn-primary btn-block col-sm-0" style="border-radius: 5px;"
+                        name="backButton">Back</button>
                 </div>
             </div>
 
-
-
-
-
     </form>
 
-
 </body>
-
-
 
 </html>
