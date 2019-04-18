@@ -22,6 +22,38 @@ try {
 }
 ?>
 
+<?php
+
+// Navigation of Back Button
+if (isset($_POST['backButton'])) {
+
+    $userType  = $_SESSION["userType"];
+
+    if (strpos($userType, "Employee") !== false && strpos($userType, "Visitor") === false) {
+        echo '<script>console.log("%cUser is EMPLOYEE", "color:blue")</script>';
+        // $employeeType = $_SESSION["user_employeeType"];
+
+        if (strpos($_SESSION["user_employeeType"], "Admin") !== false) {
+            header('Location: http://localhost/web_gui/php/administratorFunctionality.php');
+            exit();
+        } else {
+            echo '<script>console.log("%cUser is EMPLOYEE, BUT they are NOT a Admin.", "color:red")</script>';;
+        }
+    } else if (strpos($userType, "Employee") !== false && strpos($userType, "Visitor") !== false) {
+        echo '<script>console.log("%cUser is BOTH an EMPLOYEE and VISITOR", "color:blue")</script>';
+
+
+        if (strpos($_SESSION["user_employeeVisitorType"], "Admin") !== false) {
+            header('Location: http://localhost/web_gui/php/administratorVisitorFunctionality.php');
+            exit();
+        } else {
+            echo '<script>console.log("%cUser is EMPLOYEE and VISITOR, BUT they are NOT a Admin.", "color:red")</script>';;
+        }
+    }
+}
+
+?>
+
 
 <!DOCTYPE html>
 <html>
@@ -53,12 +85,11 @@ try {
 </head>
 
 <body>
-    <form class="form-signin">
+    <form class="form-signin" method="post">
         <h1 class="h3 mb-3 font-weight-heavy" id="titleOfForm">Manage Site</h1>
 
 
         <div class="container">
-
 
             <div class="row">
                 <div class="col-sm-6">
@@ -94,12 +125,6 @@ try {
                             <option value="ALL">No</option>
                         </select>
 
-                        <!--                     <input type="text" class="col-sm-4" style="text-align: center;" placeholder="">
-                    
-                    <label> -- </label>
-
-                    <input type="text" class="col-sm-4"  style="text-align: center;" placeholder=""> -->
-
                     </div>
 
 
@@ -128,21 +153,15 @@ try {
                         </div>
                     </div>
 
-
                 </div>
             </div>
-
-
-
 
             <table id="test" class="table table-bordered" style="width:100%">
                 <thead>
                     <tr>
-                        <th style='text-align:center'>Route</th>
-                        <th style='text-align:center'>Transport Type</th>
-                        <th style='text-align:center'>Price</th>
-                        <th style='text-align:center'># Connected Sites</th>
-                        <th style='text-align:center'># Transit Loggged</th>
+                        <th style='text-align:center'>Name</th>
+                        <th style='text-align:center'>Manager</th>
+                        <th style='text-align:center'>Open Everyday</th>
                     </tr>
                 </thead>
 
@@ -161,32 +180,21 @@ try {
                                                                         group by transitroute) 
                                                 count on transit.transitroute = count.transitroute;");
 
-                    while ($row = $result->fetch()) {
-                        echo "<tr>";
-                        echo    "<td style='padding-left:2.4em;'> 
-                                        <div class='radio'>
-                                            <label><input type='radio' id='express' name='optradio'> " . $row['TransitRoute'] . "</label>
-                                        </div>
-                                    </td>";
-                        echo "<td style='text-align:center'>" . $row['TransitType'] . "</td>";
-                        echo "<td style='text-align:center'> $" . $row['TransitPrice'] . "</td>";
-                        echo "<td style='text-align:center'>" . $row['Total'] . "</td>";
-                        echo "<tr>";
-                    }
+                    while ($row = $result->fetch()) { }
                     ?>
 
                 </tbody>
             </table>
 
-
-
-
+            <div class="row">
+                <div class="col-sm-3 offset-4">
+                    <button class="btn btn-sm btn-primary btn-block" style="border-radius: 5px; margin-left: 1.5em;"
+                        name="backButton">Back</button>
+                </div>
+            </div>
 
     </form>
 
-
 </body>
-
-
 
 </html>
