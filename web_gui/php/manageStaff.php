@@ -22,7 +22,34 @@ try {
 }
 ?>
 
+<?php
 
+if (isset($_POST['backButton'])) {
+
+    $userType  = $_SESSION["userType"];
+
+    if (strpos($userType, "Employee") !== false && strpos($userType, "Visitor") === false) {
+        echo '<script>console.log("%cUser is EMPLOYEE", "color:blue")</script>';
+
+        if (strpos($_SESSION["user_employeeType"], "Manager") !== false) {
+            header('Location: http://localhost/web_gui/php/managerFunctionality.php');
+            exit();
+        } else {
+            echo '<script>console.log("%cUser is EMPLOYEE, BUT they are NOT a Admin, Manager, or Staff", "color:red")</script>';;
+        }
+    } else if (strpos($userType, "Employee") !== false && strpos($userType, "Visitor") !== false) {
+        echo '<script>console.log("%cUser is BOTH an EMPLOYEE and VISITOR", "color:blue")</script>';
+
+        if (strpos($_SESSION["user_employeeVisitorType"], "Manager") !== false) {
+            header('Location: http://localhost/web_gui/php/managerVisitorFunctionality.php');
+            exit();
+        } else {
+            echo '<script>console.log("%cUser is EMPLOYEE and VISITOR, BUT they are NOT a Admin, Manager, or Staff", "color:red")</script>';;
+        }
+    }
+}
+
+?>
 
 <!DOCTYPE html>
 <html>
@@ -63,13 +90,12 @@ try {
 </head>
 
 <body>
-    <form class="form-signin">
+    <form class="form-signin" method="post">
         <h1 class="h3 mb-3 font-weight-heavy" id="titleOfForm">Manage Staff</h1>
-
 
         <div class="container">
             <div class="row">
-                <div class="col-sm-0 offset-0">
+                <div class="col-sm-12 offset-0">
                     <label class='offset-4'>Site</label>
                     <select>
                         <?php
@@ -107,9 +133,6 @@ try {
 
                         </div>
 
-
-
-
                         <div class="col-sm-0 offset-1">
                             <label>End Date</label>
 
@@ -118,8 +141,6 @@ try {
                         </div>
                     </div>
 
-
-
                     <div class="row col-sm-12">
 
                         <div class="col-sm-0 offset-6">
@@ -127,37 +148,34 @@ try {
     width:60px;border-radius: 5px;">Filter</button>
                         </div>
 
-
-
                     </div>
                 </div>
+            </div>
 
+            <table id="test" class="table table-bordered" style="width:100%">
+                <thead>
+                    <tr>
+                        <th style='text-align:center'>Staff Name</th>
+                        <th style='text-align:center'># of Event Shifts Shifts</th>
 
+                    </tr>
+                </thead>
 
+                <tbody>
 
-                <table id="test" class="table table-bordered" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th style='text-align:center'>Staff Name</th>
-                            <th style='text-align:center'># of Event Shifts Shifts</th>
+                </tbody>
+            </table>
 
-                        </tr>
-                    </thead>
-
-                    <tbody>
-
-                    </tbody>
-                </table>
-
-
-
-
+            <div class="container">
+                <div class="col-sm-2 offset-5">
+                    <button class="btn btn-sm btn-primary btn-block col-sm-0" style="border-radius: 5px;"
+                        name="backButton">Back</button>
+                </div>
+            </div>
+        </div>
 
     </form>
 
-
 </body>
-
-
 
 </html>
