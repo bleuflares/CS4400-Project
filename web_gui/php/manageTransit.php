@@ -53,10 +53,7 @@ if (isset($_POST['backButton'])) {
     }
 }
 
-
-
 ?>
-
 
 
 <!DOCTYPE html>
@@ -77,7 +74,6 @@ if (isset($_POST['backButton'])) {
 
     <script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
 
-
     <!-- <script type="text/javascript">
 
     $(document).ready(function() {
@@ -92,14 +88,12 @@ if (isset($_POST['backButton'])) {
     <form class="form-signin" method="post">
         <h1 class="h3 mb-3 font-weight-heavy" id="titleOfForm">Manage Transit</h1>
 
-
         <div class="container">
-
 
             <div class="row">
                 <div class="col-sm-6">
 
-                    <label>Transport type</label>
+                    <label>Transport Type</label>
                     <select>
                         <option value="ALL">--ALL--</option>
                         <option value="MARTA">MARTA</option>
@@ -109,13 +103,11 @@ if (isset($_POST['backButton'])) {
 
                 </div>
 
-
                 <div class="col-sm-1 offset-0">
                     <label>Route </label>
                 </div>
                 <div class="col-sm-3 offset-1">
                     <input type="text" class="form-control col-sm-0 offset-0" id="inputAdress">
-
                 </div>
             </div>
 
@@ -131,13 +123,6 @@ if (isset($_POST['backButton'])) {
                         }
                         ?>
                     </select>
-
-                    <!--                     <input type="text" class="col-sm-4" style="text-align: center;" placeholder="">
-                    
-                    <label> -- </label>
-
-                    <input type="text" class="col-sm-4"  style="text-align: center;" placeholder=""> -->
-
                 </div>
 
 
@@ -145,7 +130,6 @@ if (isset($_POST['backButton'])) {
                     <label>Price Range</label>
                 </div>
                 <div class="col-sm-3">
-
                     <input type="text" class="col-sm-1" style="text-align: center;" placeholder="">
 
                     <label> -- </label>
@@ -163,10 +147,7 @@ if (isset($_POST['backButton'])) {
                     <div class="col-sm-0 offset-3" style="text-align: right;">
                         <input id="button" class="btn btn-sm btn-primary btn-block col-sm-0" type="submit" name="button"
                             onclick="filter();" value="Create" />
-
-
                     </div>
-
 
                     <div class="col-sm-0 offset-1">
                         <input id="button" class="btn btn-sm btn-primary btn-block col-sm-0" type="submit" name="button"
@@ -181,9 +162,6 @@ if (isset($_POST['backButton'])) {
 
             </div>
         </div>
-
-
-
 
         <table id="test" class="table table-bordered" style="width:100%">
             <thead>
@@ -211,24 +189,10 @@ if (isset($_POST['backButton'])) {
                                                                         group by transitroute) 
                                                 count on transit.transitroute = count.transitroute;");
 
-                while ($row = $result->fetch()) {
-                    echo "<tr>";
-                    echo    "<td style='padding-left:2.4em;'> 
-                                        <div class='radio'>
-                                            <label><input type='radio' id='express' name='optradio'> " . $row['TransitRoute'] . "</label>
-                                        </div>
-                                    </td>";
-                    echo "<td style='text-align:center'>" . $row['TransitType'] . "</td>";
-                    echo "<td style='text-align:center'> $" . $row['TransitPrice'] . "</td>";
-                    echo "<td style='text-align:center'>" . $row['Total'] . "</td>";
-                    echo "<tr>";
-                }
+                while ($row = $result->fetch()) { }
                 ?>
-
             </tbody>
         </table>
-
-
 
         <div class="row">
             <div class="col-sm-3 offset-4">
@@ -239,10 +203,6 @@ if (isset($_POST['backButton'])) {
 
     </form>
 
-
-
 </body>
-
-
 
 </html>
