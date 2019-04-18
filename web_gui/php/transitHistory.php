@@ -22,7 +22,59 @@ try {
 }
 ?>
 
+<?php
 
+if (isset($_POST['backButton'])) {
+
+    $userType  = $_SESSION["userType"];
+
+    if (strpos($userType, "Employee") !== false && strpos($userType, "Visitor") === false) {
+        echo '<script>console.log("%cUser is EMPLOYEE", "color:blue")</script>';
+
+
+        // $employeeType = $_SESSION["user_employeeType"];
+
+        if (strpos($_SESSION["user_employeeType"], "Admin") !== false) {
+            header('Location: http://localhost/web_gui/php/administratorFunctionality.php');
+            exit();
+        } else if (strpos($_SESSION["user_employeeType"], "Manager") !== false) {
+            header('Location: http://localhost/web_gui/php/managerFunctionality.php');
+            exit();
+        } else if (strpos($_SESSION["user_employeeType"], "Staff") !== false) {
+            header('Location: http://localhost/web_gui/php/staffFunctionality.php');
+            exit();
+        } else {
+            echo '<script>console.log("%cUser is EMPLOYEE, BUT they are NOT a Admin, Manager, or Staff", "color:red")</script>';;
+        }
+    } else if (strpos($userType, "Employee") !== false && strpos($userType, "Visitor") !== false) {
+        echo '<script>console.log("%cUser is BOTH an EMPLOYEE and VISITOR", "color:blue")</script>';
+
+
+        if (strpos($_SESSION["user_employeeVisitorType"], "Admin") !== false) {
+            header('Location: http://localhost/web_gui/php/administratorVisitorFunctionality.php');
+            exit();
+        } else if (strpos($_SESSION["user_employeeVisitorType"], "Manager") !== false) {
+            header('Location: http://localhost/web_gui/php/managerVisitorFunctionality.php');
+            exit();
+        } else if (strpos($_SESSION["user_employeeVisitorType"], "Staff") !== false) {
+            header('Location: http://localhost/web_gui/php/staffVisitorFunctionality.php');
+            exit();
+        } else {
+            echo '<script>console.log("%cUser is EMPLOYEE and VISITOR, BUT they are NOT a Admin, Manager, or Staff", "color:red")</script>';;
+        }
+    } else if (strpos($userType, "Employee") === false && strpos($userType, "Visitor") !== false) {
+        echo '<script>console.log("%cUser is ONLY a VISITOR", "color:blue")</script>';
+        header('Location: http://localhost/web_gui/php/visitorFunctionality.php');
+        exit();
+    } else if (strpos($userType, "User") !== false) {
+        echo '<script>console.log("%cUser is JUST a USER", "color:blue")</script>';
+
+        header('Location: http://localhost/web_gui/php/userFunctionality.php');
+        exit();
+    }
+}
+
+?>
 
 <!DOCTYPE html>
 <html>
@@ -60,7 +112,7 @@ try {
 </head>
 
 <body>
-    <form class="form-signin">
+    <form class="form-signin" method="post">
         <h1 class="h3 mb-3 font-weight-heavy" id="titleOfForm">Transit History</h1>
 
 
@@ -149,8 +201,8 @@ try {
 
             <div class="row">
                 <div class="col-sm-2 offset-5">
-                    <button class="btn btn-sm btn-primary btn-block"
-                        style="border-radius: 5px; margin-left: .25em;">Back</button>
+                    <button class="btn btn-sm btn-primary btn-block" style="border-radius: 5px; margin-left: .25em;"
+                        name="backButton">Back</button>
                 </div>
             </div>
 
