@@ -1,6 +1,7 @@
 <?php
 // Start the session
 session_start();
+$_SESSION['deleteButton'] = false;
 
 $_SESSION['transitHistoryFilter'] = false;
 
@@ -36,12 +37,50 @@ if (isset($_POST['filterButton'])){
 
 }
 
+if (isset($_POST['create'])) {
+
+
+        header('Location: http://localhost/web_gui/php/createSite.php');
+            exit();
+
+
+
+}
+if (isset($_POST['delete'])){
+
+        
+        $_SESSION['deleteButton'] = True;
+        echo '<script>console.log("%cSuccessful Delete Button Push", "color:blue")</script>';
+}
+
+
 
 if (isset($_POST['edit'])) {
+    if (isset($_POST['optRadio'])){
+        
+        $siteName = $_POST['optRadio'];
+
+        $_SESSION["siteName"] = $siteName;
+
+         echo '<script>console.log("manager Input: ' . $siteName     . '")</script>';
+         echo '<script>console.log("session Input: ' . $_SESSION['siteName']     . '")</script>';
+
         header('Location: http://localhost/web_gui/php/editSite.php');
             exit();
 
+
+
+    } else{
+           echo '<script language="javascript">';
+                echo 'alert("No Site Selected!")';
+                echo '</script>';
+
+    }
 }
+
+
+
+
 
 
 // Navigation of Back Button
@@ -232,19 +271,31 @@ if (isset($_POST['backButton'])) {
                                 And  concat(FirstName, ' ', LastName) like '$manager'
                                 And s.OpenEveryday = '$openEveryday';");
 
+
                             while ($row = $result->fetch()) {
                             echo "<tr>";
-                            echo "<td style='text-align:center'>" . $row['siteName'] . "</td>";
+                            echo    "<td style='padding-left:2.4em;'> 
+                                    <div class='radio'>
+                                    <label><input type='radio' id='express' name='optRadio' value ='$site'>" . $row['siteName'] . "</label>
+                                    </div>
+                                    </td>";
                             echo "<td style='text-align:center'>" . $row['manager'] . "</td>";
-                            echo "<td style='text-align:center'>" . $row['openEveryday'] . "</td>";
+                            echo "<td style='text-align:center'> " . $row['openEveryday'] . "</td>";
+                           
+                        //     while ($row = $result->fetch()) {
+                        //     echo "<tr>";
+                        //     echo "<td style='text-align:center'>" . $row['siteName'] . "</td>";
+                        //     echo "<td style='text-align:center'>" . $row['manager'] . "</td>";
+                        //     echo "<td style='text-align:center'>" . $row['openEveryday'] . "</td>";
                             
-                            echo "<tr>";
+                        //     echo "<tr>";
 
-                        }
+                        // }
                         $_SESSION['transitHistoryFilter'] = false;
 
-                    }
-
+                    echo '<script>console.log("%cSuccessful Delete Button Push", "color:blue")</script>';
+}
+}
 
 
 
@@ -255,15 +306,65 @@ if (isset($_POST['backButton'])) {
 
                     
                         while ($row = $result->fetch()) {
+                            $value = $row['siteName'];
                             echo "<tr>";
-                            echo "<td style='text-align:center'>" . $row['siteName'] . "</td>";
+                            echo    "<td style='padding-left:2.4em;'> 
+                                    <div class='radio'>
+                                    <label><input type='radio' id='express' name='optRadio' value ='$value'>" . $row['siteName'] . "</label>
+                                    </div>
+                                    </td>";
                             echo "<td style='text-align:center'>" . $row['manager'] . "</td>";
-                            echo "<td style='text-align:center'>" . $row['openEveryday'] . "</td>";
-                            
-                            echo "<tr>";
+                            echo "<td style='text-align:center'> " . $row['openEveryday'] . "</td>";
                         }
                     }
-                    ?>
+
+                    if ($_SESSION['deleteButton'] == true){
+                         $siteName = $_POST['optRadio'];
+
+
+                        echo '<script>console.log("%cConnection failed: ' . $siteName . '", "color:green")</script>';
+
+                         $result = $conn->query("SELECT siteName, siteAddress, siteZipCode, openEveryday, managerusername from site WHERE siteName = '$siteName';");
+                        while ($row = $result->fetch()) {
+                            $siteAddress = $row['siteAddress'];
+                            $siteZipcode = $row['siteZipCode'];
+                            $openEveryday = $row['openEveryday'];
+                            $managerusername = $row['managerusername'];
+
+                        }
+
+                        echo '<script>console.log("%c address ' . $siteAddress . '", "color:green")</script>';
+                         echo '<script>console.log("%c zip ' . $siteZipcode . '", "color:green")</script>';
+                          echo '<script>console.log("%c openEveryday ' . $openEveryday . '", "color:green")</script>';
+                           echo '<script>console.log("%c manageruser ' . $managerusername . '", "color:green")</script>';
+
+
+
+
+                        
+
+
+                        
+
+                        $result = $conn->query("Delete from site
+                                                Where  
+                                                siteName = '$siteName'
+                                                AND
+                                                siteAddress = '$siteAddress'
+                                                AND siteZipcode = '$siteZipcode'
+                                                AND openEveryday = '$openEveryday'
+                                                AND managerusername = '$managerusername';");
+                                        echo '<script language="javascript">';
+                echo 'alert("Successful Delete of Site!")';
+                echo '</script>';
+
+               
+
+                    
+                }
+                ?>
+
+
 
                 </tbody>
             </table>

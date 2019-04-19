@@ -1,6 +1,10 @@
 <?php
 // Start the session
 session_start();
+$_SESSION['updateButton'] = False;
+
+echo '<script>console.log("manager Input: ' . $_SESSION['siteName']     . '")</script>';
+
 
 if (!$_SESSION["logged_in"]) {
     header("Location: http://localhost/web_gui/php/userLogin.php");
@@ -24,13 +28,31 @@ try {
 
 
 
+<?php
+
+if (isset($_POST['back'])){
+    echo '<script>console.log("%cSuccessful  Push", "color:blue")</script>';
+}
+if (isset($_POST['updateButton'])){
+     echo '<script>console.log("%cSuccessful  Push", "color:blue")</script>';
+
+   $_SESSION['updateButton'] = True;
+
+
+}
+
+
+
+?>
+
+
 <!DOCTYPE html>
 <html>
 
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <meta http-equiv="refresh" content="3">
+<!-- 
+    <meta http-equiv="refresh" content="3"> -->
 
     <link rel="stylesheet" href="..\css\registerEmployeeVisitor.css">
 
@@ -41,7 +63,34 @@ try {
 
 <body>
 
-    <form class="form-signin">
+<?php
+
+ if (isset($_SESSION['siteName'])){
+    $siteName = $_SESSION['siteName'];
+
+    $result = $conn->query("SELECT siteName, siteAddress, siteZipcode,openEveryday, managerUsername, concat(firstname, ' ', lastname) AS name  from site s
+        inner join user u
+        on s.managerUsername = u.userName
+        where siteName = '$siteName';");
+
+    echo '<script>console.log("Query : ' . $_SESSION['siteName']     . '")</script>';
+
+    $row = $result->fetch();
+
+    $siteAddress = $row['siteAddress'];
+    $siteZipCode = $row['siteZipcode'];
+    $managerUsername = $row['managerUsername'];
+    $openEveryday = $row['openEveryday'];
+    $name= $row['name'];
+
+
+
+
+}
+
+    ?>
+
+    <form class="form-signin" method="_POST">
 
         <h1 class="mb-3 font-weight-heavy" id="titleOfForm">Edit Site</h3>
 
@@ -51,7 +100,7 @@ try {
                     <label for="inputFirstName" class="label .col-form-label col-sm-4" id="firstNameLabel">Name</label>
 
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" id="inputFirstName">
+                        <input type="text" class="form-control" id="inputFirstName" value="<?php echo $siteName; ?>" name ="siteName">
                     </div>
                 </div>
 
@@ -60,8 +109,8 @@ try {
 
                     <div class="col-sm-8">
                         <input type="text" class="form-control" id="inputLastName"
-                                pattern='^\+?\d{5}' placeholder="5 digits">
-                    </div>
+                                pattern='^\+?\d{5}' placeholder="5 digits"value="<?php echo $siteZipCode; ?>" name = "siteZipCode">                    
+                            </div>
                 </div>
 
             </div>
@@ -73,10 +122,9 @@ try {
                         id="firstNameLabel">Address</label>
 
 
-                    <input type="text" class="form-control col-sm-9 offset-1" id="inputAdress">
+                    <input type="text" class="form-control col-sm-9 offset-1" id="inputAdress" value="<?php echo $siteAddress; ?>" name = "SiteZddress">
 
                 </div>
-
 
 
             </div>
@@ -89,8 +137,22 @@ try {
                 <div class="form-group row col-sm-6">
                     <label for="inputFirstName" class="label .col-form-label col-sm-4"
                         id="firstNameLabel">Manager</label>
-                    <select class="col-sm-6" style="margin-left: 1em;">
-                        <option value="Yes">Option1</option>
+                    <select class="col-sm-6" style="margin-left: 1em;" name = "siteManagerName">
+                        <option value="Yes"><?php echo $name;?></option>
+
+                        <?php
+                        $result = $conn->query("SELECT concat(firstname, ' ', lastname) AS name FROM user u 
+                                                INNER Join site s on
+                                                u.username = s.managerUsername
+                                                where managerUsername != '$managerUsername'");
+
+                        while ($row = $result->fetch()) {
+                            echo "<option>" . $row['name'] . "</option>";
+                        };
+                        ?>
+
+
+
                         <option value="No">Option2</option>
 
                     </select>
@@ -101,9 +163,17 @@ try {
                 <div class="form-group row col-sm-6">
                     <label for="inputLastName" class="label .col-form-label col-sm-6" id="lastNameLabel">Open
                         Everyday</label>
-                    <select style="margin-left: 1em;">
-                        <option value="Yes">Yes</option>
-                        <option value="No">No</option>
+                    <select style="margin-left: 1em;" name= "openEveryday">
+                        <option value="dynamic"><?php echo $openEveryday;?></option>
+
+                        <?php
+                        $result = $conn->query("SELECT Distinct openEveryday from site where openEveryday != '$openEveryday'");
+
+
+                        while ($row = $result->fetch()) {
+                            echo "<option>" . $row['openEveryday'] . "</option>";
+                        };
+                        ?>
 
                     </select>
                 </div>
@@ -112,15 +182,32 @@ try {
 
 
 
-            <div class="form-row">'
+            <div class="form-row">
                 <div class="form-group row col-sm-12 offset-3">
-                    <button type="submit" class="btn btn-primary offset-0" id="backButton">Back</button>
-                    <button type="submit" class="btn btn-primary offset-6" id="registerButton">Update</button>
+                    <button type="submit" class="btn btn-primary offset-0" id="backButton" name = "back">Back</button>
+                    <button type="submit" class="btn btn-primary offset-6" id="registerButton" name ="updateButton">Update</button>
                 </div>
             </div>
+            </form>
 
+            <?php
+                    if ($_SESSION['updateButton'] == true) {
+                        $siteName = $_POST['siteName'];
+                        $siteZipCode = $_POST['siteZipcode'];
+                        $siteAddress = $_POST['siteAddress'];
+                        $siteManagerName = $_POST['siteManagerName'];
+                        $openEveryday =  $_POST['openEveryday'];
 
-    </form>
+                        echo '<script>console.log("siteName Input: ' . $siteName     . '")</script>';
+                        echo '<script>console.log("siteZipcode Input: ' . $siteZipcode     . '")</script>';
+                        echo '<script>console.log("siteAddress Input: ' . $siteAddress     . '")</script>';
+                        echo '<script>console.log("siteManagerName Input: ' . $siteManagerName     . '")</script>';
+                        echo '<script>console.log("openEveryday Input: ' . $openEveryday     . '")</script>';
+
+                    }
+                    ?>
+
+    
 
     <script type="text/javascript">
     </script>
