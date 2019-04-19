@@ -2,6 +2,11 @@
 // Start the session
 session_start();
 
+$_SESSION['transitHistoryFilter'] = false;
+
+
+
+
 if (!$_SESSION["logged_in"]) {
     header("Location: http://localhost/web_gui/php/userLogin.php");
     exit();
@@ -23,6 +28,21 @@ try {
 ?>
 
 <?php
+
+if (isset($_POST['filterButton'])){
+    echo '<script>console.log("%cSuccessful Filter Button Push", "color:blue")</script>';
+    $_SESSION['transitHistoryFilter'] = True;
+    echo '<script>console.log("%c Transit History Filter Session variable set", "color:blue")</script>';
+
+}
+
+
+if (isset($_POST['edit'])) {
+        header('Location: http://localhost/web_gui/php/editSite.php');
+            exit();
+
+}
+
 
 // Navigation of Back Button
 if (isset($_POST['backButton'])) {
@@ -60,8 +80,8 @@ if (isset($_POST['backButton'])) {
 
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <meta http-equiv="refresh" content="3">
+<!-- 
+    <meta http-equiv="refresh" content="3"> -->
 
     <link rel="stylesheet" href="..\css\_universalStyling.css">
 
@@ -95,8 +115,16 @@ if (isset($_POST['backButton'])) {
                 <div class="col-sm-6">
 
                     <label>Site</label>
-                    <select>
-                        <option value="ALL">--ALL--</option>
+                    <select name ="site">
+                        <option value="ALL">ALL</option>
+                        <?php
+                        $result = $conn->query("SELECT siteName FROM site");
+
+                        while ($row = $result->fetch()) {
+                            echo "<option>" . $row['siteName'] . "</option>";
+                        }
+                        ?>
+
                     </select>
                 </div>
 
@@ -105,9 +133,15 @@ if (isset($_POST['backButton'])) {
                     <label>Manager</label>
                 </div>
                 <div class="col-sm-3 offset-1">
-                    <select>
+
+                    <select name ="manager">
+                        <option value="ALL">ALL</option>
                         <?php
-                        $result = $conn->query("SELECT Username FROM employee WHERE EmployeeType = 'Manager'");
+                        $result = $conn->query("SELECT  concat(FirstName, ' ', LastName) as Username
+                                                from site s 
+                                                inner join user u on
+                                                s.managerUserName = u.userName;
+                                                        ");
 
                         while ($row = $result->fetch()) {
                             echo "<option>" . $row['Username'] . "</option>";
@@ -120,9 +154,9 @@ if (isset($_POST['backButton'])) {
                     <div class="col-sm-7 offset-5">
                         <label>Open Everyday</label>
 
-                        <select>
-                            <option value="ALL">Yes</option>
-                            <option value="ALL">No</option>
+                        <select name ="openEveryday">
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
                         </select>
 
                     </div>
@@ -132,12 +166,12 @@ if (isset($_POST['backButton'])) {
 
                         <div class="col-sm-0 offset-2">
                             <button class="btn btn-sm btn-primary btn-block col-sm-0"
-                                style="border-radius: 5px;">Filter</button>
+                                style="border-radius: 5px;" name="filterButton">Filter</button>
                         </div>
 
                         <div class="col-sm-0 offset-2" style="text-align: right;">
                             <input id="button" class="btn btn-sm btn-primary btn-block col-sm-0 offset-5" type="submit"
-                                name="button" onclick="filter();" value="Create" />
+                                name="create" onclick="filter();" value="Create" />
 
 
                         </div>
@@ -145,11 +179,11 @@ if (isset($_POST['backButton'])) {
 
                         <div class="col-sm-0 offset-1">
                             <input id="button" class="btn btn-sm btn-primary btn-block col-sm-0 offset-7" type="submit"
-                                name="button" onclick="myFunction();" value="Edit" />
+                                name="edit" onclick="myFunction();" value="Edit" />
                         </div>
                         <div class="col-sm-0">
                             <input id="button" class="btn btn-sm btn-primary btn-block offset-10" type="submit"
-                                name="button" onclick="myFunction();" value="Delete" />
+                                name="delete" onclick="myFunction();" value="Delete" />
                         </div>
                     </div>
 
@@ -167,20 +201,68 @@ if (isset($_POST['backButton'])) {
 
                 <tbody>
                     <?php
-                    $result = $conn->query("select 
-                                                    transit.TransitRoute, 
-                                                    transit.TransitType, 
-                                                    transit.TransitPrice, 
-                                                    count.Total 
-                                                from transit inner join (select 
-                                                                            sitename, 
-                                                                            transitroute, 
-                                                                            count(*) as total 
-                                                                        from connect 
-                                                                        group by transitroute) 
-                                                count on transit.transitroute = count.transitroute;");
 
-                    while ($row = $result->fetch()) { }
+                        if ($_SESSION['transitHistoryFilter'] == true) {
+                    
+                        $openEveryday  = $_POST['openEveryday'];
+
+                        if ($_POST['site'] == "ALL") {
+                            $site = "%%";
+
+                        } else { 
+                            $site = $_POST['site'];
+                        }
+                        if($_POST['manager'] == "ALL"){
+                            $manager  = "%%";
+                        
+
+                        } else { 
+                            $manager = $_POST['manager'];
+                        }
+
+                         echo '<script>console.log("siteName Input: ' . $site . '")</script>';
+                        echo '<script>console.log("manager Input: ' . $manager     . '")</script>';
+                        echo '<script>console.log("openEveryday Input: ' . $openEveryday . '")</script>';
+
+                            $result = $conn->query("SELECT  s.siteName, concat(FirstName, ' ', LastName) as manager, s.openEveryday
+                                from site s 
+                                inner join user u on
+                                s.managerUserName  = u.userName
+                                where s.siteName like '$site'
+                                And  concat(FirstName, ' ', LastName) like '$manager'
+                                And s.OpenEveryday = '$openEveryday';");
+
+                            while ($row = $result->fetch()) {
+                            echo "<tr>";
+                            echo "<td style='text-align:center'>" . $row['siteName'] . "</td>";
+                            echo "<td style='text-align:center'>" . $row['manager'] . "</td>";
+                            echo "<td style='text-align:center'>" . $row['openEveryday'] . "</td>";
+                            
+                            echo "<tr>";
+
+                        }
+                        $_SESSION['transitHistoryFilter'] = false;
+
+                    }
+
+
+
+
+                    else {$result = $conn->query("SELECT  s.siteName, concat(FirstName, ' ', LastName) as manager, s.openEveryday
+                                                from site s 
+                                                inner join user u on
+                                                s.managerUserName = u.userName;");
+
+                    
+                        while ($row = $result->fetch()) {
+                            echo "<tr>";
+                            echo "<td style='text-align:center'>" . $row['siteName'] . "</td>";
+                            echo "<td style='text-align:center'>" . $row['manager'] . "</td>";
+                            echo "<td style='text-align:center'>" . $row['openEveryday'] . "</td>";
+                            
+                            echo "<tr>";
+                        }
+                    }
                     ?>
 
                 </tbody>
