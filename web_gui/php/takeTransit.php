@@ -28,6 +28,18 @@ try {
 <?php
 
 
+if (isset($_POST['logTransitButton'])) {
+
+
+
+ echo '<script>console.log("%cSuccessful log transit pushed here is the data: ' . $_POST['logDataInput'] . '", "color:green")</script>';
+    
+
+
+    }
+
+
+
 if (isset($_POST['filterButton'])) {
 
     echo '<script>console.log("%cSuccessful Filter", "color:green")</script>';
@@ -36,6 +48,7 @@ if (isset($_POST['filterButton'])) {
 
     $_SESSION['manageTransitFilter'] = True;
 }
+
 
 
 
@@ -291,12 +304,13 @@ if (isset($_POST['backButton'])) {
                 <div class="col-sm-6 offset-1" style="text-align: right;">
                     <label>Transit Date</label>
 
-                    <input type="date" class="col-sm-6" style="padding: 0;" placeholder="">
+                    <input type="date" class="col-sm-6" style="padding: 0;" placeholder="" name="logDataInput">
 
                 </div>
 
                 <div class="col-sm-3">
-                    <button class="btn btn-sm btn-primary btn-block" style="border-radius: 5px;">Log Transit</button>
+                    <button class="btn btn-sm btn-primary btn-block" style="border-radius: 5px;" name ="logTransitButton">Log Transit</button>
+
                 </div>
             </div>
 
