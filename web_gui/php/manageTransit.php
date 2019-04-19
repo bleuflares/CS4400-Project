@@ -176,20 +176,46 @@ if (isset($_POST['backButton'])) {
 
             <tbody>
                 <?php
-                $result = $conn->query("select 
-                                                    transit.TransitRoute, 
-                                                    transit.TransitType, 
-                                                    transit.TransitPrice, 
-                                                    count.Total 
-                                                from transit inner join (select 
-                                                                            sitename, 
-                                                                            transitroute, 
-                                                                            count(*) as total 
-                                                                        from connect 
-                                                                        group by transitroute) 
-                                                count on transit.transitroute = count.transitroute;");
+                 $result = $conn->query("SELECT t.TransitType, t.TransitRoute , count(*) as transitCount
+                from transit t
+                inner join taketransit tt
+                on t.transitRoute = tt.transitRoute
+                group by(TransitRoute)");
+                                while ($row = $result->fetch()) { 
+                            $transitCount = $row['transitCount'];
 
-                while ($row = $result->fetch()) { }
+
+}
+                
+                $result = $conn->query("select SiteName, t.TransitRoute, t.TransitType, TransitPrice,
+                        count(*) as connectedSites
+                    from transit t
+                    inner join connect c
+                    on t.TransitRoute = c.TransitRoute
+                    group by (TransitType);");
+
+
+                while ($row = $result->fetch()) { 
+                            echo "<tr>";
+                            echo "<td style='text-align:center'>" . $row['TransitRoute'] . "</td>";
+                            echo "<td style='text-align:center'>" . $row['TransitType'] . "</td>";
+                            echo "<td style='text-align:center'>" . $row['TransitPrice'] . "</td>";
+                            echo "<td style='text-align:center'>" . $row['connectedSites'] . "</td>";
+                            echo "<tr>";}
+
+
+                $result = $conn->query("SELECT t.TransitType, t.TransitRoute , count(*) as transitCount
+                from transit t
+                inner join taketransit tt
+                on t.transitRoute = tt.transitRoute
+                group by(TransitRoute)");
+                                while ($row = $result->fetch()) { 
+                            echo "<tr>";
+                            echo "<td style='text-align:center'>" . $row['connectedSites'] . "</td>";
+                            echo "<tr>";
+
+
+}
                 ?>
             </tbody>
         </table>

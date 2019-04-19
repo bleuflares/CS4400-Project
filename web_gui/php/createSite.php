@@ -28,6 +28,11 @@ try {
 
 // echo '<script>console.log("BOOL' . $_POST['zipInput'] . ')</script>';
 
+if (isset($_POST['backButton'])) {
+
+    header('location: http://localhost/web_gui/php/manageSite.php');
+    exit();
+}
 
 if (isset($_POST['nameInput'])  && !empty($_POST['zipInput']) && !empty($_POST['addressInput']) && !empty($_POST['managerInput']) && !empty($_POST['openInput'])) {
 
@@ -149,7 +154,7 @@ if (isset($_POST['nameInput'])  && !empty($_POST['zipInput']) && !empty($_POST['
 
                          
                         ?>
-                        
+
                     </select>
 
                 </div>
@@ -171,7 +176,7 @@ if (isset($_POST['nameInput'])  && !empty($_POST['zipInput']) && !empty($_POST['
 
             <div class="form-row">'
                 <div class="form-group row col-sm-12">
-                    <button type="submit" class="btn btn-primary offset-1" id="createButton">Back</button>
+                    <button type="submit" class="btn btn-primary offset-1" id="createButton"name = "backButton">Back</button>
                     <button type="submit" class="btn btn-primary offset-7" id="createButton"
                         name="createSite">Create</button>
                 </div>

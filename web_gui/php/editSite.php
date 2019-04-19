@@ -30,8 +30,12 @@ try {
 
 <?php
 
-if (isset($_POST['back'])){
-    echo '<script>console.log("%cSuccessful  Push", "color:blue")</script>';
+
+
+if (isset($_POST['backButton'])) {
+
+    header('location: http://localhost/web_gui/php/manageSite.php');
+    exit();
 }
 if (isset($_POST['updateButton'])){
      echo '<script>console.log("%cSuccessful  Push", "color:blue")</script>';
@@ -184,7 +188,7 @@ if (isset($_POST['updateButton'])){
 
             <div class="form-row">
                 <div class="form-group row col-sm-12 offset-3">
-                    <button type="submit" class="btn btn-primary offset-0" id="backButton" name = "back">Back</button>
+                    <button type="submit" class="btn btn-primary offset-0" id="backButton" name = "backButton">Back</button>
                     <button type="submit" class="btn btn-primary offset-6" id="registerButton" name ="updateButton">Update</button>
                 </div>
             </div>
