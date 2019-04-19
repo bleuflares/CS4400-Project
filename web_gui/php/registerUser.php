@@ -63,10 +63,10 @@ if (isset($_POST['registerButton'])) {
         $cPass = $_POST['pass'];
         $password = $_POST['pass'];
         if ($cPass == $pass) {
-            $result = $conn->query("INSERT into user VALUES('$username', '$pass', 'pending', '.$fname', '$lname', 'User')");
+            $result = $conn->query("INSERT into user VALUES('$username', '$pass', 'Pending', '.$fname', '$lname', 'User')");
 
             foreach ($_POST['email'] as $email) {
-                if ($email !== "") {
+                if ($email !== "") { 
                     $result = $conn->query("INSERT into useremail VALUES('$username', '$email')");
                 }
             }
