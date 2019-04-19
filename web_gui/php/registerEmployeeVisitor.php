@@ -21,43 +21,56 @@ try {
 
 <?php
 
-if (isset($_POST['registerButton']) && !empty($_POST['fname']) && !empty($_POST['lname']) && !empty($_POST['username']) && !empty($_POST['password']) && !empty($_POST['cPass']) && !empty($_POST['email']) && !empty($_POST['phone']) && !empty($_POST['address']) && !empty($_POST['city']) && !empty($_POST['state']) && !empty($_POST['zip']) && !empty($_POST['type'])) {
-    // ){
-    //
+if (isset($_POST['registerButton'])) {
 
-    echo '<script>console.log("First Name Input: ' . $_POST['fname'] . '")</script>';
-    echo '<script>console.log(" Last Name Input: ' . $_POST['lname'] . '")</script>';
-    echo '<script>console.log("Username Input: ' . $_POST['username'] . '")</script>';
-    echo '<script>console.log("Password Input: ' . $_POST['password'] . '")</script>';
-    echo '<script>console.log("cPass Input: ' . $_POST['cPass'] . '")</script>';
-    // echo '<script>console.log("email Input: ' . $_POST['email'] . '")</script>'
+    if (
+        !empty($_POST['fname']) && !empty($_POST['lname']) && !empty($_POST['username']) && !empty($_POST['password']) && !empty($_POST['cPass']) && !empty($_POST['email'])
+        && !empty($_POST['phone']) && !empty($_POST['address']) && !empty($_POST['city']) && !empty($_POST['state']) && !empty($_POST['zip']) && !empty($_POST['type'])
+    ) {
+        echo '<script>console.log("First Name Input: ' . $_POST['fname'] . '")</script>';
+        echo '<script>console.log(" Last Name Input: ' . $_POST['lname'] . '")</script>';
+        echo '<script>console.log("Username Input: ' . $_POST['username'] . '")</script>';
+        echo '<script>console.log("Password Input: ' . $_POST['password'] . '")</script>';
+        echo '<script>console.log("cPass Input: ' . $_POST['cPass'] . '")</script>';
+        // echo '<script>console.log("email Input: ' . $_POST['email'] . '")</script>'
 
-    $fname = $_POST['fname'];
-    $lname = $_POST['lname'];
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-    $cPass = $_POST['cPass'];
-    $email = $_POST['email'];
-    $phone = $_POST['phone'];
-    $address = $_POST['address'];
-    $city = $_POST['city'];
-    $state = $_POST['state'];
-    $zip = $_POST['zip'];
-    $type = $_POST['type'];
+        $fname = $_POST['fname'];
+        $lname = $_POST['lname'];
+        $username = $_POST['username'];
+        $password = $_POST['password'];
+        $cPass = $_POST['cPass'];
+        $email = $_POST['email'];
+        $phone = $_POST['phone'];
+        $address = $_POST['address'];
+        $city = $_POST['city'];
+        $state = $_POST['state'];
+        $zip = $_POST['zip'];
+        $type = $_POST['type'];
 
-    if ($password == $cPass) {
-        $result = $conn->query("INSERT into user VALUES('$username', '$password','Pending', '$fname', '$lname', 'Employee, Visitor')");
-        $result = $conn->query("INSERT into Employee VALUES('$username', null,'$phone','$address','$city','$state','$zip','$type')");
-        $result = $conn->query("INSERT into useremail VALUES('$username', '$email')");
+        if ($password == $cPass) {
+            $result = $conn->query("INSERT into user VALUES('$username', '$password','Pending', '$fname', '$lname', 'Employee, Visitor')");
+            $result = $conn->query("INSERT into Employee VALUES('$username', null,'$phone','$address','$city','$state','$zip','$type')");
+            $result = $conn->query("INSERT into useremail VALUES('$username', '$email')");
+        } else {
+            echo '<script language="javascript">';
+            echo 'alert("Passwords Do Not Match. Please register again.")';
+            echo '</script>';
+        }
     } else {
         echo '<script language="javascript">';
-        echo 'alert("Passwords Do Not Match. Please register again.")';
+        echo 'alert("Failed to Register. There was an empty field. Please register again.")';
         echo '</script>';
     }
-} else {
-    echo '<script language="javascript">';
-    echo 'alert("Failed to Register. There was an empty field. Please register again.")';
-    echo '</script>';
+}
+
+?>
+
+<?php
+
+if (isset($_POST['backButton'])) {
+
+    header('Location: http://localhost/web_gui/php/registerNavigation.php');
+    exit();
 }
 
 ?>
@@ -161,7 +174,8 @@ if (isset($_POST['registerButton']) && !empty($_POST['fname']) && !empty($_POST[
                     <label for="inputPassword" class="label .col-form-label col-sm-4" id="passwordLabel">Phone</label>
 
                     <div class="col-sm-8">
-                        <input type="tel" class="form-control" id="inputPassword1" name="phone" pattern='^\+?\d{10}' placeholder="10 digit number">
+                        <input type="tel" class="form-control" id="inputPassword1" name="phone" pattern='^\+?\d{10}'
+                            placeholder="10 digit number">
                     </div>
                 </div>
 
@@ -266,7 +280,7 @@ if (isset($_POST['registerButton']) && !empty($_POST['fname']) && !empty($_POST[
                     <label for="inputEmail" class="label .col-form-label col-sm-2" id="emailLabel">Email</label>
                     <div class="col-sm-6">
                         <input type="text" class="form-control" id="inputEmail" name="email"
-                                pattern="[a-z0-9]+@[a-z0-9]+\.[a-z0-9]{1,}$">
+                            pattern="[a-z0-9]+@[a-z0-9]+\.[a-z0-9]{1,}$">
                     </div>
 
                     <button type="submit" class="btn btn-outline-dark">Add</button>
@@ -276,7 +290,7 @@ if (isset($_POST['registerButton']) && !empty($_POST['fname']) && !empty($_POST[
 
             <div class="form-row">'
                 <div class="form-group row col-sm-12 offset-3">
-                    <button type="submit" class="btn btn-primary" id="backButton">Back</button>
+                    <button type="submit" class="btn btn-primary" id="backButton" name="backButton">Back</button>
                     <button type="submit" class="btn btn-primary" id="registerButton"
                         name='registerButton'>Register</button>
                 </div>

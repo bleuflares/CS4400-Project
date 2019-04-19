@@ -19,41 +19,53 @@ try {
 
 <?php
 
-// echo '<script>console.log("BOOL' . $_POST['zipInput'] . ')</script>';
+if (isset($_POST['registerButton'])) {
 
+    if (!empty($_POST['fname']) && !empty($_POST['lname']) && !empty($_POST['username']) && !empty($_POST['pass']) && !empty($_POST['cpass']) && !empty($_POST['email'])) {
+        echo '<script>console.log("%cSuccessful Creation", "color:green")</script>';
 
-if (isset($_POST['registerButton'])  && !empty($_POST['fname']) && !empty($_POST['lname']) && !empty($_POST['username']) && !empty($_POST['pass']) && !empty($_POST['cpass']) && !empty($_POST['email'])) {
+        // echo '<script>console.log("Name Input: ' . $_POST['nameInput'] . '")</script>';
+        // echo '<script>console.log("Zip Input: ' . $_POST['zipInput'] . '")</script>';
+        // echo '<script>console.log("address Input: ' . $_POST['addressInput'] . '")</script>';
+        // echo '<script>console.log("manager Input: ' . $_POST['managerInput'] . '")</script>';
+        // echo '<script>console.log("open Input: ' . $_POST['openInput'] . '")</script>';
 
-    echo '<script>console.log("%cSuccessful Creation", "color:green")</script>';
+        $fname = $_POST['fname'];
+        $lname = $_POST['lname'];
+        $username = $_POST['username'];
+        $pass = $_POST['pass'];
+        $email = $_POST['email'];
+        $cPass = $_POST['cpass'];
+        $password = $_POST['pass'];
+        if ($cPass == $pass) {
+            $result = $conn->query("INSERT into user VALUES('$username', '$pass', 'pending', '.$fname', '$lname', 'User')");
 
-    // echo '<script>console.log("Name Input: ' . $_POST['nameInput'] . '")</script>';
-    // echo '<script>console.log("Zip Input: ' . $_POST['zipInput'] . '")</script>';
-    // echo '<script>console.log("address Input: ' . $_POST['addressInput'] . '")</script>';
-    // echo '<script>console.log("manager Input: ' . $_POST['managerInput'] . '")</script>';
-    // echo '<script>console.log("open Input: ' . $_POST['openInput'] . '")</script>';
-
-    $fname = $_POST['fname'];
-    $lname = $_POST['lname'];
-    $username = $_POST['username'];
-    $pass = $_POST['pass'];
-    $email = $_POST['email'];
-    $cPass = $_POST['cpass'];
-    $password = $_POST['pass'];
-    if ($cPass == $pass) {
-        $result = $conn->query("INSERT into user VALUES('$username', '$pass', 'pending', '.$fname', '$lname', 'User')");
-        $result = $conn->query("INSERT into useremail VALUES('$username', '$email')");
+            $result = $conn->query("INSERT into useremail VALUES('$username', '$email')");
+        } else {
+            echo '<script language="javascript">';
+            echo 'alert("Passwords Do Not Match. Please try registering again.")';
+            echo '</script>';
+        }
     } else {
         echo '<script language="javascript">';
-        echo 'alert("Passwords Do Not Match. Please try registering again.")';
+        echo 'alert("Failed to Register. There was an empty field. Please register again.")';
         echo '</script>';
     }
-} else {
-    echo '<script language="javascript">';
-    echo 'alert("Failed to Register. There was an empty field. Please register again.")';
-    echo '</script>';
+}
+?>
+
+
+<?php
+
+if (isset($_POST['backButton'])) {
+
+    header('Location: http://localhost/web_gui/php/registerNavigation.php');
+    exit();
 }
 
 ?>
+
+
 <!DOCTYPE html>
 <html>
 
@@ -116,7 +128,7 @@ if (isset($_POST['registerButton'])  && !empty($_POST['fname']) && !empty($_POST
 
                 <div class="form-group row col-sm-6">
                     <label for="inputPassword" class="label .col-form-label col-sm-4"
-                        id="passwordLabel" >Password</label>
+                        id="passwordLabel">Password</label>
 
                     <div class="col-sm-8">
                         <input type="password" class="form-control" id="inputPassword" name="pass" pattern=".{8,25}"
@@ -129,8 +141,8 @@ if (isset($_POST['registerButton'])  && !empty($_POST['fname']) && !empty($_POST
                         id="confirmPasswordLabel">Confirm Password</label>
 
                     <div class="col-sm-8">
-                        <input type="password" class="form-control" id="inputConfirmPassword" name="cpass" pattern=".{8,25}"
-                            placeholder="At least 8 characters">
+                        <input type="password" class="form-control" id="inputConfirmPassword" name="cpass"
+                            pattern=".{8,25}" placeholder="At least 8 characters">
                     </div>
                 </div>
 
@@ -144,7 +156,7 @@ if (isset($_POST['registerButton'])  && !empty($_POST['fname']) && !empty($_POST
 
                     <div class="col-sm-6">
                         <input type="text" class="form-control" id="inputEmail" name="email"
-                                pattern="[a-z0-9]+@[a-z0-9]+\.[a-z0-9]{1,}$">
+                            pattern="[a-z0-9]+@[a-z0-9]+\.[a-z0-9]{1,}$">
                     </div>
 
                     <button type="submit" class="btn btn-outline-dark">Add</button>
@@ -154,7 +166,7 @@ if (isset($_POST['registerButton'])  && !empty($_POST['fname']) && !empty($_POST
 
             <div class="form-row">'
                 <div class="form-group row col-sm-12 offset-3">
-                    <button type="submit" class="btn btn-primary" id="backButton">Back</button>
+                    <button type="submit" class="btn btn-primary" id="backButton" name="backButton">Back</button>
                     <button type="submit" class="btn btn-primary" id="registerButton"
                         name="registerButton">Register</button>
                 </div>

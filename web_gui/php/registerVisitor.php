@@ -19,32 +19,45 @@ try {
 
 <?php
 
-if (isset($_POST['registerButton'])  && !empty($_POST['fname']) && !empty($_POST['lname']) && !empty($_POST['username']) && !empty($_POST['password']) && !empty($_POST['cPass']) && !empty($_POST['email'])) {
+if (isset($_POST['registerButton'])) {
 
-    echo '<script>console.log("First Name Input: ' . $_POST['fname'] . '")</script>';
-    echo '<script>console.log(" Last Name Input: ' . $_POST['lname'] . '")</script>';
-    echo '<script>console.log("Username Input: ' . $_POST['username'] . '")</script>';
-    echo '<script>console.log("Password Input: ' . $_POST['password'] . '")</script>';
-    echo '<script>console.log("cPass Input: ' . $_POST['cPass'] . '")</script>';
-    // echo '<script>console.log("email Input: ' . $_POST['email'] . '")</script>'
+    if (!empty($_POST['fname']) && !empty($_POST['lname']) && !empty($_POST['username']) && !empty($_POST['password']) && !empty($_POST['cPass']) && !empty($_POST['email'])) {
+        echo '<script>console.log("First Name Input: ' . $_POST['fname'] . '")</script>';
+        echo '<script>console.log(" Last Name Input: ' . $_POST['lname'] . '")</script>';
+        echo '<script>console.log("Username Input: ' . $_POST['username'] . '")</script>';
+        echo '<script>console.log("Password Input: ' . $_POST['password'] . '")</script>';
+        echo '<script>console.log("cPass Input: ' . $_POST['cPass'] . '")</script>';
+        // echo '<script>console.log("email Input: ' . $_POST['email'] . '")</script>'
 
-    $fname = $_POST['fname'];
-    $lname = $_POST['lname'];
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-    $cPass = $_POST['cPass'];
-    $email = $_POST['email'];
+        $fname = $_POST['fname'];
+        $lname = $_POST['lname'];
+        $username = $_POST['username'];
+        $password = $_POST['password'];
+        $cPass = $_POST['cPass'];
+        $email = $_POST['email'];
 
-    if ($password == $cPass) {
-        $result = $conn->query("INSERT into user VALUES('$username', '$password','Pending', '$fname', '$lname', 'User')");
-        $result = $conn->query("INSERT into useremail VALUES('$username', '$email')");
+        if ($password == $cPass) {
+            $result = $conn->query("INSERT into user VALUES('$username', '$password','Pending', '$fname', '$lname', 'User')");
+            $result = $conn->query("INSERT into useremail VALUES('$username', '$email')");
+        } else {
+            echo '<script>console.log("%cPlease fill in matching password", "color:red")</script>';;
+        }
     } else {
-        echo '<script>console.log("%cPlease fill in matching password", "color:red")</script>';;
+        echo '<script language="javascript">';
+        echo 'alert("Failed to Register. There was an empty field. Please register again.")';
+        echo '</script>';
     }
-} else {
-    echo '<script language="javascript">';
-    echo 'alert("Failed to Register. There was an empty field. Please register again.")';
-    echo '</script>';
+}
+
+?>
+
+
+<?php
+
+if (isset($_POST['backButton'])) {
+
+    header('Location: http://localhost/web_gui/php/registerNavigation.php');
+    exit();
 }
 
 ?>
@@ -113,7 +126,8 @@ if (isset($_POST['registerButton'])  && !empty($_POST['fname']) && !empty($_POST
                         id="passwordLabel">Password</label>
 
                     <div class="col-sm-8">
-                        <input type="password" class="form-control" id="inputPassword" name="password" pattern=".{8,25}" placeholder="At least 8 characters">
+                        <input type="password" class="form-control" id="inputPassword" name="password" pattern=".{8,25}"
+                            placeholder="At least 8 characters">
                     </div>
                 </div>
 
@@ -122,7 +136,8 @@ if (isset($_POST['registerButton'])  && !empty($_POST['fname']) && !empty($_POST
                         id="confirmPasswordLabel">Confirm Password</label>
 
                     <div class="col-sm-8">
-                        <input type="password" class="form-control" id="inputConfirmPassword" name="cPass" pattern=".{8,25}" placeholder="At least 8 characters">
+                        <input type="password" class="form-control" id="inputConfirmPassword" name="cPass"
+                            pattern=".{8,25}" placeholder="At least 8 characters">
                     </div>
                 </div>
 
@@ -136,7 +151,7 @@ if (isset($_POST['registerButton'])  && !empty($_POST['fname']) && !empty($_POST
 
                     <div class="col-sm-6">
                         <input type="text" class="form-control" id="inputEmail" name="email"
-                                pattern="[a-z0-9]+@[a-z0-9]+\.[a-z0-9]{1,}$">
+                            pattern="[a-z0-9]+@[a-z0-9]+\.[a-z0-9]{1,}$">
                     </div>
 
                     <button type="submit" class="btn btn-outline-dark">Add</button>
@@ -146,7 +161,7 @@ if (isset($_POST['registerButton'])  && !empty($_POST['fname']) && !empty($_POST
 
             <div class="form-row">'
                 <div class="form-group row col-sm-12 offset-3">
-                    <button type="submit" class="btn btn-primary" id="backButton">Back</button>
+                    <button type="submit" class="btn btn-primary" id="backButton" name="backButton">Back</button>
                     <button type="submit" class="btn btn-primary" id="registerButton"
                         name="registerButton">Register</button>
                 </div>
