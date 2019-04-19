@@ -30,9 +30,15 @@ try {
 
 if (isset($_POST['logTransitButton'])) {
 
+     $username= $_SESSION["userName"];
+     $logTransitDate = $_POST['logDateInput'];
+
+    $result = $conn->query("select * from taketransit where username = '$username' and TransitDate = '$logTransitDate';");
 
 
- echo '<script>console.log("%cSuccessful log transit pushed here is the data: ' . $_POST['logDataInput'] . '", "color:green")</script>';
+   
+
+ echo '<script>console.log("%cSuccessful log transit pushed here is the data: ' . $_POST['logDateInput'] . '", "color:green")</script>';
     
 
 
@@ -304,7 +310,7 @@ if (isset($_POST['backButton'])) {
                 <div class="col-sm-6 offset-1" style="text-align: right;">
                     <label>Transit Date</label>
 
-                    <input type="date" class="col-sm-6" style="padding: 0;" placeholder="" name="logDataInput">
+                    <input type="date" class="col-sm-6" style="padding: 0;" placeholder="" name="logDateInput">
 
                 </div>
 
