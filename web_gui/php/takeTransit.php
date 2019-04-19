@@ -27,24 +27,62 @@ try {
 
 <?php
 
-
 if (isset($_POST['logTransitButton'])) {
 
-     $username= $_SESSION["userName"];
-     $logTransitDate = $_POST['logDateInput'];
+    if (isset($_POST['optRadio'])) {
 
-    $result = $conn->query("select * from taketransit where username = '$username' and TransitDate = '$logTransitDate';");
+        if (!empty($_POST['logDateInput'])) {
+            $username = $_SESSION["userName"];
+            $logTransitDate = $_POST['logDateInput'];
+            $transitRoute = $_POST['optRadio'];
 
+            $result = $conn->query("SELECT * from taketransit where username = '$username' and TransitDate = '$logTransitDate' AND transitRoute = '$transitRoute';");
 
-   
+            if ($result->rowCount() == 0) {
 
- echo '<script>console.log("%cSuccessful log transit pushed here is the data: ' . $_POST['logDateInput'] . '", "color:green")</script>';
-    
+                $transitResult = $conn->query("SELECT * from transit where transitRoute = '$transitRoute';");
 
+                $transitRow = $transitResult->fetch();
 
+                $transitType = $transitRow['TransitType'];
+
+                echo '<script>console.log("%cUser: ' . $username . '", "color:green")</script>';
+
+                echo '<script>console.log("%cDate: ' . $_POST['logDateInput'] . '", "color:green")</script>';
+
+                echo '<script>console.log("%cRoute: ' . $_POST['optRadio'] . '", "color:green")</script>';
+
+                echo '<script>console.log("%cType: ' . $transitType . '", "color:green")</script>';
+
+                $conn->query("INSERT INTO taketransit values('$username', '$transitType', '$transitRoute', '$logTransitDate');");
+
+                echo '<script>console.log("%cSuccessful.", "color:green")</script>';
+                echo '<script language="javascript">';
+                echo 'alert("Successful Log of travel on transit on the particular day!")';
+                echo '</script>';
+            } else {
+                echo '<script>console.log("%cCannot log Transit if you do not Enter a Transit Date.", "color:red")</script>';
+                echo '<script language="javascript">';
+                echo 'alert("Cannot log Transit since you have taken this same transit on the same day.")';
+                echo '</script>';
+            }
+        } else {
+            echo '<script>console.log("%cCannot log Transit if you do not Enter a Transit Date.", "color:red")</script>';
+            echo '<script language="javascript">';
+            echo 'alert("Cannot log Transit if you do not Enter a Transit Date.")';
+            echo '</script>';
+        }
+    } else {
+        echo '<script>console.log("%cCannot log Transit if you do not select a Route.", "color:red")</script>';
+        echo '<script language="javascript">';
+        echo 'alert("Cannot log Transit if you do not select a Route.")';
+        echo '</script>';
     }
+}
 
+?>
 
+<?php
 
 if (isset($_POST['filterButton'])) {
 
@@ -55,14 +93,10 @@ if (isset($_POST['filterButton'])) {
     $_SESSION['manageTransitFilter'] = True;
 }
 
+?>
 
 
-
-
-
-
-
-
+<?php
 
 if (isset($_POST['backButton'])) {
 
@@ -253,11 +287,12 @@ if (isset($_POST['backButton'])) {
                                                 as ue on ue.transitRoute = u.transitRoute
                                                 where transitPrice BETWEEN $price1 AND $price2;");
                         while ($row = $result->fetch()) {
+                            $route = $row['transitRoute'];
 
                             echo "<tr>";
                             echo    "<td style='padding-left:2.4em;'> 
                                     <div class='radio'>
-                                    <label><input type='radio' id='express' name='optradio'> " . $row['transitRoute'] . "</label>
+                                    <label><input type='radio' id='express' name='optRadio' value ='$route'>" . $row['transitRoute'] . "</label>
                                     </div>
                                     </td>";
                             echo "<td style='text-align:center'>" . $row['transitType'] . "</td>";
@@ -283,10 +318,12 @@ if (isset($_POST['backButton'])) {
                                                 count on transit.transitroute = count.transitroute;");
 
                         while ($row = $result->fetch()) {
+                            $route = $row['TransitRoute'];
+
                             echo "<tr>";
                             echo    "<td style='padding-left:2.4em;'> 
                                         <div class='radio'>
-                                            <label><input type='radio' id='express' name='optradio'> " . $row['TransitRoute'] . "</label>
+                                            <label><input type='radio' id='express' name='optRadio' value ='$route'> " . $row['TransitRoute'] . "</label>
                                         </div>
                                     </td>";
                             echo "<td style='text-align:center'>" . $row['TransitType'] . "</td>";
@@ -315,7 +352,8 @@ if (isset($_POST['backButton'])) {
                 </div>
 
                 <div class="col-sm-3">
-                    <button class="btn btn-sm btn-primary btn-block" style="border-radius: 5px;" name ="logTransitButton">Log Transit</button>
+                    <button class="btn btn-sm btn-primary btn-block" style="border-radius: 5px;"
+                        name="logTransitButton">Log Transit</button>
 
                 </div>
             </div>
@@ -325,5 +363,14 @@ if (isset($_POST['backButton'])) {
     </form>
 
 </body>
+
+<script>
+$(document).keypress(
+    function(event) {
+        if (event.which == '13') {
+            event.preventDefault();
+        }
+    });
+</script>
 
 </html>
