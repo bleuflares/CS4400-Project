@@ -42,7 +42,10 @@ if (isset($_POST['registerButton'])) {
         echo '<script>console.log("%cThere DOES NOT exist ANY valid EMAILS", "color:red")</script>';
     }
 
-    if (!empty($_POST['fname']) && !empty($_POST['lname']) && !empty($_POST['username']) && !empty($_POST['pass']) && !empty($_POST['cpass']) && $anyValidEmails) {
+    if (
+        !empty($_POST['fname']) && !empty($_POST['lname']) && !empty($_POST['username'])
+        && !empty($_POST['pass']) && !empty($_POST['cpass']) && $anyValidEmails
+    ) {
         echo '<script>console.log("%cSuccessful Creation", "color:green")</script>';
 
         // echo '<script>console.log("Name Input: ' . $_POST['nameInput'] . '")</script>';
