@@ -81,7 +81,7 @@ if (isset($_POST['updateButton'])){
     $siteZipCode = $row['siteZipcode'];
     $managerUsername = $row['managerUsername'];
     $openEveryday = $row['openEveryday'];
-    $name= $row['name'];
+    $name = $row['name'];
 
 
 
@@ -90,7 +90,7 @@ if (isset($_POST['updateButton'])){
 
     ?>
 
-    <form class="form-signin" method="_POST">
+    <form class="form-signin" method="post">
 
         <h1 class="mb-3 font-weight-heavy" id="titleOfForm">Edit Site</h3>
 
@@ -122,7 +122,7 @@ if (isset($_POST['updateButton'])){
                         id="firstNameLabel">Address</label>
 
 
-                    <input type="text" class="form-control col-sm-9 offset-1" id="inputAdress" value="<?php echo $siteAddress; ?>" name = "SiteZddress">
+                    <input type="text" class="form-control col-sm-9 offset-1" id="inputAdress" value="<?php echo $siteAddress; ?>" name = "siteAddress">
 
                 </div>
 
@@ -138,7 +138,7 @@ if (isset($_POST['updateButton'])){
                     <label for="inputFirstName" class="label .col-form-label col-sm-4"
                         id="firstNameLabel">Manager</label>
                     <select class="col-sm-6" style="margin-left: 1em;" name = "siteManagerName">
-                        <option value="Yes"><?php echo $name;?></option>
+                        <option value='<?php echo $name;?>'><?php echo $name;?></option>
 
                         <?php
                         $result = $conn->query("SELECT concat(firstname, ' ', lastname) AS name FROM user u 
@@ -164,7 +164,7 @@ if (isset($_POST['updateButton'])){
                     <label for="inputLastName" class="label .col-form-label col-sm-6" id="lastNameLabel">Open
                         Everyday</label>
                     <select style="margin-left: 1em;" name= "openEveryday">
-                        <option value="dynamic"><?php echo $openEveryday;?></option>
+                        <option value='<?php echo $openEveryday;?>'><?php echo $openEveryday;?></option>
 
                         <?php
                         $result = $conn->query("SELECT Distinct openEveryday from site where openEveryday != '$openEveryday'");
@@ -192,17 +192,58 @@ if (isset($_POST['updateButton'])){
 
             <?php
                     if ($_SESSION['updateButton'] == true) {
-                        $siteName = $_POST['siteName'];
-                        $siteZipCode = $_POST['siteZipcode'];
-                        $siteAddress = $_POST['siteAddress'];
-                        $siteManagerName = $_POST['siteManagerName'];
-                        $openEveryday =  $_POST['openEveryday'];
 
-                        echo '<script>console.log("siteName Input: ' . $siteName     . '")</script>';
-                        echo '<script>console.log("siteZipcode Input: ' . $siteZipcode     . '")</script>';
-                        echo '<script>console.log("siteAddress Input: ' . $siteAddress     . '")</script>';
-                        echo '<script>console.log("siteManagerName Input: ' . $siteManagerName     . '")</script>';
-                        echo '<script>console.log("openEveryday Input: ' . $openEveryday     . '")</script>';
+                        $siteName2 = $_POST['siteName'];
+                        $siteZipCode2 = $_POST['siteZipCode'];
+                        if(isset($_POST['siteAddress'])){
+                            $siteAddress2 = $_POST['siteAddress'];
+                        } else{
+                            $siteAddress2 = "";
+                        }
+
+
+
+
+                        
+                        $siteManagerName2 = $_POST['siteManagerName'];
+
+                        $openEveryday2 =  $_POST['openEveryday'];
+
+                             $result = $conn->query("SELECT username from user u inner join site s on u.username = s.managerUsername where concat(firstname, ' ', lastname)='$siteManagerName2';");
+                                while ($row = $result->fetch()) {
+                                $username2 = $row['username'];
+                                }
+
+                        echo '<script>console.log("siteName Input: ' . $siteName . '")</script>';
+                        echo '<script>console.log("siteName Input: ' . $siteName2 . '")</script>';
+                        
+
+                        echo '<script>console.log("siteZipcodeO Input: ' . $siteZipCode     . '")</script>';
+                        echo '<script>console.log("siteZipcodeO Input: ' . $siteZipCode2     . '")</script>';
+
+
+                        echo '<script>console.log("siteAddressO Input: ' . $siteAddress     . '")</script>';
+                         echo '<script>console.log("siteAddressO Input: ' . $siteAddress2     . '")</script>';
+
+
+                        
+
+
+                        echo '<script>console.log("openEverydayO Input: ' . $openEveryday     . '")</script>';
+                        echo '<script>console.log("openEverydayO Input: ' . $openEveryday2     . '")</script>';
+
+
+                        echo '<script>console.log("managerUsernameO Input: ' . $managerUsername   . '")</script>';
+                        echo '<script>console.log("managerUsernameO Input: ' . $username2   . '")</script>';
+
+
+
+                             $result = $conn->query("UPDATE site SET SiteName = '$siteName2', SiteAddress = '$siteAddress2' , SiteZipCode = $siteZipCode2, OpenEveryday = '$openEveryday2' , ManagerUsername = '$username2' WHERE SiteName ='siteName' AND SiteAddress = 'siteAddress'AND SiteZipcode = $siteZipCode AND managerUsername = '$managerUsername' AND OpenEveryday = '$openEveryday';");
+                               
+
+
+
+
 
                     }
                     ?>
