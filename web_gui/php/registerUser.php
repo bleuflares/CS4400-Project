@@ -46,7 +46,8 @@ if (isset($_POST['registerButton'])) {
         !empty($_POST['fname']) && !empty($_POST['lname']) && !empty($_POST['username'])
         && !empty($_POST['pass']) && !empty($_POST['cpass']) && $anyValidEmails
     ) {
-        echo '<script>console.log("%cSuccessful Creation", "color:green")</script>';
+
+        echo '<script>console.log("%cAll Required Fields Filled", "color:green")</script>';
 
         // echo '<script>console.log("Name Input: ' . $_POST['nameInput'] . '")</script>';
         // echo '<script>console.log("Zip Input: ' . $_POST['zipInput'] . '")</script>';
@@ -58,7 +59,7 @@ if (isset($_POST['registerButton'])) {
         $lname = $_POST['lname'];
         $username = $_POST['username'];
         $pass = $_POST['pass'];
-        $email = $_POST['email'];
+        // $email = $_POST['email'];
         $cPass = $_POST['pass'];
         $password = $_POST['pass'];
         if ($cPass == $pass) {
@@ -69,6 +70,7 @@ if (isset($_POST['registerButton'])) {
                     $result = $conn->query("INSERT into useremail VALUES('$username', '$email')");
                 }
             }
+            echo '<script>console.log("%cSuccessful Creation", "color:green")</script>';
         } else {
             echo '<script language="javascript">';
             echo 'alert("Passwords Do Not Match. Please try registering again.")';
