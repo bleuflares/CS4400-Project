@@ -15,13 +15,34 @@ try {
 } catch (PDOException $e) {
     echo '<script>console.log("%cConnection failed: ' . $e->getMessage() . '", "color:red")</script>';
 }
+
+$_SESSION["registerUser_EmailCounter"] = 0;
 ?>
 
 <?php
 
 if (isset($_POST['registerButton'])) {
 
-    if (!empty($_POST['fname']) && !empty($_POST['lname']) && !empty($_POST['username']) && !empty($_POST['pass']) && !empty($_POST['cpass']) && !empty($_POST['email'])) {
+    $anyValidEmails = false;
+
+    foreach ($_POST['email'] as $email) {
+
+        if ($email !== "") {
+            $anyValidEmails = true;
+        }
+
+        // echo '<script>console.log("%cEMAIL: ' . $email . '", "color:green")</script>';
+        // $bool = ($email !== "");
+        // echo '<script>console.log("%cEMAIL: ' . ($bool) . '", "color:green")</script>';
+    }
+
+    if ($anyValidEmails) {
+        echo '<script>console.log("%cThere exist an valid EMAIL", "color:green")</script>';
+    } else {
+        echo '<script>console.log("%cThere DOES NOT exist ANY valid EMAILS", "color:red")</script>';
+    }
+
+    if (!empty($_POST['fname']) && !empty($_POST['lname']) && !empty($_POST['username']) && !empty($_POST['pass']) && !empty($_POST['cpass']) && $anyValidEmails) {
         echo '<script>console.log("%cSuccessful Creation", "color:green")</script>';
 
         // echo '<script>console.log("Name Input: ' . $_POST['nameInput'] . '")</script>';
@@ -35,12 +56,16 @@ if (isset($_POST['registerButton'])) {
         $username = $_POST['username'];
         $pass = $_POST['pass'];
         $email = $_POST['email'];
-        $cPass = $_POST['cpass'];
+        $cPass = $_POST['pass'];
         $password = $_POST['pass'];
         if ($cPass == $pass) {
             $result = $conn->query("INSERT into user VALUES('$username', '$pass', 'pending', '.$fname', '$lname', 'User')");
 
-            $result = $conn->query("INSERT into useremail VALUES('$username', '$email')");
+            foreach ($_POST['email'] as $email) {
+                if ($email !== "") {
+                    $result = $conn->query("INSERT into useremail VALUES('$username', '$email')");
+                }
+            }
         } else {
             echo '<script language="javascript">';
             echo 'alert("Passwords Do Not Match. Please try registering again.")';
@@ -64,6 +89,28 @@ if (isset($_POST['backButton'])) {
 }
 
 ?>
+
+
+<?php
+
+if (isset($_POST['addEmail'])) {
+
+    $_SESSION["registerUser_EmailCounter"] = $_SESSION["registerUser_EmailCounter"] + 1;
+
+    $value =  $_SESSION["registerUser_EmailCounter"];
+
+    echo '<script>console.log("%cSuccessful Creation' . $value . '", "color:green")</script>';
+}
+
+?>
+
+
+<?php
+$cookie_name = "registerUser_EmailCounter";
+$cookie_value = 0;
+setcookie($cookie_name, $cookie_value, time() + (86400 * 30), "/"); // 86400 = 1 day
+?>
+
 
 
 <!DOCTYPE html>
@@ -155,12 +202,14 @@ if (isset($_POST['backButton'])) {
                     <label for="inputEmail" class="label .col-form-label col-sm-2" id="emailLabel">Email</label>
 
                     <div class="col-sm-6">
-                        <input type="text" class="form-control" id="inputEmail" name="email"
-                            pattern="[a-z0-9]+@[a-z0-9]+\.[a-z0-9]{1,}$">
+                        <div id="emailContainer">
+                            <!-- <input type="text" class="form-control" id="inputEmail" name="email"
+                                pattern="[a-z0-9]+@[a-z0-9]+\.[a-z0-9]{2,}$"> -->
+                        </div>
                     </div>
 
-                    <button type="submit" class="btn btn-outline-dark">Add</button>
                 </div>
+                <input type="button" class="btn btn-outline-dark" onclick="addField()" name="addEmail" value="ADD" />
 
             </div>
 
@@ -175,7 +224,56 @@ if (isset($_POST['backButton'])) {
 
     </form>
 
-    <script type="text/javascript">
+    <script type='text/javascript'>
+    var i;
+
+    function addField() {
+        // Container <div> where dynamic content will be placed
+        var container = document.getElementById("emailContainer");
+
+        if (i == null) {
+            i = 0;
+        } else {
+            i++;
+        }
+
+        // Create an <input> element, set its type and name attributes
+        var input = document.createElement("input");
+        input.type = "text";
+        input.name = "email[]";
+        input.id = "email" + i;
+        input.pattern = "[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]{1,}$";
+        input.className = "form-control removableEmail";
+        input.style = "margin-left: -1em;"
+
+        container.appendChild(input);
+
+        var button = document.createElement("button");
+        button.innerHTML = "Remove";
+        button.value = "email" + i;
+        button.type = "button";
+        button.onclick = function() {
+            console.log(this.value);
+
+            var totalEmailInputsLeft = document.querySelectorAll(".removableEmail").length;
+
+            if (totalEmailInputsLeft > 1) {
+                var removeID = this.value;
+                document.getElementById(removeID).nextSibling.nextSibling.remove();
+                document.getElementById(removeID).nextSibling.remove();
+                document.getElementById(removeID).remove();
+            }
+        };
+
+        container.appendChild(button);
+
+        // Append a line break 
+        container.appendChild(document.createElement("br"));
+    }
+
+    window.onload = function() {
+        addField();
+    };
     </script>
 
 </body>
