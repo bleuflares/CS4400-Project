@@ -137,7 +137,9 @@ if (isset($_POST['backButton'])) {
 
                 <div class="col-sm-7 ">
                     <label>Contain Site</label>
+
                     <select style="margin-left: 1em;" name = "containSite">
+                    	<option value="ALL">ALL</option>
                         <?php
                         $result = $conn->query("SELECT SiteName FROM site");
 
@@ -188,8 +190,15 @@ if (isset($_POST['backButton'])) {
 
 
                     if ($_SESSION['transitHistoryFilter'] == true) {
+                    
 
+                    	if($_POST['containSite'] == "ALL"){
+							$containSite = "%%";
+						
+
+                        } else { 
                             $containSite = $_POST['containSite'];
+                        }
 
 
                         if ($_POST['transportType'] == "ALL") {
@@ -200,6 +209,8 @@ if (isset($_POST['backButton'])) {
 
                         if (empty($_POST['route'])) {
                             $route = "%%";
+
+
                         } else {
                             $route = $_POST['route'];
                         }
@@ -225,6 +236,7 @@ if (isset($_POST['backButton'])) {
 
 
 
+                        echo '<script>console.log("Works Input: ' . $route . '")</script>';
                         echo '<script>console.log("Transport Input: ' . $transportType . '")</script>';
                         echo '<script>console.log("Contain Input: ' . $containSite . '")</script>';
                         echo '<script>console.log("Start Input: ' . $startDate . '")</script>';
@@ -260,6 +272,7 @@ if (isset($_POST['backButton'])) {
                         while ($row = $result->fetch()) {
                             
                             echo "<tr>";
+
                             echo "<td style='text-align:center'>" . $row['TransitDate'] . "</td>";
                             echo "<td style='text-align:center'>" . $row['TransitRoute'] . "</td>";
                             echo "<td style='text-align:center'>" . $row['TransitType'] . "</td>";
