@@ -2,8 +2,10 @@
 // Start the session
 session_start();
 
+ $_SESSION['transitHistoryFilter'] = false;
+
 if (!$_SESSION["logged_in"]) {
-    header("Location: http://localhost/web_gui/php/userLogin.php");
+    header("Location: http://localhost/CS4400-Project-master/web_gui/php/userLogin.php");
     exit();
 }
 
@@ -23,6 +25,13 @@ try {
 ?>
 
 <?php
+
+if (isset($_POST['filterButton'])){
+    echo '<script>console.log("%cSuccessful Filter Button Push", "color:blue")</script>';
+    $_SESSION['transitHistoryFilter'] = True;
+    echo '<script>console.log("%c Transit History Filter Session variable set", "color:blue")</script>';
+
+}
 
 if (isset($_POST['backButton'])) {
 
@@ -97,14 +106,10 @@ if (isset($_POST['backButton'])) {
     <script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
 
 
-    <script type="text/javascript">
-    $(document).ready(function() {
-        var table = $('#table1').DataTable({
-            // "stateSave": true
+ 
 
-        });
 
-    });
+
     </script>
 
 
@@ -121,8 +126,8 @@ if (isset($_POST['backButton'])) {
             <div class="row">
                 <div class="col-sm-5">
                     <label>Transport Type </label>
-                    <select style="margin-left: 1em;">
-                        <option value="ALL">--ALL--</option>
+                    <select style="margin-left: 1em;" name = "transportType">
+                        <option value="ALL">ALL</option>
                         <option value="MARTA">MARTA</option>
                         <option value="Bus">Bus</option>
                         <option value="Bike">Bike</option>
@@ -131,7 +136,7 @@ if (isset($_POST['backButton'])) {
 
                 <div class="col-sm-7 ">
                     <label>Contain Site</label>
-                    <select style="margin-left: 1em;">
+                    <select style="margin-left: 1em;" name = "containSite">
                         <?php
                         $result = $conn->query("SELECT SiteName FROM site");
 
@@ -148,22 +153,22 @@ if (isset($_POST['backButton'])) {
                     <label>Route</label>
 
                     <input type="text" class="col-sm-1" style="text-align: center; margin-left: 0.5em; padding: 0em;"
-                        placeholder="">
+                        placeholder="" name = "route">
 
                     <label style="margin-left: 0.5em;">Start Date</label>
 
-                    <input type="date" class="unstyled col-sm-3" style="padding: 0; margin-left: 0.5em;" placeholder="">
+                    <input type="date" class="unstyled col-sm-3" style="padding: 0; margin-left: 0.5em;" placeholder="" Name = "startDate">
 
                     <label style="margin-left: 0.5em;">End Date</label>
 
-                    <input type="date" class="col-sm-3" style="padding: 0; margin-left: 0.5em;" placeholder="">
+                    <input type="date" class="col-sm-3" style="padding: 0; margin-left: 0.5em;" placeholder="" name = "endDate">
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-sm-3 offset-4">
                     <button class="btn btn-sm btn-primary btn-block"
-                        style="border-radius: 5px; margin-left: 2em;">Filter</button>
+                        style="border-radius: 5px; margin-left: 2em;" name = "filterButton">Filter</button>
                 </div>
             </div>
 
@@ -179,6 +184,91 @@ if (isset($_POST['backButton'])) {
 
                 <tbody>
                     <?php
+
+
+                    if ($_SESSION['transitHistoryFilter'] == true) {
+
+                            $containSite = $_POST['containSite'];
+
+
+                        if ($_POST['transportType'] == "ALL") {
+                            $transportType = "%%";
+                        } else {
+                            $transportType = $_POST['transportType'];
+                        }
+
+                        if (empty($_POST['route'])) {
+                            $route = "%%";
+                        } else {
+                            $route = $_POST['route'];
+                        }
+
+
+                        if (empty($_POST['startDate'])) {
+                            $startDate = "0000-00-00";
+                        } else {
+                            $startDate = $_POST['startDate'];
+                            echo '<script>console.log("Works Input: ' . $_POST['startDate'] . '")</script>';
+
+                        }
+
+                        if (empty($_POST['endDate'])) {
+                            $endDate = "9999-12-12"; 
+                            echo '<script>console.log("Works Input: ' . $_POST['endDate'] . '")</script>';
+                        } else {
+                            $endDate = $_POST['endDate'];
+
+                        }
+
+
+
+
+
+                        echo '<script>console.log("Transport Input: ' . $transportType . '")</script>';
+                        echo '<script>console.log("Contain Input: ' . $containSite . '")</script>';
+                        echo '<script>console.log("Start Input: ' . $startDate . '")</script>';
+                        echo '<script>console.log("End Input: ' . $endDate . '")</script>';
+                        echo '<script>console.log("Route Input: ' . $route . '")</script>';
+                        echo '<script>console.log("user Input: ' . $_SESSION["userName"] . '")</script>';
+                        
+                       
+                        
+
+
+                        $result = $conn->query("select DISTINCT tt.TransitDate, t.TransitRoute, t.TransitType,  t. TransitPrice
+                        from transit t 
+                        inner join taketransit tt on
+                        t.transitType = tt.transitType
+                        inner join taketransit ttt on
+                        t.transitRoute = ttt.transitRoute
+
+                        inner join connect c on   
+                        t.transitType = c.transitType 
+
+                        inner join connect cc on
+                        t.transitRoute = cc.transitRoute
+
+                        where tt.TransitDate >= '$startDate' AND tt.TransitDate <= '$endDate' 
+                        AND t.TransitRoute like '$route' 
+                        AND t.transitType like '$transportType'
+                        AND c.SiteNAME like '$containSite'
+                        AND tt.userName ='".$_SESSION["userName"]."';");
+
+
+
+                        while ($row = $result->fetch()) {
+                            
+                            echo "<tr>";
+                            echo "<td style='text-align:center'>" . $row['TransitDate'] . "</td>";
+                            echo "<td style='text-align:center'>" . $row['TransitRoute'] . "</td>";
+                            echo "<td style='text-align:center'>" . $row['TransitType'] . "</td>";
+                            echo "<td style='text-align:center'>" . $row['TransitPrice'] . "</td>";
+                            echo "<tr>";
+                        }
+
+                        isset($_SESSION['transitHistoryFilter']) == false;
+
+                    } else {
                     $result = $conn->query("SELECT tt.*, t.TransitPrice 
                                             FROM taketransit as tt 
                                                     INNER JOIN transit AS t 
@@ -186,15 +276,16 @@ if (isset($_POST['backButton'])) {
                                                     AND tt.TransitRoute = t.TransitRoute 
                                             WHERE tt.Username = '" . $_SESSION["userName"] . "';");
 
-                    while ($row = $result->fetch()) {
-                        echo "<tr>";
-                        echo "<td style='text-align:center'>" . $row['TransitDate'] . "</td>";
-                        echo "<td style='text-align:center'>" . $row['TransitRoute'] . "</td>";
-                        echo "<td style='text-align:center'>" . $row['TransitType'] . "</td>";
-                        echo "<td style='text-align:center'>" . $row['TransitPrice'] . "</td>";
-                        echo "<tr>";
+                        while ($row = $result->fetch()) {
+                            echo "<tr>";
+                            echo "<td style='text-align:center'>" . $row['TransitDate'] . "</td>";
+                            echo "<td style='text-align:center'>" . $row['TransitRoute'] . "</td>";
+                            echo "<td style='text-align:center'>" . $row['TransitType'] . "</td>";
+                            echo "<td style='text-align:center'>" . $row['TransitPrice'] . "</td>";
+                            echo "<tr>";
+                        }
                     }
-                    ?>
+                ?>
 
                 </tbody>
             </table>
