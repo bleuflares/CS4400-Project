@@ -46,6 +46,7 @@ if (isset($_POST['filterButton'])) {
 
 
 
+
 if (isset($_POST['backButton'])) {
 
     $userType  = $_SESSION["userType"];
