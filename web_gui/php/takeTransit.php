@@ -34,9 +34,8 @@ if (isset($_POST['filterButton'])) {
 
     echo '<script>console.log("Session Filter Varable is now True : ")</script>';
 
-     $_SESSION['manageTransitFilter'] = True;
-
-    }
+    $_SESSION['manageTransitFilter'] = True;
+}
 
 
 
@@ -140,7 +139,7 @@ if (isset($_POST['backButton'])) {
             <div class="row">
                 <div class="col-sm-6">
                     <label>Contain Site</label>
-                    <select name ="contain">
+                    <select name="contain">
                         <?php
                         $result = $conn->query("SELECT SiteName FROM site");
 
@@ -154,8 +153,8 @@ if (isset($_POST['backButton'])) {
 
                 <div class="col-sm-4 offset-2">
                     <label>Transport Type </label>
-                    <select name ="transport">
-                        <option value="ALL">--ALL--</option>
+                    <select name="transport">
+                        <option value="ALL">ALL</option>
                         <option value="MARTA">MARTA</option>
                         <option value="Bus">Bus</option>
                         <option value="Bike">Bike</option>
@@ -167,17 +166,18 @@ if (isset($_POST['backButton'])) {
                 <div class="col-sm-7">
                     <label>Price Range</label>
 
-                    <input type="text" class="col-sm-4" style="text-align: center;" placeholder="" name = "price1Input">
+                    <input type="number" class="col-sm-4" style="text-align: center;" placeholder="" name="price1Input">
 
                     <label> -- </label>
 
-                    <input type="text" class="col-sm-4" style="text-align: center;" placeholder="" name = "price2Input">
+                    <input type="number" class="col-sm-4" style="text-align: center;" placeholder="" name="price2Input">
 
                 </div>
 
 
                 <div class="col-sm-3 offset-1">
-                    <button class="btn btn-sm btn-primary btn-block" style="border-radius: 5px;"name="filterButton">Filter</button>
+                    <button class="btn btn-sm btn-primary btn-block" style="border-radius: 5px;"
+                        name="filterButton">Filter</button>
                 </div>
             </div>
 
@@ -197,26 +197,44 @@ if (isset($_POST['backButton'])) {
                 <tbody>
                     <?php
 
-
                     if ($_SESSION['manageTransitFilter'] == true) {
 
-                            $containSite = $_POST['contain'];
+                        $containSite = $_POST['contain'];
+
+                        if ($_POST['transport'] == "ALL") {
+                            $transportType = "%%";
+                        } else {
                             $transportType = $_POST['transport'];
+                        }
+
+                        if (empty($_POST['price1Input'])) {
+                            $price1 = 0;
+                        } else {
                             $price1 = $_POST['price1Input'];
+                        }
+
+                        if (empty($_POST['price2Input'])) {
+                            $price2 = 9223372036854775807;
+                        } else {
                             $price2 = $_POST['price2Input'];
+                        }
 
-                         if (empty($price1) && empty($price2)) {
-                     
-                            echo '<script>console.log("Works Input: ' . $_POST['contain'] . '")</script>';
+                        echo '<script>console.log("Works Input: ' . $_POST['contain'] . '")</script>';
+                        echo '<script>console.log("Works Input: ' . $_POST['transport'] . '")</script>';
+                        echo '<script>console.log("Works Input: ' . $_POST['price1Input'] . '")</script>';
+                        echo '<script>console.log("Works Input: ' . $_POST['price2Input'] . '")</script>';
 
+                        $result = $conn->query("SELECT u.transitRoute, u.transitType, ue.transitPrice, u.connectedSites
+                                                from ( 
+                                                    select transitRoute, transitType, count(*) as connectedSites 
+                                                    from connect where sitename LIKE '$containSite' AND transitType Like '$transportType'
+                                                    group by transitRoute)
+                                                as u inner join (
+                                                    select transitRoute, transitPrice, transitType from transit)
+                                                as ue on ue.transitRoute = u.transitRoute
+                                                where transitPrice BETWEEN $price1 AND $price2;");
+                        while ($row = $result->fetch()) {
 
-                            echo '<script>console.log("%cGOT HERE", "color:red")</script>';
-                            $result = $conn->query("                SELECT u.transitRoute, u.transitType, ue.transitPrice, u.connectedSites
-                            from (select transitRoute, transitType, count(*) as connectedSites from connect where sitename ='$containSite' group by transitRoute)
-                            as u inner join (select transitRoute, transitPrice, transitType from transit)
-                            as ue on ue.transitRoute = u.transitRoute;");
-                            while ($row = $result->fetch()) {
-                            echo '<script>console.log("%cGOT HERE", "color:red")</script>';
                             echo "<tr>";
                             echo    "<td style='padding-left:2.4em;'> 
                                     <div class='radio'>
@@ -227,27 +245,12 @@ if (isset($_POST['backButton'])) {
                             echo "<td style='text-align:center'> $" . $row['transitPrice'] . "</td>";
                             echo "<td style='text-align:center'>" . $row['connectedSites'] . "</td>";
                             echo "<tr>";
-
-
-
-
-                    // price 1 is empty but price two is not
-                            } 
-                        } else if (!empty($price1)){
-
-
-                    // Price two is empty but price one is not
-                        } else if (!empty($price2)){
-
-                            // Neither price are empty.
-                       } else if (!empty($price1) && !empty($price2)){
-
-                       }
+                        }
 
                         $_SESSION['manageTransitFilter'] == false;
-
-// Generates orginal tables
-                    } else { $result = $conn->query("select 
+                    } else {
+                        // Generates orginal tables
+                        $result = $conn->query("select 
                                                     transit.TransitRoute, 
                                                     transit.TransitType, 
                                                     transit.TransitPrice, 
@@ -260,26 +263,24 @@ if (isset($_POST['backButton'])) {
                                                                         group by transitroute) 
                                                 count on transit.transitroute = count.transitroute;");
 
-                    while ($row = $result->fetch()) {
-                        echo "<tr>";
-                        echo    "<td style='padding-left:2.4em;'> 
+                        while ($row = $result->fetch()) {
+                            echo "<tr>";
+                            echo    "<td style='padding-left:2.4em;'> 
                                         <div class='radio'>
                                             <label><input type='radio' id='express' name='optradio'> " . $row['TransitRoute'] . "</label>
                                         </div>
                                     </td>";
-                        echo "<td style='text-align:center'>" . $row['TransitType'] . "</td>";
-                        echo "<td style='text-align:center'> $" . $row['TransitPrice'] . "</td>";
-                        echo "<td style='text-align:center'>" . $row['Total'] . "</td>";
-                        echo "<tr>";
+                            echo "<td style='text-align:center'>" . $row['TransitType'] . "</td>";
+                            echo "<td style='text-align:center'> $" . $row['TransitPrice'] . "</td>";
+                            echo "<td style='text-align:center'>" . $row['Total'] . "</td>";
+                            echo "<tr>";
+                        }
                     }
-                }
 
                     ?>
 
                 </tbody>
             </table>
-
-
 
             <div class="row">
 
@@ -294,12 +295,10 @@ if (isset($_POST['backButton'])) {
 
                 </div>
 
-
                 <div class="col-sm-3">
                     <button class="btn btn-sm btn-primary btn-block" style="border-radius: 5px;">Log Transit</button>
                 </div>
             </div>
-
 
         </div>
 

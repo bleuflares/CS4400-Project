@@ -51,7 +51,8 @@ if (isset($_POST['submit'])  && !empty($_POST['email']) && !empty($_POST['passwo
         if (strpos($userType, "Employee") !== false && strpos($userType, "Visitor") === false) {
             echo '<script>console.log("%cUser is EMPLOYEE", "color:blue")</script>';
 
-            $employeeData_Result = $conn->query("SELECT * FROM employee AS e WHERE e.Username = '" . $_SESSION["userName"] . "';");
+            $employeeData_Result = $conn->query("SELECT * FROM employee AS e 
+                                                WHERE e.Username = '" . $_SESSION["userName"] . "';");
 
             // Make sure Employee is in DB
             if ($employeeData_Result->rowCount() > 0) {
