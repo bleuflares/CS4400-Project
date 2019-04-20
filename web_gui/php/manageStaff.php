@@ -187,7 +187,13 @@ if (isset($_POST['backButton'])) {
                 if ($_SESSION['manageStaffFilterButton'] == True) {
                     echo '<script>console.log("%cSuccessful Filter", "color:blue")</script>';
 
-                    $siteName  = $_POST['siteName'];
+                    
+                    if (($_POST['siteName']) == "ALL") {
+                        $siteName = "%%";
+
+                    } else {
+                        $siteName = $_POST['siteName'];
+                    }
 
                     if (empty($_POST['firstName'])) {
                         $firstName = "%%";
@@ -211,6 +217,7 @@ if (isset($_POST['backButton'])) {
                     } else {
                         $endDate = $_POST['endDate'];
                     }
+                
                     echo '<script>console.log("Works Input: ' . $siteName . '")</script>';
                     echo '<script>console.log("Works Input: ' . $firstName . '")</script>';
                     echo '<script>console.log("Works Input: ' . $lastName . '")</script>';
