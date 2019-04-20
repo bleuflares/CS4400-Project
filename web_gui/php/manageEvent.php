@@ -2,6 +2,8 @@
 // Start the session
 session_start();
 
+$_SESSION['manageEventFilter'] = false;
+
 if (!$_SESSION["logged_in"]) {
     header("Location: http://localhost/web_gui/php/userLogin.php");
     exit();
@@ -24,6 +26,12 @@ try {
 
 
 <?php
+
+if (isset($_POST['filterButton'])){
+    echo '<script>console.log("%cSuccessful Filter Button Push", "color:blue")</script>';
+    $_SESSION['manageEventFilter'] = True;
+    echo '<script>console.log("%c Transit History Filter Session variable set", "color:blue")</script>';
+}
 
 if (isset($_POST['backButton'])) {
 
@@ -114,7 +122,7 @@ if (isset($_POST['view_editButton'])) {
                     <label>Name</label>
                 </div>
                 <div class="col-sm-3 offset-0">
-                    <input type="text" class="form-control col-sm-0 offset-0" id="inputAdress">
+                    <input type="text" class="form-control col-sm-0 offset-0" id="inputAdress" name = "eventName">
 
                 </div>
 
@@ -123,7 +131,7 @@ if (isset($_POST['view_editButton'])) {
                     <label>Description Keyword</label>
                 </div>
                 <div class="col-sm-3 offset-0">
-                    <input type="text" class="form-control col-sm-0 offset-0" id="inputAdress">
+                    <input type="text" class="form-control col-sm-0 offset-0" id="inputAdress" name = "descKey">
 
                 </div>
             </div>
@@ -133,7 +141,7 @@ if (isset($_POST['view_editButton'])) {
                     <label>Start Date</label>
                 </div>
                 <div class="col-sm-4 offset-0">
-                    <input type="Date" class="form-control col-sm-0 offset-0" id="inputAdress">
+                    <input type="Date" class="form-control col-sm-0 offset-0" id="inputAdress" name = "startDate">
 
                 </div>
 
@@ -142,7 +150,7 @@ if (isset($_POST['view_editButton'])) {
                     <label>End Date</label>
                 </div>
                 <div class="col-sm-4 offset-0">
-                    <input type="Date" class="form-control col-sm-0 offset-0" id="inputAdress">
+                    <input type="Date" class="form-control col-sm-0 offset-0" id="inputAdress" name = "endDate">
 
                 </div>
             </div>
@@ -153,11 +161,11 @@ if (isset($_POST['view_editButton'])) {
                 </div>
                 <div class="col-sm-3">
 
-                    <input type="text" class="col-sm-1" style="text-align: center;" placeholder="">
+                    <input type="text" class="col-sm-1" style="text-align: center;" placeholder="" name = lowDurRange>
 
                     <label> -- </label>
 
-                    <input type="text" class="col-sm-1" style="text-align: center;" placeholder="">
+                    <input type="text" class="col-sm-1" style="text-align: center;" placeholder="" name = "highDurRange">
                 </div>
 
 
@@ -166,11 +174,11 @@ if (isset($_POST['view_editButton'])) {
                 </div>
                 <div class="col-sm-3">
 
-                    <input type="text" class="col-sm-1" style="text-align: center;" placeholder="">
+                    <input type="text" class="col-sm-1" style="text-align: center;" placeholder="" name = "lowVisitRange">
 
                     <label> -- </label>
 
-                    <input type="text" class="col-sm-1" style="text-align: center;" placeholder="">
+                    <input type="text" class="col-sm-1" style="text-align: center;" placeholder="" name = "highVisitRange">
                 </div>
 
             </div>
@@ -182,18 +190,18 @@ if (isset($_POST['view_editButton'])) {
             </div>
             <div class="col-sm-3">
 
-                <input type="text" class="col-sm-1" style="text-align: center;" placeholder="">
+                <input type="text" class="col-sm-1" style="text-align: center;" placeholder="" name = "lowRevRange">
 
                 <label> -- </label>
 
-                <input type="text" class="col-sm-1" style="text-align: center;" placeholder="">
+                <input type="text" class="col-sm-1" style="text-align: center;" placeholder="" name = "highRevRange">
             </div>
         </div>
 
         <div class="row col-sm-12">
 
             <div class="col-sm-0 offset-2">
-                <button class="btn btn-sm btn-primary btn-block col-sm-0" style="border-radius: 5px;">Filter</button>
+                <button class="btn btn-sm btn-primary btn-block col-sm-0" style="border-radius: 5px" name = "filterButton";>Filter</button>
             </div>
 
             <div class="col-sm-0 offset-2" style="text-align: right;">
@@ -233,6 +241,74 @@ if (isset($_POST['view_editButton'])) {
             </thead>
 
             <tbody>
+                <?php
+                if ($_SESSION['manageEventFilter'] == true) {
+
+                        if (isempty($_POST['eventName'])) {
+                            $eventName = "%%";
+
+                        } else {
+                            $eventName = $_POST['eventName'];
+                        }
+
+                        if(isempty($_POST['descKey'])){
+                            $descKey = "%%";
+                        } else {
+                            $descKey = $_POST['descKey'];
+                        }
+                    }
+
+                        //  echo '<script>console.log("siteName Input: ' . $site . '")</script>';
+                        // echo '<script>console.log("manager Input: ' . $manager     . '")</script>';
+                        // echo '<script>console.log("openEveryday Input: ' . $openEveryday . '")</script>';
+
+                            // $result = $conn->query("SELECT  s.siteName, concat(FirstName, ' ', LastName) as manager, s.openEveryday
+                            //     from site s
+                            //     inner join user u on
+                            //     s.managerUserName  = u.userName
+                            //     where s.siteName like '$site'
+                            //     And  concat(FirstName, ' ', LastName) like '$manager'
+                            //     And s.OpenEveryday = '$openEveryday';");
+
+
+                            while ($row = $result->fetch()) {
+                            echo "<tr>";
+                            echo    "<td style='padding-left:2.4em;'>
+                                    <div class='radio'>
+                                    <label><input type='radio' id='express' name='optRadio' value ='$site'>" . $row['siteName'] . "</label>
+                                    </div>
+                                    </td>";
+                            echo "<td style='text-align:center'>" . $row['manager'] . "</td>";
+                            echo "<td style='text-align:center'> " . $row['openEveryday'] . "</td>";
+                    $result = $conn->query("SELECT event.eventName,
+                                                    staffassign.staffCount,
+                                                    datediff(event.endDate, event.startDate) as duration,
+                                                    visitors.totalVisits,
+                                                    visitors.totalVisits*EventPrice as TotalRevenue
+                                                    FROM event left join (SELECT EventName, StartDate, count(*) as StaffCount FROM assignTo group by 1,2) as staffassign
+                                                    on event.eventName = staffassign.eventName
+                                                    and event.startDate = staffassign.startDate
+                                                            left join (SELECT EventName, StartDate, count(*) as totalvisits FROM visitEvent group by 1,2) as visitors
+                                                    on event.eventName = visitors.eventName
+                                                    and event.startDate = visitors.startDate
+                                                    group by event.eventName,event.startDate;");
+                }
+
+
+                            while ($row = $result->fetch()) {
+                            $value = $row['eventName'];
+                            echo "<tr>";
+                            echo    "<td style='padding-left:2.4em;'>
+                                    <div class='radio'>
+                                    <label><input type='radio' id='express' name='optRadio' value ='$value'>" . $row['eventName'] . "</label>
+                                    </div>
+                                    </td>";
+                            echo "<td style='text-align:center'>" . $row['duration'] . "</td>";
+                            echo "<td style='text-align:center'> " . $row['staffCount'] . "</td>";
+                            echo "<td style='text-align:center'> " . $row['totalVisits'] . "</td>";
+                            echo "<td style='text-align:center'> " . $row['TotalRevenue'] . "</td>";
+                        }
+                ?>
 
             </tbody>
         </table>
