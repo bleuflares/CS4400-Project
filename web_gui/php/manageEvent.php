@@ -76,6 +76,22 @@ if (isset($_POST['view_editButton'])) {
 
 ?>
 
+<?php
+
+if (isset($_POST['createButton'])) {
+
+    $userType  = $_SESSION["userType"];
+
+    if (strpos($_SESSION["user_employeeType"], "Manager") !== false) {
+        header('Location: http://localhost/web_gui/php/createEvent.php');
+        exit();
+    } else {
+        echo '<script>console.log("%cUser is not a manager, hence should not be on this page. Please logout.", "color:red")</script>';;
+    }
+}
+
+?>
+
 
 ?>
 
@@ -205,8 +221,8 @@ if (isset($_POST['view_editButton'])) {
             </div>
 
             <div class="col-sm-0 offset-2" style="text-align: right;">
-                <input id="button" class="btn btn-sm btn-primary btn-block col-sm-0" type="submit" name="button"
-                    onclick="filter();" value="Create" />
+                <input id="button" class="btn btn-sm btn-primary btn-block col-sm-0" type="submit" name="createButton"
+                     value="Create" />
 
 
             </div>
@@ -217,7 +233,7 @@ if (isset($_POST['view_editButton'])) {
                     name="view_editButton" value="View/Edit" />
             </div>
             <div class="col-sm-0 offset-1">
-                <input id="button" class="btn btn-sm btn-primary btn-block col-sm-0" type="submit" name="button"
+                <input id="button" class="btn btn-sm btn-primary btn-block col-sm-0" type="submit" name="deleteButton"
                     onclick="myFunction();" value="Delete" />
             </div>
         </div>

@@ -1,6 +1,8 @@
+
 <?php
 // Start the session
 session_start();
+$_SESSION['createButton'] = False;
 
 if (!$_SESSION["logged_in"]) {
     header("Location: http://localhost/web_gui/php/userLogin.php");
@@ -21,6 +23,30 @@ try {
     echo '<script>console.log("%cConnection failed: ' . $e->getMessage() . '", "color:red")</script>';
 }
 ?>
+
+<?php
+ if (isset($_SESSION['route'])){
+    $route = $_SESSION['route'];
+    echo '<script>console.log("route name : ' . $route     . '")</script>';
+
+    $result = $conn->query("SELECT transitPrice from transit where transitRoute = '$route';");
+
+    $row = $result->fetch();
+
+    $transitPrice = $row['transitPrice'];
+    echo '<script>console.log("route name : ' . $transitPrice     . '")</script>';
+
+}
+
+if (isset($_POST['createButton'])) {
+    echo '<script>console.log("Create Button Pushed")</script>';
+
+    $_SESSION['createButton'] = True;
+    
+}
+
+?>
+
 
 
 
@@ -79,7 +105,7 @@ try {
     ?>
 
 
-    <form class="form-signin">
+    <form class="form-signin" method = Post>
         <h1 class="h3 mb-3 font-weight-heavy" id="titleOfForm">Create Transit</h1>
 
 
@@ -99,16 +125,14 @@ try {
 
                 <div class="col-sm-4">
                     <label>Route</label>
-                    <?php
-                    echo '<input type="text" class="col-sm-4" style="padding: 0; margin-left: 0.5em;" value="' . $row['Lastname'] . '">'
-                    ?>
-                </div>
+                    <input type="text" class="form-control" id="inputFirstName" value="<?php echo $route; ?>" name ="route">                
+                    </div>
 
                 <div class="col-sm-3">
                     <label>Price ($)</label>
-                    <?php
-                    echo '<input type="text" class="col-sm-5" style="padding: 0; margin-left: 0.5em;" value="' . $row['Lastname'] . '">'
-                    ?>
+                    
+                    <input type="text" class="form-control" id="inputFirstName" value="<?php echo $transitPrice; ?>" name ="transitPrice">
+                    
                 </div>
             </div>
 
@@ -142,12 +166,14 @@ try {
                 <label for="exampleFormControlSelect2" style="">Connected Sites</label>
 
                 <select multiple style="display: inline ;" class="form-control col-sm-6 offset-3"
-                    id="exampleFormControlSelect2">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
+                    id="exampleFormControlSelect2" name = 'connectedSites[]'>
+                        <?php
+                        $result = $conn->query("SELECT siteName FROM site");
+
+                        while ($row = $result->fetch()) {
+                            echo "<option>" . $row['siteName'] . "</option>";
+                        }
+                        ?>
                 </select>
 
             </div>
@@ -157,8 +183,8 @@ try {
                 <div class="form-group row col-sm-12 offset-3">
                     <button type="submit" class="btn btn-primary" id="backButton"
                         style="padding-left: 2.5em; padding-right: 2.5em; margin-left: .75em;">Back</button>
-                    <button type="submit" class="btn btn-primary" id="registerButton"
-                        style="padding-left: 2.5em; padding-right: 2.5em; margin-left: 4em;">Create</button>
+                    <button type="submit" class="btn btn-primary" id="registerButton" 
+                        style="padding-left: 2.5em; padding-right: 2.5em; margin-left: 4em;" name = "createButton">Create</button>
                 </div>
             </div>
 
@@ -166,6 +192,38 @@ try {
 
     </form>
 
+
+
+    <?php
+        if($_SESSION['createButton'] == True){ 
+             $connectedSites = $_POST['connectedSites'];
+
+            for ($i = 0 ; $i >= count($connectedSites); $i++) {
+                echo $connectedSites[$i];
+            }
+
+            echo '<script>console.log("connected Sites : ' . 
+            $connectedSites[0]. '")</script>';
+            echo '<script>console.log("connected Sites : ' . 
+            $connectedSites[1]. '")</script>';
+
+
+        // $counter = 0
+        // foreach($connectedSites as $array_values){
+        // $connectedSites[counter] = $array_values
+        // $counter++
+        // }
+
+
+
+        // $connectedSites = $_POST['connectedSites'];
+        // echo '<script>console.log("connected Sites : ' . 
+        // $connectedSites[0]. '")</script>';
+
+
+        }
+
+    ?>
+
 </body>
 
-</html>

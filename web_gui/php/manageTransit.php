@@ -1,6 +1,8 @@
 <?php
 // Start the session
 session_start();
+$delete  = $_SESSION["delete"] = FALSE;
+$filter  = $_SESSION["filter"] = FALSE;
 
 if (!$_SESSION["logged_in"]) {
     header("Location: http://localhost/web_gui/php/userLogin.php");
@@ -24,6 +26,38 @@ try {
 
 
 <?php
+
+if (isset($_POST['filter'])){
+     echo '<script>console.log("Filter Button Pushed")</script>';
+     $filter  = $_SESSION["filter"] = TRUE;
+     echo '<script>console.log("Filter Session Variable Created")</script>';
+
+}
+
+if (isset($_POST['create'])){
+        if (isset($_POST['optRadio'])){
+            
+        
+        $route = $_POST['optRadio'];
+         echo '<script>console.log("route name : ' . $route     . '")</script>';
+
+
+        $_SESSION["route"] = $route;
+
+
+        header('Location: http://localhost/web_gui/php/createTransit.php');
+            exit();
+        }
+
+    }
+
+if (isset($_POST['delete'])){
+     echo '<script>console.log("delete Button Pushed")</script>';
+     $delete  = $_SESSION["delete"] = TRUE;
+     echo '<script>console.log("delete Session Variable Created")</script>';
+
+}
+
 
 // Navigation of Back Button
 if (isset($_POST['backButton'])) {
@@ -62,7 +96,7 @@ if (isset($_POST['backButton'])) {
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <meta http-equiv="refresh" content="3">
+ <!--    <meta http-equiv="refresh" content="3"> -->
 
     <link rel="stylesheet" href="..\css\_universalStyling.css">
 
@@ -94,8 +128,8 @@ if (isset($_POST['backButton'])) {
                 <div class="col-sm-6">
 
                     <label>Transport Type</label>
-                    <select>
-                        <option value="ALL">--ALL--</option>
+                    <select name ="transportType">
+                        <option value="ALL">ALL</option>
                         <option value="MARTA">MARTA</option>
                         <option value="Bus">Bus</option>
                         <option value="Bike">Bike</option>
@@ -107,14 +141,15 @@ if (isset($_POST['backButton'])) {
                     <label>Route </label>
                 </div>
                 <div class="col-sm-3 offset-1">
-                    <input type="text" class="form-control col-sm-0 offset-0" id="inputAdress">
+                    <input type="text" class="form-control col-sm-0 offset-0" id="inputAdress" name = "route">
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-sm-7">
                     <label>Contain Site</label>
-                    <select>
+                    <select name = "containSite">
+                        <option value="ALL">ALL</option>
                         <?php
                         $result = $conn->query("SELECT SiteName FROM site");
 
@@ -126,26 +161,27 @@ if (isset($_POST['backButton'])) {
                 </div>
 
 
-                <div class="col-sm-0 offset-0">
+                <div class="col-sm-7">
                     <label>Price Range</label>
-                </div>
-                <div class="col-sm-3">
-                    <input type="text" class="col-sm-1" style="text-align: center;" placeholder="">
+
+                    <input type="number" class="col-sm-4" style="text-align: center;" placeholder="" name="lowerPrice">
+                    
 
                     <label> -- </label>
 
-                    <input type="text" class="col-sm-1" style="text-align: center;" placeholder="">
+                    <input type="number" class="col-sm-4" style="text-align: center;" placeholder="" name="upperPrice">
+
                 </div>
 
                 <div class="row col-sm-12">
 
                     <div class="col-sm-0 offset-3">
                         <button class="btn btn-sm btn-primary btn-block col-sm-0"
-                            style="border-radius: 5px;">Filter</button>
+                            style="border-radius: 5px;" name = "filter">Filter</button>
                     </div>
 
                     <div class="col-sm-0 offset-3" style="text-align: right;">
-                        <input id="button" class="btn btn-sm btn-primary btn-block col-sm-0" type="submit" name="button"
+                        <input id="button" class="btn btn-sm btn-primary btn-block col-sm-0" type="submit" name="create"
                             onclick="filter();" value="Create" />
                     </div>
 
@@ -154,7 +190,7 @@ if (isset($_POST['backButton'])) {
                             onclick="myFunction();" value="Edit" />
                     </div>
                     <div class="col-sm-0 offset-1">
-                        <input id="button" class="btn btn-sm btn-primary btn-block col-sm-0" type="submit" name="button"
+                        <input id="button" class="btn btn-sm btn-primary btn-block col-sm-0" type="submit" name="delete"
                             onclick="myFunction();" value="Delete" />
                     </div>
                 </div>
@@ -176,46 +212,167 @@ if (isset($_POST['backButton'])) {
 
             <tbody>
                 <?php
-                 $result = $conn->query("SELECT t.TransitType, t.TransitRoute , count(*) as transitCount
-                from transit t
-                inner join taketransit tt
-                on t.transitRoute = tt.transitRoute
-                group by(TransitRoute)");
-                                while ($row = $result->fetch()) { 
-                            $transitCount = $row['transitCount'];
+
+            if (($_SESSION['delete']) == TRUE) {
+
+                if ($_POST['transportType'] == "ALL") {
+                            $transportType = "%%";
+
+                } else {
+                    $transportType = $_POST['transportType'];
+                }
+
+                if ($_POST['containSite'] == "ALL") {
+                    $containSite = "%%";
+
+                }else {
+                    $containSite = $_POST['containSite'];
+                }
+
+                if (empty($_POST['route'])) {
+                            $route = "%%";
+                } else {
+                    $route = $_POST['route'];
+                }
+
+                if (empty($_POST['lowerPrice'])) {
+                            $lowerPrice = 0;
+                } else {
+                    $lowerPrice = $_POST['lowerPrice'];
+                }
+
+                if (empty($_POST['upperPrice'])) {
+                            $upperPrice = 9223372036854775807;
+                } else {
+                    $upperPrice = $_POST['upperPrice'];
+
+                }
+
+            echo '<script>console.log("delete Session Variables set and Created")</script>';
+            $result = $conn->query("DELETE from transit
+                                                Where transitRoute like '$route';");
+            }
 
 
-}
-                
-                $result = $conn->query("select SiteName, t.TransitRoute, t.TransitType, TransitPrice,
-                        count(*) as connectedSites
-                    from transit t
-                    inner join connect c
-                    on t.TransitRoute = c.TransitRoute
-                    group by (TransitType);");
 
 
-                while ($row = $result->fetch()) { 
-                            echo "<tr>";
-                            echo "<td style='text-align:center'>" . $row['TransitRoute'] . "</td>";
-                            echo "<td style='text-align:center'>" . $row['TransitType'] . "</td>";
-                            echo "<td style='text-align:center'>" . $row['TransitPrice'] . "</td>";
+
+
+
+
+            if (($_SESSION['filter']) == TRUE) {
+
+                if ($_POST['transportType'] == "ALL") {
+                            $transportType = "%%";
+
+                } else {
+                    $transportType = $_POST['transportType'];
+                }
+
+                if ($_POST['containSite'] == "ALL") {
+                    $containSite = "%%";
+
+                }else {
+                    $containSite = $_POST['containSite'];
+                }
+
+                if (empty($_POST['route'])) {
+                            $route = "%%";
+                } else {
+                    $route = $_POST['route'];
+                }
+
+                if (empty($_POST['lowerPrice'])) {
+                            $lowerPrice = 0;
+                } else {
+                    $lowerPrice = $_POST['lowerPrice'];
+                }
+
+                if (empty($_POST['upperPrice'])) {
+                            $upperPrice = 9223372036854775807;
+                } else {
+                    $upperPrice = $_POST['upperPrice'];
+                }
+
+            echo '<script>console.log("transportType Input: ' . $transportType . '")</script>';
+            echo '<script>console.log("containSite Input: ' . $containSite . '")</script>';
+            echo '<script>console.log("route Input: ' . $route. '")</script>';
+            echo '<script>console.log("lowerPrice Input: ' . $lowerPrice . '")</script>';
+            echo '<script>console.log("upperPrice Input: ' . $upperPrice . '")</script>';
+
+
+
+                    $result = $conn->query("SELECT transit.transitRoute, transit.transitType, transit.transitPrice, connect.connectedSites, takeTransit.totalRiders
+                                            from transit
+                                            left join (select transitRoute, 
+                                                        count(*) as connectedSites 
+                                                        from connect group by transitRoute) as connect
+                                                        on transit.transitRoute = connect.transitRoute
+                                            left join (select transitRoute, 
+                                                            count(*) as totalRiders 
+                                                            from taketransit group by transitRoute) as takeTransit
+                                                        on transit.transitRoute = takeTransit.transitRoute
+                                            where transitType like '$transportType'
+                                            and transit.transitRoute like '$route'
+                                            and transitPrice between $lowerPrice and $upperPrice;");
+
+
+                                        while ($row = $result->fetch()) { 
+                                             echo "<tr>";
+                            echo    "<td style='padding-left:2.4em;'> 
+                                    <div class='radio'>
+                                    <label><input type='radio' id='express' name='optRadio' value ='$route'>" . $row['transitRoute'] . "</label>
+                                    </div>
+                                    </td>";
+                            echo "<td style='text-align:center'>" . $row['transitType'] . "</td>";
+                            echo "<td style='text-align:center'> $" . $row['transitPrice'] . "</td>";
                             echo "<td style='text-align:center'>" . $row['connectedSites'] . "</td>";
-                            echo "<tr>";}
-
-
-                $result = $conn->query("SELECT t.TransitType, t.TransitRoute , count(*) as transitCount
-                from transit t
-                inner join taketransit tt
-                on t.transitRoute = tt.transitRoute
-                group by(TransitRoute)");
-                                while ($row = $result->fetch()) { 
+                            echo "<td style='text-align:center'>" . $row['totalRiders'] . "</td>";
                             echo "<tr>";
+
+                        }
+                    }
+
+     
+                        
+
+
+
+
+
+
+
+                 else {$result = $conn->query("SELECT c.transitRoute, c.transitType,tt.transitPrice, c.connectedSites,tt.totalRiders
+                        FROM (select c.siteName, c.transitType, c.transitRoute, count(*) as connectedSites
+                        from connect c
+                        group by transitRoute) as c
+                        Join
+                        (select  t.transitRoute, t.transitPrice,
+                        count(*) as totalRiders 
+                        from taketransit tt
+                        inner join transit t
+                        on t.transitRoute = tt.transitRoute
+                        group by transitRoute) as tt
+                        where c.transitRoute = tt.transitRoute;");
+
+                    
+
+                        while ($row = $result->fetch()) { 
+                            $route = $row['transitRoute'];
+                            echo "<tr>";
+                            echo    "<td style='padding-left:2.4em;'> 
+                                    <div class='radio'>
+                                    <label><input type='radio' id='express' name='optRadio' value ='$route'>" . $row['transitRoute'] . "</label>
+                                    </div>
+                                    </td>";
+                            echo "<td style='text-align:center'>" . $row['transitType'] . "</td>";
+                            echo "<td style='text-align:center'> " . $row['transitPrice'] . "</td>";
                             echo "<td style='text-align:center'>" . $row['connectedSites'] . "</td>";
+                            echo "<td style='text-align:center'>" . $row['totalRiders'] . "</td>";
                             echo "<tr>";
 
-
-}
+                        }
+            }
                 ?>
             </tbody>
         </table>
