@@ -163,6 +163,38 @@ if (isset($_POST['backButton'])) {
 
                 <tbody>
 
+                    
+                    else {$result = $conn->query("SELECT c.transitRoute, c.transitType,tt.transitPrice, c.connectedSites,tt.totalRiders
+                        FROM (select c.siteName, c.transitType, c.transitRoute, count(*) as connectedSites
+                        from connect c
+                        group by transitRoute) as c
+                        Join
+                        (select  t.transitRoute, t.transitPrice,
+                        count(*) as totalRiders 
+                        from taketransit tt
+                        inner join transit t
+                        on t.transitRoute = tt.transitRoute
+                        group by transitRoute) as tt
+                        where c.transitRoute = tt.transitRoute;");
+
+                    
+
+                        while ($row = $result->fetch()) { 
+                            $route = $row['transitRoute'];
+                            echo "<tr>";
+                            echo    "<td style='padding-left:2.4em;'> 
+                                    <div class='radio'>
+                                    <label><input type='radio' id='express' name='optRadio' value ='$route'>" . $row['transitRoute'] . "</label>
+                                    </div>
+                                    </td>";
+                            echo "<td style='text-align:center'>" . $row['transitType'] . "</td>";
+                            echo "<td style='text-align:center'> " . $row['transitPrice'] . "</td>";
+                            echo "<td style='text-align:center'>" . $row['connectedSites'] . "</td>";
+                            echo "<td style='text-align:center'>" . $row['totalRiders'] . "</td>";
+                            echo "<tr>";
+
+                        }
+            }
                 </tbody>
             </table>
 
