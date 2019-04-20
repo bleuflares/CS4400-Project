@@ -51,13 +51,23 @@ if (isset($_POST['backButton'])) {
 
 ?>
 
+<?php
+
+if (isset($_POST['filterButton'])) { }
+
+
+?>
+
+
+
+
 <!DOCTYPE html>
 <html>
 
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <meta http-equiv="refresh" content="3">
+    <!-- <meta http-equiv="refresh" content="3"> -->
 
     <link rel="stylesheet" href="..\css\_universalStyling.css">
 
@@ -97,13 +107,14 @@ if (isset($_POST['backButton'])) {
             <div class="row">
                 <div class="col-sm-12 offset-0">
                     <label class='offset-4'>Site</label>
-                    <select>
+                    <select name="siteInput">
                         <?php
                         $result = $conn->query("SELECT SiteName FROM Site");
 
                         while ($row = $result->fetch()) {
                             echo "<option>" . $row['SiteName'] . "</option>";
                         }
+                        echo "<option>ALL</option>";
                         ?>
                     </select>
                     <div class="row">
@@ -111,7 +122,7 @@ if (isset($_POST['backButton'])) {
                             <label>First Name</label>
                         </div>
                         <div class="col-sm-3 offset-0">
-                            <input type="text" class="form-control col-sm-0 offset-0" id="inputAdress">
+                            <input type="text" class="form-control col-sm-0 offset-0" name="fnameInput">
 
                         </div>
 
@@ -120,7 +131,7 @@ if (isset($_POST['backButton'])) {
                             <label>Last Name</label>
                         </div>
                         <div class="col-sm-3 offset-0">
-                            <input type="text" class="form-control col-sm-0 offset-0" id="inputAdress">
+                            <input type="text" class="form-control col-sm-0 offset-0" name="lnameInput">
 
                         </div>
                     </div>
@@ -129,14 +140,14 @@ if (isset($_POST['backButton'])) {
                         <div class="col-sm-0 offset-0">
                             <label>Start Date</label>
 
-                            <input type="date" class="col-sm-0" style="padding: 0;" placeholder="">
+                            <input type="date" class="col-sm-0" style="padding: 0;" name="startDateInput">
 
                         </div>
 
                         <div class="col-sm-0 offset-1">
                             <label>End Date</label>
 
-                            <input type="date" class="col-sm-0" style="padding: 0;" placeholder="">
+                            <input type="date" class="col-sm-0" style="padding: 0;" name="endDateInput">
 
                         </div>
                     </div>
@@ -145,7 +156,7 @@ if (isset($_POST['backButton'])) {
 
                         <div class="col-sm-0 offset-6">
                             <button class="btn btn-sm btn-primary btn-block col-sm-0  " style=" height:40px;
-    width:60px;border-radius: 5px;">Filter</button>
+    width:60px;border-radius: 5px;" name="filterButton">Filter</button>
                         </div>
 
                     </div>
@@ -163,8 +174,8 @@ if (isset($_POST['backButton'])) {
 
                 <tbody>
 
-                    
-                    else {$result = $conn->query("SELECT c.transitRoute, c.transitType,tt.transitPrice, c.connectedSites,tt.totalRiders
+
+                    <!-- else {$result = $conn->query("SELECT c.transitRoute, c.transitType,tt.transitPrice, c.connectedSites,tt.totalRiders
                         FROM (select c.siteName, c.transitType, c.transitRoute, count(*) as connectedSites
                         from connect c
                         group by transitRoute) as c
@@ -194,7 +205,7 @@ if (isset($_POST['backButton'])) {
                             echo "<tr>";
 
                         }
-            }
+            } -->
                 </tbody>
             </table>
 
