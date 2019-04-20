@@ -29,7 +29,7 @@ try {
 
 <?php
 
-if (isset($_POST['filterButton'])){
+if (isset($_POST['filterButton'])) {
     echo '<script>console.log("%cSuccessful Filter Button Push", "color:blue")</script>';
     $_SESSION['manageEventFilter'] = True;
     echo '<script>console.log("%c Transit History Filter Session variable set", "color:blue")</script>';
@@ -60,11 +60,11 @@ if (isset($_POST['backButton'])) {
     }
 }
 
-if (isset($_POST['deleteButton'])){
+if (isset($_POST['deleteButton'])) {
 
 
-        $_SESSION['deleteButton'] = True;
-        echo '<script>console.log("%cSuccessful Delete Button Push", "color:blue")</script>';
+    $_SESSION['deleteButton'] = True;
+    echo '<script>console.log("%cSuccessful Delete Button Push", "color:blue")</script>';
 }
 
 ?>
@@ -76,10 +76,24 @@ if (isset($_POST['view_editButton'])) {
     $userType  = $_SESSION["userType"];
 
     if (strpos($_SESSION["user_employeeType"], "Manager") !== false) {
-        header('Location: http://localhost/web_gui/php/view_editEvent.php');
-        exit();
+
+
+        if (isset($_POST['optRadio'])) {
+            $data = explode("_", $_POST['optRadio']);
+
+            echo '<script>console.log("Input: ' . $_POST['optRadio'] . '")</script>';
+            echo '<script>console.log("Input: ' . $data[1] . '")</script>';
+        } else {
+            echo '<script>console.log("%cCannot View/Edit Event if a specific event is not chosen.", "color:red")</script>';;
+        }
+
+
+
+
+        // header('Location: http://localhost/web_gui/php/view_editEvent.php');
+        // exit();
     } else {
-        echo '<script>console.log("%cUser is not a manager, hence should not be on this page. Please logout.", "color:red")</script>';;
+        echo '<script>console.log("%cUser is not a manager, hence should not be on this page. Please logout.", "color:red")</script>';
     }
 }
 
@@ -98,9 +112,6 @@ if (isset($_POST['createButton'])) {
         echo '<script>console.log("%cUser is not a manager, hence should not be on this page. Please logout.", "color:red")</script>';;
     }
 }
-
-?>
-
 
 ?>
 
@@ -147,7 +158,7 @@ if (isset($_POST['createButton'])) {
                     <label>Name</label>
                 </div>
                 <div class="col-sm-3 offset-0">
-                    <input type="text" class="form-control col-sm-0 offset-0" id="inputAdress" name = "eventName">
+                    <input type="text" class="form-control col-sm-0 offset-0" id="inputAdress" name="eventName">
 
                 </div>
 
@@ -156,7 +167,7 @@ if (isset($_POST['createButton'])) {
                     <label>Description Keyword</label>
                 </div>
                 <div class="col-sm-3 offset-0">
-                    <input type="text" class="form-control col-sm-0 offset-0" id="inputAdress" name = "descKey">
+                    <input type="text" class="form-control col-sm-0 offset-0" id="inputAdress" name="descKey">
 
                 </div>
             </div>
@@ -166,7 +177,7 @@ if (isset($_POST['createButton'])) {
                     <label>Start Date</label>
                 </div>
                 <div class="col-sm-4 offset-0">
-                    <input type="Date" class="form-control col-sm-0 offset-0" id="inputAdress" name = "startDate">
+                    <input type="Date" class="form-control col-sm-0 offset-0" id="inputAdress" name="startDate">
 
                 </div>
 
@@ -175,7 +186,7 @@ if (isset($_POST['createButton'])) {
                     <label>End Date</label>
                 </div>
                 <div class="col-sm-4 offset-0">
-                    <input type="Date" class="form-control col-sm-0 offset-0" id="inputAdress" name = "endDate">
+                    <input type="Date" class="form-control col-sm-0 offset-0" id="inputAdress" name="endDate">
 
                 </div>
             </div>
@@ -186,25 +197,28 @@ if (isset($_POST['createButton'])) {
                 </div>
                 <div class="col-sm-5">
 
-                    <input type="number" class="col-sm-4" style="text-align: center;" placeholder="" name = "lowDurRange">
+                    <input type="number" class="col-sm-4" style="text-align: center;" placeholder="" name="lowDurRange">
 
                     <label> -- </label>
 
-                    <input type="number" class="col-sm-4" style="text-align: center; width: 300px; " placeholder="" name = "highDurRange">
+                    <input type="number" class="col-sm-4" style="text-align: center; width: 300px; " placeholder=""
+                        name="highDurRange">
                 </div>
                 <div class="row">
-                <div class="col-sm-0 offset-0">
-                    <label>Total Visits Range</label>
+                    <div class="col-sm-0 offset-0">
+                        <label>Total Visits Range</label>
+                    </div>
+                    <div class="col-sm-5">
+
+                        <input type="number" class="col-sm-4" style="text-align: center;" placeholder=""
+                            name="lowVisitRange">
+
+                        <label> -- </label>
+
+                        <input type="number" class="col-sm-4" style="text-align: center;" placeholder=""
+                            name="highVisitRange">
+                    </div>
                 </div>
-                <div class="col-sm-5">
-
-                    <input type="number" class="col-sm-4" style="text-align: center;" placeholder="" name = "lowVisitRange">
-
-                    <label> -- </label>
-
-                    <input type="number" class="col-sm-4" style="text-align: center;" placeholder="" name = "highVisitRange">
-                </div>
-            </div>
 
             </div>
         </div>
@@ -215,23 +229,24 @@ if (isset($_POST['createButton'])) {
             </div>
             <div class="col-sm-5">
 
-                <input type="number" class="col-sm-4" style="text-align: center;" placeholder="" name = "lowRevRange">
+                <input type="number" class="col-sm-4" style="text-align: center;" placeholder="" name="lowRevRange">
 
                 <label> -- </label>
 
-                <input type="number" class="col-sm-4" style="text-align: center;" placeholder="" name = "highRevRange">
+                <input type="number" class="col-sm-4" style="text-align: center;" placeholder="" name="highRevRange">
             </div>
         </div>
 
         <div class="row col-sm-12">
 
             <div class="col-sm-0 offset-2">
-                <button class="btn btn-sm btn-primary btn-block col-sm-0" style="border-radius: 5px" name = "filterButton";>Filter</button>
+                <button class="btn btn-sm btn-primary btn-block col-sm-0" style="border-radius: 5px" name="filterButton"
+                    ;>Filter</button>
             </div>
 
             <div class="col-sm-0 offset-2" style="text-align: right;">
                 <input id="button" class="btn btn-sm btn-primary btn-block col-sm-0" type="submit" name="createButton"
-                     value="Create" />
+                    value="Create" />
 
 
             </div>
@@ -246,11 +261,6 @@ if (isset($_POST['createButton'])) {
                     onclick="myFunction();" value="Delete" />
             </div>
         </div>
-
-
-        </div>
-        </div>
-
 
 
 
@@ -270,95 +280,91 @@ if (isset($_POST['createButton'])) {
                 if ($_SESSION['manageEventFilter'] == true) {
 
 
-                        echo '<script>console.log("Here")</script>';
-                        if (empty($_POST['eventName'])) {
-                            $eventName = "%%";
+                    echo '<script>console.log("Here")</script>';
+                    if (empty($_POST['eventName'])) {
+                        $eventName = "%%";
+                    } else {
+                        $eventName = $_POST['eventName'];
+                    }
 
-                        } else {
-                            $eventName = $_POST['eventName'];
-                        }
+                    if (empty($_POST['startDate'])) {
+                        $startDate = "0000-00-00";
+                    } else {
+                        $startDate = $_POST['startDate'];
+                    }
 
-                        if (empty($_POST['startDate'])) {
-                            $startDate = "0000-00-00";
-                        } else {
-                            $startDate = $_POST['startDate'];
-                            
-                        }
+                    if (empty($_POST['endDate'])) {
+                        $endDate = "9999-12-12";
+                    } else {
+                        $endDate = $_POST['endDate'];
+                    }
 
-                        if (empty($_POST['endDate'])) {
-                            $endDate = "9999-12-12";
-                        } else {
-                            $endDate = $_POST['endDate'];
-                        }
-                        
-                        if (empty($_POST['descKey'])) {
-                            $descKey = "%%";
-                        } else {
-                            $descKey = '%'.$_POST['descKey'].'%';
-                        }
+                    if (empty($_POST['descKey'])) {
+                        $descKey = "%%";
+                    } else {
+                        $descKey = '%' . $_POST['descKey'] . '%';
+                    }
 
-                        if (empty($_POST['startDate'])) {
-                            $startDate = "0000-00-00";
-                        } else {
-                            $startDate = $_POST['startDate'];
-                            echo '<script>console.log("Works Input: ' . $startDate . '")</script>';
-                        }
+                    if (empty($_POST['startDate'])) {
+                        $startDate = "0000-00-00";
+                    } else {
+                        $startDate = $_POST['startDate'];
+                        echo '<script>console.log("Works Input: ' . $startDate . '")</script>';
+                    }
 
 
-                        if (empty($_POST['lowDurRange'])) {
-                            $lowDurRange = 0;
-                            
-                        } else {
-                            $lowDurRange = $_POST['lowDurRange'];
-                        }
-                        
-                        if(empty($_POST['highDurRange'])){
-                            $highDurRange = 9223372036854775807;;
-                        } else {
-                            $highDurRange = $_POST['highDurRange'];
-                        }
-                        if (empty($_POST['lowVisitRange'])) {
-                            $lowVisitRange = 0;
-                            
-                        } else {
-                            $lowVisitRange = $_POST['lowVisitRange'];
-                        }
-                        
-                        if(empty($_POST['highVisitRange'])){
-                            $highVisitRange = 9223372036854775807;;
-                        } else {
-                            $highVisitRange = $_POST['highVisitRange'];
-                        }
+                    if (empty($_POST['lowDurRange'])) {
+                        $lowDurRange = 0;
+                    } else {
+                        $lowDurRange = $_POST['lowDurRange'];
+                    }
 
-                        if (empty($_POST['lowRevRange'])) {
-                            $lowRevRange = 0;
-                            
-                        } else {
-                            $lowRevRange = $_POST['lowRevRange'];
-                        }
-                        
-                        if(empty($_POST['highRevRange'])){
-                            $highRevRange = 9223372036854775807;;
-                        } else {
-                            $highRevRange = $_POST['highRevRange'];
-                        }
+                    if (empty($_POST['highDurRange'])) {
+                        $highDurRange = 9223372036854775807;;
+                    } else {
+                        $highDurRange = $_POST['highDurRange'];
+                    }
+                    if (empty($_POST['lowVisitRange'])) {
+                        $lowVisitRange = 0;
+                    } else {
+                        $lowVisitRange = $_POST['lowVisitRange'];
+                    }
+
+                    if (empty($_POST['highVisitRange'])) {
+                        $highVisitRange = 9223372036854775807;;
+                    } else {
+                        $highVisitRange = $_POST['highVisitRange'];
+                    }
+
+                    if (empty($_POST['lowRevRange'])) {
+                        $lowRevRange = 0;
+                    } else {
+                        $lowRevRange = $_POST['lowRevRange'];
+                    }
+
+                    if (empty($_POST['highRevRange'])) {
+                        $highRevRange = 9223372036854775807;;
+                    } else {
+                        $highRevRange = $_POST['highRevRange'];
+                    }
 
 
-                        echo '<script>console.log("eventName: ' . $eventName . '")</script>';
-                        echo '<script>console.log("startDate: ' . $startDate . '")</script>';
-                        echo '<script>console.log("endDate: ' . $endDate . '")</script>';
-                        echo '<script>console.log("descKey: ' . $descKey . '")</script>';
-                        echo '<script>console.log("lowDurRange: ' . $lowDurRange . '")</script>';
-                        echo '<script>console.log("highDurRange: ' . $highDurRange . '")</script>';
-                        echo '<script>console.log("lowVisitRange: ' . $lowVisitRange . '")</script>';
-                        echo '<script>console.log("highVisitRange: ' . $highVisitRange . '")</script>';
-                        echo '<script>console.log("lowRevRange ' . $lowRevRange . '")</script>';
-                        echo '<script>console.log("highRevRange: ' . $highRevRange . '")</script>';
+                    echo '<script>console.log("eventName: ' . $eventName . '")</script>';
+                    echo '<script>console.log("startDate: ' . $startDate . '")</script>';
+                    echo '<script>console.log("endDate: ' . $endDate . '")</script>';
+                    echo '<script>console.log("descKey: ' . $descKey . '")</script>';
+                    echo '<script>console.log("lowDurRange: ' . $lowDurRange . '")</script>';
+                    echo '<script>console.log("highDurRange: ' . $highDurRange . '")</script>';
+                    echo '<script>console.log("lowVisitRange: ' . $lowVisitRange . '")</script>';
+                    echo '<script>console.log("highVisitRange: ' . $highVisitRange . '")</script>';
+                    echo '<script>console.log("lowRevRange ' . $lowRevRange . '")</script>';
+                    echo '<script>console.log("highRevRange: ' . $highRevRange . '")</script>';
 
 
-            
-                           $result = $conn->query("SELECT event.eventName,
+
+                    $result = $conn->query("SELECT event.eventName,
                             datediff(event.endDate, event.startDate) as duration,
+                                event.startDate,
                                staffassign.staffCount,
                                visitors.totalVisits,
                                visitors.totalVisits*eventPrice as totalRevenue
@@ -378,57 +384,58 @@ if (isset($_POST['createButton'])) {
                                group by event.eventName,event.startDate;");
 
 
-                               while ($row = $result->fetch()) {
-                            $value = $row['eventName'];
-                            echo "<tr>";
-                            echo    "<td style='padding-left:2.4em;'>
+                    while ($row = $result->fetch()) {
+                        $value = $row['eventName'] . "_" . $row['startDate'];
+                        echo "<tr>";
+                        echo    "<td style='padding-left:2.4em;'>
                                     <div class='radio'>
                                     <label><input type='radio' id='express' name='optRadio' value ='$value'>" . $row['eventName'] . "</label>
                                     </div>
                                     </td>";
-                            echo "<td style='text-align:center'>" . $row['duration'] . "</td>";
-                            echo "<td style='text-align:center'> " . $row['staffCount'] . "</td>";
-                            echo "<td style='text-align:center'> " . $row['totalVisits'] . "</td>";
-                            echo "<td style='text-align:center'> $" . $row['totalRevenue'] . "</td>";
-                            }
-
-                        } else { $result = $conn->query("SELECT event.eventName,
-                                                    staffassign.staffCount,
-                                                    datediff(event.endDate, event.startDate) as duration,
-                                                    visitors.totalVisits,
-                                                    visitors.totalVisits*EventPrice as TotalRevenue,
-                                                    FROM event left join (SELECT EventName, StartDate, count(*) as StaffCount FROM assignTo group by 1,2) as staffassign
-                                                    on event.eventName = staffassign.eventName
-                                                    and event.startDate = staffassign.startDate
-                                                            left join (SELECT EventName, StartDate, count(*) as totalvisits FROM visitEvent group by 1,2) as visitors
-                                                    on event.eventName = visitors.eventName
-                                                    and event.startDate = visitors.startDate
-                                                    group by event.eventName,event.startDate;");
-                
-
-
-                            while ($row = $result->fetch()) {
-                            $value = $row['eventName'];
-                            echo "<tr>";
-                            echo    "<td style='padding-left:2.4em;'>
-                                    <div class='radio'>
-                                    <label><input type='radio' id='express' name='optRadio' value ='$value'>" . $row['eventName'] . "</label>
-                                    </div>
-                                    </td>";
-                            echo "<td style='text-align:center'>" . $row['duration'] . "</td>";
-                            echo "<td style='text-align:center'> " . $row['staffCount'] . "</td>";
-                            echo "<td style='text-align:center'> " . $row['totalVisits'] . "</td>";
-                            echo "<td style='text-align:center'> $" . $row['TotalRevenue'] . "</td>";
-                            }
-                        }
-                    
-
-                    if ($_SESSION['deleteButton'] == true){
-
-                         $eventName = $_POST['optRadio'];
-                         echo '<script>console.log("eventName: ' . $eventName . '")</script>';
-
+                        echo "<td style='text-align:center'>" . $row['duration'] . "</td>";
+                        echo "<td style='text-align:center'> " . $row['staffCount'] . "</td>";
+                        echo "<td style='text-align:center'> " . $row['totalVisits'] . "</td>";
+                        echo "<td style='text-align:center'> $ " . $row['totalRevenue'] . ".00</td>";
                     }
+                } else {
+                    $result = $conn->query("SELECT event.eventName,
+                            datediff(event.endDate, event.startDate) as duration,
+                                event.startDate,
+                               staffassign.staffCount,
+                               visitors.totalVisits,
+                               visitors.totalVisits*eventPrice as totalRevenue
+                               FROM event left join (SELECT eventName, startDate, count(*) as staffCount FROM assignTo group by 1,2) as staffAssign
+                               on event.eventName = staffAssign.eventName
+                            and event.startDate = staffAssign.startDate
+                            left join (SELECT eventName, startDate, count(*) as totalVisits FROM visitEvent group by 1,2) as visitors
+                            on event.eventName = visitors.eventName
+                            and event.startDate = visitors.startDate
+                               group by event.eventName,event.startDate;");
+
+
+
+                    while ($row = $result->fetch()) {
+                        $value = $row['eventName'] . "_" . $row['startDate'];
+                        // $value_date = $row['startDate'];
+                        echo "<tr>";
+                        echo    "<td style='padding-left:2.4em;'>
+                                    <div class='radio'>
+                                    <label><input type='radio' id='express' name='optRadio' value ='$value'>" . $row['eventName'] . "</label>
+                                    </div>
+                                    </td>";
+                        echo "<td style='text-align:center'>" . $row['duration'] . "</td>";
+                        echo "<td style='text-align:center'> " . $row['staffCount'] . "</td>";
+                        echo "<td style='text-align:center'> " . $row['totalVisits'] . "</td>";
+                        echo "<td style='text-align:center'> $ " . $row['totalRevenue'] . ".00</td>";
+                    }
+                }
+
+
+                if ($_SESSION['deleteButton'] == true) {
+
+                    $eventName = $_POST['optRadio'];
+                    echo '<script>console.log("eventName: ' . $eventName . '")</script>';
+                }
 
                 ?>
 
