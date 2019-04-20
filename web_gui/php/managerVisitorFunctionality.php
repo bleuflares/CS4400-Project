@@ -7,6 +7,8 @@ if (!$_SESSION["logged_in"]) {
     exit();
 }
 
+echo '<script>console.log("Input: ' . $_SESSION["user_employeeType"] . '")</script>';
+
 global $conn;
 try {
     $conn = new PDO(
