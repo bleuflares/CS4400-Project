@@ -286,6 +286,7 @@ if (isset($_POST['createButton'])) {
                             //     And  concat(FirstName, ' ', LastName) like '$manager'
                             //     And s.OpenEveryday = '$openEveryday';");
 
+<<<<<<< HEAD
 
                             // while ($row = $result->fetch()) {
                             // echo "<tr>";
@@ -296,6 +297,8 @@ if (isset($_POST['createButton'])) {
                             //         </td>";
                             // echo "<td style='text-align:center'>" . $row['manager'] . "</td>";
                             // echo "<td style='text-align:center'> " . $row['openEveryday'] . "</td>";
+=======
+>>>>>>> 73e0c08f9407849e02aa4ff0c23d9bd2cd68e1c5
                     $result = $conn->query("SELECT event.eventName,
                                                     staffassign.staffCount,
                                                     datediff(event.endDate, event.startDate) as duration,
@@ -308,7 +311,10 @@ if (isset($_POST['createButton'])) {
                                                     on event.eventName = visitors.eventName
                                                     and event.startDate = visitors.startDate
                                                     group by event.eventName,event.startDate;");
+<<<<<<< HEAD
                 
+=======
+>>>>>>> 73e0c08f9407849e02aa4ff0c23d9bd2cd68e1c5
 
 
                             while ($row = $result->fetch()) {

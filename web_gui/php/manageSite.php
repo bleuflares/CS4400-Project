@@ -48,7 +48,7 @@ if (isset($_POST['create'])) {
 }
 if (isset($_POST['delete'])){
 
-        
+
         $_SESSION['deleteButton'] = True;
         echo '<script>console.log("%cSuccessful Delete Button Push", "color:blue")</script>';
 }
@@ -57,7 +57,7 @@ if (isset($_POST['delete'])){
 
 if (isset($_POST['edit'])) {
     if (isset($_POST['optRadio'])){
-        
+
         $siteName = $_POST['optRadio'];
 
         $_SESSION["siteName"] = $siteName;
@@ -119,7 +119,7 @@ if (isset($_POST['backButton'])) {
 
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-<!-- 
+<!--
     <meta http-equiv="refresh" content="3"> -->
 
     <link rel="stylesheet" href="..\css\_universalStyling.css">
@@ -177,7 +177,7 @@ if (isset($_POST['backButton'])) {
                         <option value="ALL">ALL</option>
                         <?php
                         $result = $conn->query("SELECT  concat(FirstName, ' ', LastName) as Username
-                                                from site s 
+                                                from site s
                                                 inner join user u on
                                                 s.managerUserName = u.userName;
                                                         ");
@@ -242,32 +242,32 @@ if (isset($_POST['backButton'])) {
                     <?php
 
                         if ($_SESSION['transitHistoryFilter'] == true) {
-                    
+
                         $openEveryday  = $_POST['openEveryday'];
 
                         if ($_POST['site'] == "ALL") {
                             $site = "%%";
 
-                        } else { 
+                        } else {
                             $site = $_POST['site'];
                         }
                         if($_POST['manager'] == "ALL"){
                             $manager  = "%%";
-                        
 
-                        } else { 
+
+                        } else {
                             $manager = $_POST['manager'];
                         }
 
 
-                        
+
 
                          echo '<script>console.log("siteName Input: ' . $site . '")</script>';
                         echo '<script>console.log("manager Input: ' . $manager     . '")</script>';
                         echo '<script>console.log("openEveryday Input: ' . $openEveryday . '")</script>';
 
                             $result = $conn->query("SELECT  s.siteName, concat(FirstName, ' ', LastName) as manager, s.openEveryday
-                                from site s 
+                                from site s
                                 inner join user u on
                                 s.managerUserName  = u.userName
                                 where s.siteName like '$site'
@@ -277,41 +277,41 @@ if (isset($_POST['backButton'])) {
 
                             while ($row = $result->fetch()) {
                             echo "<tr>";
-                            echo    "<td style='padding-left:2.4em;'> 
+                            echo    "<td style='padding-left:2.4em;'>
                                     <div class='radio'>
                                     <label><input type='radio' id='express' name='optRadio' value ='$site'>" . $row['siteName'] . "</label>
                                     </div>
                                     </td>";
                             echo "<td style='text-align:center'>" . $row['manager'] . "</td>";
                             echo "<td style='text-align:center'> " . $row['openEveryday'] . "</td>";
-                           
+
                         //     while ($row = $result->fetch()) {
                         //     echo "<tr>";
                         //     echo "<td style='text-align:center'>" . $row['siteName'] . "</td>";
                         //     echo "<td style='text-align:center'>" . $row['manager'] . "</td>";
                         //     echo "<td style='text-align:center'>" . $row['openEveryday'] . "</td>";
-                            
+
                         //     echo "<tr>";
 
                         // }
                         $_SESSION['transitHistoryFilter'] = false;
 
                     echo '<script>console.log("%cSuccessful Delete Button Push", "color:blue")</script>';
-}
-}
+                            }
+                        }
 
 
 
                     else {$result = $conn->query("SELECT  s.siteName, concat(FirstName, ' ', LastName) as manager, s.openEveryday
-                                                from site s 
+                                                from site s
                                                 inner join user u on
                                                 s.managerUserName = u.userName;");
 
-                    
+
                         while ($row = $result->fetch()) {
                             $value = $row['siteName'];
                             echo "<tr>";
-                            echo    "<td style='padding-left:2.4em;'> 
+                            echo    "<td style='padding-left:2.4em;'>
                                     <div class='radio'>
                                     <label><input type='radio' id='express' name='optRadio' value ='$value'>" . $row['siteName'] . "</label>
                                     </div>
@@ -344,13 +344,13 @@ if (isset($_POST['backButton'])) {
 
 
 
-                        
 
 
-                        
+
+
 
                         $result = $conn->query("Delete from site
-                                                Where  
+                                                Where
                                                 siteName = '$siteName'
                                                 AND
                                                 siteAddress = '$siteAddress'
@@ -361,9 +361,9 @@ if (isset($_POST['backButton'])) {
                 echo 'alert("Successful Delete of Site!")';
                 echo '</script>';
 
-               
 
-                    
+
+
                 }
                 ?>
 

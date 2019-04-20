@@ -1,5 +1,6 @@
 
 <?php
+error_reporting(E_ERROR| E_PARSE);
 // Start the session
 session_start();
 $_SESSION['createButton'] = False;
@@ -42,7 +43,7 @@ if (isset($_POST['createButton'])) {
     echo '<script>console.log("Create Button Pushed")</script>';
 
     $_SESSION['createButton'] = True;
-    
+
 }
 
 ?>
@@ -83,13 +84,13 @@ if (isset($_POST['createButton'])) {
 <body>
 
     <?php
-    $result = $conn->query("select  e.*, u.Password, 
-                                            u.Status, 
-                                            u.Firstname, 
-                                            u.Lastname, 
-                                            u.UserType 
-                                    from employee e inner join user u 
-                                    on e.Username = u.Username 
+    $result = $conn->query("select  e.*, u.Password,
+                                            u.Status,
+                                            u.Firstname,
+                                            u.Lastname,
+                                            u.UserType
+                                    from employee e inner join user u
+                                    on e.Username = u.Username
                                     where u.Username = '" . $_SESSION["userName"] . "';");
 
     $row = $result->fetch();
@@ -114,7 +115,7 @@ if (isset($_POST['createButton'])) {
             <div class="row">
                 <div class="col-sm-5">
                     <label>Transport Type</label>
-                    <select>
+                    <select name = "transportType">
                         <option value="ALL">--ALL--</option>
                         <option value="MARTA">MARTA</option>
                         <option value="Bus">Bus</option>
@@ -125,14 +126,14 @@ if (isset($_POST['createButton'])) {
 
                 <div class="col-sm-4">
                     <label>Route</label>
-                    <input type="text" class="form-control" id="inputFirstName" value="<?php echo $route; ?>" name ="route">                
+                    <input type="text" class="form-control" id="inputFirstName" value="<?php echo $route; ?>" name ="route">
                     </div>
 
                 <div class="col-sm-3">
                     <label>Price ($)</label>
-                    
+
                     <input type="text" class="form-control" id="inputFirstName" value="<?php echo $transitPrice; ?>" name ="transitPrice">
-                    
+
                 </div>
             </div>
 
@@ -183,7 +184,7 @@ if (isset($_POST['createButton'])) {
                 <div class="form-group row col-sm-12 offset-3">
                     <button type="submit" class="btn btn-primary" id="backButton"
                         style="padding-left: 2.5em; padding-right: 2.5em; margin-left: .75em;">Back</button>
-                    <button type="submit" class="btn btn-primary" id="registerButton" 
+                    <button type="submit" class="btn btn-primary" id="registerButton"
                         style="padding-left: 2.5em; padding-right: 2.5em; margin-left: 4em;" name = "createButton">Create</button>
                 </div>
             </div>
@@ -195,18 +196,43 @@ if (isset($_POST['createButton'])) {
 
 
     <?php
-        if($_SESSION['createButton'] == True){ 
-             $connectedSites = $_POST['connectedSites'];
+        if($_SESSION['createButton'] == True){
 
-            for ($i = 0 ; $i >= count($connectedSites); $i++) {
-                echo $connectedSites[$i];
+             if(isset($_POST['connectedSites'])){
+             } else {
+                $connectedSites = $_POST['connectedSites'];
+             }
+             $transportType = $_POST['transportType'];
+             $route = $_POST['route'];
+             $transitPrice = $_POST['transitPrice'];
+
+            if(count($connectedSites) > 1){
+                $result =$conn->query("SELECT EXISTS(SELECT * FROM transit WHERE transitType ='$transportType' and transitRoute = '$route') as answer;");
+                    while ($row = $result->fetch()) {
+                            $answer = $row['answer'];
+                }
+
+                if($answer == '1')
+                {
+                    echo '<script language="javascript">';
+                    echo 'alert("This is not a unique transport type and route!")';
+                    echo '</script>';
+                } else{
+                    if($conn->query("INSERT into transit values('$transportType','$route','$transitPrice');")) {
+                        for ($i = 0 ; $i < count($connectedSites); $i++) {
+                            $temp = $connectedSites[$i];
+                            echo '<script>console.log("connected Sites : ' .
+                            $temp. '")</script>';
+                            $conn->query("INSERT into connect values('$temp','$transportType','$route');");
+                        }
+                    }
+
+                }
+            } else{
+                 echo '<script language="javascript">';
+                echo 'alert("Less than two sites selected!")';
+                echo '</script>';
             }
-
-            echo '<script>console.log("connected Sites : ' . 
-            $connectedSites[0]. '")</script>';
-            echo '<script>console.log("connected Sites : ' . 
-            $connectedSites[1]. '")</script>';
-
 
         // $counter = 0
         // foreach($connectedSites as $array_values){
@@ -217,7 +243,7 @@ if (isset($_POST['createButton'])) {
 
 
         // $connectedSites = $_POST['connectedSites'];
-        // echo '<script>console.log("connected Sites : ' . 
+        // echo '<script>console.log("connected Sites : ' .
         // $connectedSites[0]. '")</script>';
 
 
