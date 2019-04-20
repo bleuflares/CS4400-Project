@@ -194,7 +194,7 @@ if (isset($_POST['updateButton'])) {
                                             u.Status,
                                             u.Firstname,
                                             u.Lastname,
-                                            u.UserType
+                                            u.userType
                                     from employee e inner join user u
                                     on e.Username = u.Username
                                     where u.Username = '" . $_SESSION["userName"] . "';");
@@ -238,7 +238,7 @@ if (isset($_POST['updateButton'])) {
                 <div class="col-sm-6">
                     <label>Username</label>
                     <?php
-                    echo '<span style="font-weight: 600; margin-left: 2.25em;>' . $row['Username'] . '</span>';
+                    echo '<span style="font-weight: 600; margin-left: 2.25em;">' .  $username . '</span>';
                     ?>
                 </div>
 
@@ -246,7 +246,7 @@ if (isset($_POST['updateButton'])) {
                     <label>Site Name</label>
                     <?php
                     if ($siteRow) {
-                        echo '<span style="font-weight: 600; margin-left: 2.25em;">' .  $siteRow['SiteName'] . '</span>';
+                        echo '<span style="font-weight: 600; margin-left: 2.25em;">' .  $siteRow['siteName'] . '</span>';
                     } else {
                         echo '<span style="font-weight: 600; margin-left: 2.25em;">N/a</span>';
                     }
@@ -313,7 +313,7 @@ if (isset($_POST['updateButton'])) {
                 <div class="col-sm-4 offset-5">
 
                     <?php
-                    if (strpos($row['UserType'], "Visit") !== false) {
+                    if (strpos($row['userType'], "Visit") !== false) {
                         echo '<input type="checkbox" class="col-sm-1"
                             style="text-align: center; margin-left: 0.5em; padding: 0em;" name="checkedVisitor" placeholder="" checked>';
                     } else {
