@@ -33,7 +33,7 @@ if (isset($_POST['backButton'])) {
         echo '<script>console.log("%cUser is EMPLOYEE", "color:blue")</script>';
 
         if (strpos($_SESSION["user_employeeType"], "Manager") !== false) {
-            header('Location: http://localhost/web_gui/php/managerFunctionality.php');
+            header('Location: http://localhost/web_gui/php/manageEvent.php');
             exit();
         } else {
             echo '<script>console.log("%cUser is EMPLOYEE, BUT they are NOT a Admin, Manager, or Staff", "color:red")</script>';;
@@ -42,32 +42,13 @@ if (isset($_POST['backButton'])) {
         echo '<script>console.log("%cUser is BOTH an EMPLOYEE and VISITOR", "color:blue")</script>';
 
         if (strpos($_SESSION["user_employeeVisitorType"], "Manager") !== false) {
-            header('Location: http://localhost/web_gui/php/managerVisitorFunctionality.php');
+            header('Location: http://localhost/web_gui/php/manageEvent.php');
             exit();
         } else {
             echo '<script>console.log("%cUser is EMPLOYEE and VISITOR, BUT they are NOT a Admin, Manager, or Staff", "color:red")</script>';;
         }
     }
 }
-
-?>
-
-<?php
-
-if (isset($_POST['view_editButton'])) {
-
-    $userType  = $_SESSION["userType"];
-
-    if (strpos($_SESSION["user_employeeType"], "Manager") !== false) {
-        header('Location: http://localhost/web_gui/php/view_editEvent.php');
-        exit();
-    } else {
-        echo '<script>console.log("%cUser is not a manager, hence should not be on this page. Please logout.", "color:red")</script>';;
-    }
-}
-
-?>
-
 
 ?>
 
@@ -78,7 +59,7 @@ if (isset($_POST['view_editButton'])) {
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- <meta http-equiv="refresh" content="3"> -->
+    <meta http-equiv="refresh" content="3">
 
     <link rel="stylesheet" href="..\css\_universalStyling.css">
 
@@ -103,53 +84,98 @@ if (isset($_POST['view_editButton'])) {
 
 <body>
     <form class="form-signin" method="post">
-        <h1 class="h3 mb-3 font-weight-heavy" id="titleOfForm">Manage Event</h1>
+        <h1 class="h3 mb-3 font-weight-heavy" id="titleOfForm">View/Edit Event</h1>
 
 
         <div class="container">
 
 
             <div class="row">
-                <div class="col-sm-1 offset-0">
+
+                <div class="col-sm-6">
                     <label>Name</label>
+                    <?php
+                    // echo '<span style="font-weight: 600; margin-left: 2.25em;">' . $row['Username'] . '</span>';
+                    ?>
                 </div>
-                <div class="col-sm-3 offset-0">
-                    <input type="text" class="form-control col-sm-0 offset-0" id="inputAdress">
 
-                </div>
-
-
-                <div class="col-sm-4 offset-0">
-                    <label>Description Keyword</label>
-                </div>
-                <div class="col-sm-3 offset-0">
-                    <input type="text" class="form-control col-sm-0 offset-0" id="inputAdress">
-
+                <div class="col-sm-6">
+                    <label>Price ($)</label>
+                    <?php
+                    // echo '<span style="font-weight: 600; margin-left: 2.25em;">' . $row['Username'] . '</span>';
+                    ?>
                 </div>
             </div>
 
             <div class="row">
-                <div class="col-sm-1 offset-0">
+                <div class="col-sm-6">
                     <label>Start Date</label>
+                    <?php
+                    // echo '<span style="font-weight: 600; margin-left: 2.25em;">' . $row['Username'] . '</span>';
+                    ?>
                 </div>
-                <div class="col-sm-4 offset-0">
-                    <input type="Date" class="form-control col-sm-0 offset-0" id="inputAdress">
 
-                </div>
-
-
-                <div class="col-sm-2 offset-0">
+                <div class="col-sm-6">
                     <label>End Date</label>
+                    <?php
+                    // if ($siteRow) {
+                    //     // echo '<span style="font-weight: 600; margin-left: 2.25em;">' .  $siteRow['SiteName'] . '</span>';
+                    // } else {
+                    //     // echo '<span style="font-weight: 600; margin-left: 2.25em;">N/a</span>';
+                    // }
+                    ?>
                 </div>
-                <div class="col-sm-4 offset-0">
-                    <input type="Date" class="form-control col-sm-0 offset-0" id="inputAdress">
 
+            </div>
+
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <label>Minimum Staff Required</label>
+                    <?php
+                    // echo '<span style="font-weight: 600; margin-left: 2.25em;">' . $row['Username'] . '</span>';
+                    ?>
                 </div>
+                <div class="col-sm-6">
+                    <label>Capacity</label>
+                    <?php
+                    // echo '<span style="font-weight: 600; margin-left: 1.15em;">' . $row['EmployeeID'] . '</span>'
+                    ?>
+                </div>
+            </div>
+
+            <br>
+
+            <div class="row">
+                <label for="exampleFormControlSelect2" style="">Staff Assigned</label>
+
+                <select multiple style="display: inline; margin-left: 5em;" class="form-control col-sm-6 offset-1"
+                    id="exampleFormControlSelect2">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                </select>
+
             </div>
 
             <div class="row">
+                <div class="col-sm-2 offset-0">
+                    <label>Description</label>
+                </div>
+                <div class="col-sm-4 offset-1">
+                    <textarea name="paragraph_text" cols="50" rows="8"></textarea>
+
+                </div>
+
+            </div>
+
+            <br>
+
+            <div class="row">
                 <div class="col-sm-0 offset-0">
-                    <label>Duration Range</label>
+                    <label>Daily Visits Range</label>
                 </div>
                 <div class="col-sm-3">
 
@@ -162,7 +188,7 @@ if (isset($_POST['view_editButton'])) {
 
 
                 <div class="col-sm-0 offset-0">
-                    <label>Total Visits Range</label>
+                    <label>Daily Revenue Range</label>
                 </div>
                 <div class="col-sm-3">
 
@@ -176,59 +202,28 @@ if (isset($_POST['view_editButton'])) {
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-sm-4 offset-2">
-                <label>Total Revenue Range</label>
-            </div>
-            <div class="col-sm-3">
-
-                <input type="text" class="col-sm-1" style="text-align: center;" placeholder="">
-
-                <label> -- </label>
-
-                <input type="text" class="col-sm-1" style="text-align: center;" placeholder="">
-            </div>
-        </div>
+        <br>
 
         <div class="row col-sm-12">
 
-            <div class="col-sm-0 offset-2">
+            <div class="col-sm-2 offset-2">
                 <button class="btn btn-sm btn-primary btn-block col-sm-0" style="border-radius: 5px;">Filter</button>
             </div>
 
-            <div class="col-sm-0 offset-2" style="text-align: right;">
-                <input id="button" class="btn btn-sm btn-primary btn-block col-sm-0" type="submit" name="button"
-                    onclick="filter();" value="Create" />
-
-
+            <div class="col-sm-2 offset-4">
+                <button class="btn btn-sm btn-primary btn-block col-sm-0" style="border-radius: 5px;">Update</button>
             </div>
 
-
-            <div class="col-sm-0 offset-1">
-                <input id="button" class="btn btn-sm btn-primary btn-block col-sm-0" type="submit"
-                    name="view_editButton" value="View/Edit" />
-            </div>
-            <div class="col-sm-0 offset-1">
-                <input id="button" class="btn btn-sm btn-primary btn-block col-sm-0" type="submit" name="button"
-                    onclick="myFunction();" value="Delete" />
-            </div>
         </div>
-
-
-        </div>
-        </div>
-
 
 
 
         <table id="test" class="table table-bordered" style="width:100%">
             <thead>
                 <tr>
-                    <th style='text-align:center'>Name</th>
-                    <th style='text-align:center'>Staff Count</th>
-                    <th style='text-align:center'>Duration (Days)</th>
-                    <th style='text-align:center'>Total Visits</th>
-                    <th style='text-align:center'>Total Revenue ($)</th>
+                    <th style='text-align:center'>Date</th>
+                    <th style='text-align:center'>Daily Visits</th>
+                    <th style='text-align:center'>Daily Revenue (S)</th>
                 </tr>
             </thead>
 
