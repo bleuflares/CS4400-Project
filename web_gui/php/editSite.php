@@ -55,7 +55,7 @@ if (isset($_POST['updateButton'])){
 
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-<!-- 
+<!--
     <meta http-equiv="refresh" content="3"> -->
 
     <link rel="stylesheet" href="..\css\registerEmployeeVisitor.css">
@@ -113,7 +113,7 @@ if (isset($_POST['updateButton'])){
 
                     <div class="col-sm-8">
                         <input type="text" class="form-control" id="inputLastName"
-                                pattern='^\+?\d{5}' placeholder="5 digits"value="<?php echo $siteZipCode; ?>" name = "siteZipCode">                    
+                                pattern='^\+?\d{5}' placeholder="5 digits"value="<?php echo $siteZipCode; ?>" name = "siteZipCode">
                             </div>
                 </div>
 
@@ -145,7 +145,7 @@ if (isset($_POST['updateButton'])){
                         <option value='<?php echo $name;?>'><?php echo $name;?></option>
 
                         <?php
-                        $result = $conn->query("SELECT concat(firstname, ' ', lastname) AS name FROM user u 
+                        $result = $conn->query("SELECT concat(firstname, ' ', lastname) AS name FROM user u
                                                 INNER Join site s on
                                                 u.username = s.managerUsername
                                                 where managerUsername != '$managerUsername'");
@@ -205,10 +205,6 @@ if (isset($_POST['updateButton'])){
                             $siteAddress2 = "";
                         }
 
-
-
-
-                        
                         $siteManagerName2 = $_POST['siteManagerName'];
 
                         $openEveryday2 =  $_POST['openEveryday'];
@@ -220,7 +216,7 @@ if (isset($_POST['updateButton'])){
 
                         echo '<script>console.log("siteName Input: ' . $siteName . '")</script>';
                         echo '<script>console.log("siteName Input: ' . $siteName2 . '")</script>';
-                        
+
 
                         echo '<script>console.log("siteZipcodeO Input: ' . $siteZipCode     . '")</script>';
                         echo '<script>console.log("siteZipcodeO Input: ' . $siteZipCode2     . '")</script>';
@@ -230,7 +226,7 @@ if (isset($_POST['updateButton'])){
                          echo '<script>console.log("siteAddressO Input: ' . $siteAddress2     . '")</script>';
 
 
-                        
+
 
 
                         echo '<script>console.log("openEverydayO Input: ' . $openEveryday     . '")</script>';
@@ -243,7 +239,7 @@ if (isset($_POST['updateButton'])){
 
 
                              $result = $conn->query("UPDATE site SET SiteName = '$siteName2', SiteAddress = '$siteAddress2' , SiteZipCode = $siteZipCode2, OpenEveryday = '$openEveryday2' , ManagerUsername = '$username2' WHERE SiteName ='siteName' AND SiteAddress = 'siteAddress'AND SiteZipcode = $siteZipCode AND managerUsername = '$managerUsername' AND OpenEveryday = '$openEveryday';");
-                               
+
 
 
 
@@ -252,7 +248,7 @@ if (isset($_POST['updateButton'])){
                     }
                     ?>
 
-    
+
 
     <script type="text/javascript">
     </script>

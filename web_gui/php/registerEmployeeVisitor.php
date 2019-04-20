@@ -67,7 +67,7 @@ if (isset($_POST['registerButton'])) {
 
         if ($password == $cPass) {
             $result = $conn->query("INSERT into user VALUES('$username', '$password','Pending', '$fname', '$lname', 'Employee, Visitor')");
-            $result = $conn->query("INSERT into Employee VALUES('$username', null,'$phone','$address','$city','$state','$zip','$type')");
+            $result = $conn->query("INSERT into employee VALUES('$username', null,'$phone','$address','$city','$state','$zip','$type')");
 
             foreach ($_POST['email'] as $email) {
                 if ($email !== "") {
