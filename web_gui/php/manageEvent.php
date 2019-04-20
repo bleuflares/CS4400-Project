@@ -3,6 +3,8 @@
 session_start();
 
 $_SESSION['manageEventFilter'] = false;
+$_SESSION['deleteButton'] = false;
+
 
 if (!$_SESSION["logged_in"]) {
     header("Location: http://localhost/web_gui/php/userLogin.php");
@@ -56,6 +58,13 @@ if (isset($_POST['backButton'])) {
             echo '<script>console.log("%cUser is EMPLOYEE and VISITOR, BUT they are NOT a Admin, Manager, or Staff", "color:red")</script>';;
         }
     }
+}
+
+if (isset($_POST['deleteButton'])){
+
+
+        $_SESSION['deleteButton'] = True;
+        echo '<script>console.log("%cSuccessful Delete Button Push", "color:blue")</script>';
 }
 
 ?>
@@ -383,11 +392,11 @@ if (isset($_POST['createButton'])) {
                             echo "<td style='text-align:center'> $" . $row['totalRevenue'] . "</td>";
                             }
 
-                        } else {$result = $conn->query("SELECT event.eventName,
+                        } else { $result = $conn->query("SELECT event.eventName,
                                                     staffassign.staffCount,
                                                     datediff(event.endDate, event.startDate) as duration,
                                                     visitors.totalVisits,
-                                                    visitors.totalVisits*EventPrice as TotalRevenue
+                                                    visitors.totalVisits*EventPrice as TotalRevenue,
                                                     FROM event left join (SELECT EventName, StartDate, count(*) as StaffCount FROM assignTo group by 1,2) as staffassign
                                                     on event.eventName = staffassign.eventName
                                                     and event.startDate = staffassign.startDate
@@ -410,8 +419,17 @@ if (isset($_POST['createButton'])) {
                             echo "<td style='text-align:center'> " . $row['staffCount'] . "</td>";
                             echo "<td style='text-align:center'> " . $row['totalVisits'] . "</td>";
                             echo "<td style='text-align:center'> $" . $row['TotalRevenue'] . "</td>";
+                            }
                         }
+                    
+
+                    if ($_SESSION['deleteButton'] == true){
+
+                         $eventName = $_POST['optRadio'];
+                         echo '<script>console.log("eventName: ' . $eventName . '")</script>';
+
                     }
+
                 ?>
 
             </tbody>

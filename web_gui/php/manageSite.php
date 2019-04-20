@@ -276,10 +276,11 @@ if (isset($_POST['backButton'])) {
 
 
                             while ($row = $result->fetch()) {
+                                $value = $row['siteName'];
                             echo "<tr>";
                             echo    "<td style='padding-left:2.4em;'>
                                     <div class='radio'>
-                                    <label><input type='radio' id='express' name='optRadio' value ='$site'>" . $row['siteName'] . "</label>
+                                    <label><input type='radio' id='express' name='optRadio' value ='$value'>" . $row['siteName'] . "</label>
                                     </div>
                                     </td>";
                             echo "<td style='text-align:center'>" . $row['manager'] . "</td>";
