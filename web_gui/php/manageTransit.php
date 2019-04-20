@@ -3,6 +3,7 @@
 session_start();
 $delete  = $_SESSION["delete"] = FALSE;
 $filter  = $_SESSION["filter"] = FALSE;
+$edit  = $_SESSION["edit"] = FALSE;
 
 if (!$_SESSION["logged_in"]) {
     header("Location: http://localhost/web_gui/php/userLogin.php");
@@ -50,6 +51,29 @@ if (isset($_POST['create'])){
         }
 
     }
+
+if (isset($_POST['edit'])){
+    if (isset($_POST['optRadio'])){
+     echo '<script>console.log("edit Button Pushed")</script>';
+     $_SESSION["edit"] = TRUE;
+     $route = $_POST['optRadio'];
+     $_SESSION["route"] = $_POST['optRadio'];
+     echo '<script>console.log("route name : ' . $route     . '")</script>';
+
+     echo '<script>console.log("edit Session Variable Created")</script>';
+             header('Location: http://localhost/web_gui/php/editTransit.php');
+            exit();
+
+
+
+} else {
+    echo '<script language="javascript">';
+                echo 'alert("No Transit Selected!")';
+                echo '</script>';
+
+}
+}
+
 
 if (isset($_POST['delete'])){
      echo '<script>console.log("delete Button Pushed")</script>';
@@ -186,7 +210,7 @@ if (isset($_POST['backButton'])) {
                     </div>
 
                     <div class="col-sm-0 offset-1">
-                        <input id="button" class="btn btn-sm btn-primary btn-block col-sm-0" type="submit" name="button"
+                        <input id="button" class="btn btn-sm btn-primary btn-block col-sm-0" type="submit" name="edit"
                             onclick="myFunction();" value="Edit" />
                     </div>
                     <div class="col-sm-0 offset-1">
