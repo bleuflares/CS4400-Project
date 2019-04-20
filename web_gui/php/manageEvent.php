@@ -287,15 +287,15 @@ if (isset($_POST['createButton'])) {
                             //     And s.OpenEveryday = '$openEveryday';");
 
 
-                            while ($row = $result->fetch()) {
-                            echo "<tr>";
-                            echo    "<td style='padding-left:2.4em;'>
-                                    <div class='radio'>
-                                    <label><input type='radio' id='express' name='optRadio' value ='$site'>" . $row['siteName'] . "</label>
-                                    </div>
-                                    </td>";
-                            echo "<td style='text-align:center'>" . $row['manager'] . "</td>";
-                            echo "<td style='text-align:center'> " . $row['openEveryday'] . "</td>";
+                            // while ($row = $result->fetch()) {
+                            // echo "<tr>";
+                            // echo    "<td style='padding-left:2.4em;'>
+                            //         <div class='radio'>
+                            //         <label><input type='radio' id='express' name='optRadio' value ='$site'>" . $row['siteName'] . "</label>
+                            //         </div>
+                            //         </td>";
+                            // echo "<td style='text-align:center'>" . $row['manager'] . "</td>";
+                            // echo "<td style='text-align:center'> " . $row['openEveryday'] . "</td>";
                     $result = $conn->query("SELECT event.eventName,
                                                     staffassign.staffCount,
                                                     datediff(event.endDate, event.startDate) as duration,
@@ -308,7 +308,7 @@ if (isset($_POST['createButton'])) {
                                                     on event.eventName = visitors.eventName
                                                     and event.startDate = visitors.startDate
                                                     group by event.eventName,event.startDate;");
-                }
+                
 
 
                             while ($row = $result->fetch()) {
