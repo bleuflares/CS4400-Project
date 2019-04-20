@@ -43,7 +43,7 @@ if (isset($_POST['submit'])  && !empty($_POST['email']) && !empty($_POST['passwo
         $_SESSION["userStatus"] = $row["Status"];
         $_SESSION["userFirstname"] = $row["Firstname"];
         $_SESSION["userLastname"] = $row["Lastname"];
-        $_SESSION["userType"] = $row["UserType"];
+        $_SESSION["userType"] = $row["userType"];
 
 
         $userType  = $_SESSION["userType"];
@@ -59,13 +59,13 @@ if (isset($_POST['submit'])  && !empty($_POST['email']) && !empty($_POST['passwo
 
                 $employee_rowData = $employeeData_Result->fetch();
 
-                $_SESSION["user_employeeID"] = $employee_rowData["EmployeeID"];
-                $_SESSION["user_employeePhone"] = $employee_rowData["Phone"];
-                $_SESSION["user_employeeAddress"] = $employee_rowData["EmployeeAddress"];
-                $_SESSION["user_employeeCity"] = $employee_rowData["EmployeeCity"];
-                $_SESSION["user_employeeState"] = $employee_rowData["EmployeeState"];
-                $_SESSION["user_employeeZipcode"] = $employee_rowData["EmployeeZipcode"];
-                $_SESSION["user_employeeType"] = $employee_rowData["EmployeeType"];
+                $_SESSION["user_employeeID"] = $employee_rowData["employeeID"];
+                $_SESSION["user_employeePhone"] = $employee_rowData["phone"];
+                $_SESSION["user_employeeAddress"] = $employee_rowData["employeeAddress"];
+                $_SESSION["user_employeeCity"] = $employee_rowData["employeeCity"];
+                $_SESSION["user_employeeState"] = $employee_rowData["employeeState"];
+                $_SESSION["user_employeeZipcode"] = $employee_rowData["employeeZipcode"];
+                $_SESSION["user_employeeType"] = $employee_rowData["employeeType"];
 
                 if (strpos($_SESSION["user_employeeType"], "Admin") !== false) {
                     header('Location: http://localhost/web_gui/php/administratorFunctionality.php');
