@@ -60,7 +60,7 @@ try {
 
             <div class="row">
                 <div class="col-md-12">
-                    <a class="btn btn-lg btn-primary btn-block" type="employeeOnly" href="./visitorHistory.php">View
+                    <a class="btn btn-lg btn-primary btn-block" type="employeeOnly" href="./visitHistory.php">View
                         Visit History</a>
                 </div>
             </div>
