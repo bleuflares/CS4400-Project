@@ -67,6 +67,96 @@ if (isset($_POST['backButton'])) {
 
 ?>
 
+<?php
+
+if (isset($_POST['updateButton'])) {
+
+    echo '<script>console.log("%cUpdate Pressed", "color:green")</script>';
+
+    // $anyValidEmails = false;
+
+    // foreach ($_POST['email'] as $email) {
+
+    //     if ($email !== "") {
+    //         $anyValidEmails = true;
+    //     }
+    // }
+
+    // if ($anyValidEmails) {
+    //     echo '<script>console.log("%cThere exist an valid EMAIL", "color:green")</script>';
+    // } else {
+    //     echo '<script>console.log("%cThere DOES NOT exist ANY valid EMAILS", "color:red")</script>';
+    // }
+
+    if (
+        !empty($_POST['fname']) && !empty($_POST['lname']) && !empty($_POST['phoneNumber'])
+    ) {
+
+        echo '<script>console.log("%cAll Required Fields Filled", "color:green")</script>';
+
+        $username = $_SESSION["userName"];
+        $userType  = $_SESSION["userType"];
+
+        $fname = $_POST['fname'];
+        $lname = $_POST['lname'];
+        $phone = $_POST['phoneNumber'];
+
+
+        echo '<script>console.log("First Name Input: ' . $_POST['fname'] . '")</script>';
+        echo '<script>console.log(" Last Name Input: ' . $_POST['lname'] . '")</script>';
+        echo '<script>console.log("Phone Input: ' . $_POST['phoneNumber'] . '")</script>';
+        echo '<script>console.log("OLD User Type (from Session): ' . $_SESSION["userType"] . '")</script>';
+
+        // echo '<script>console.log("%cIs employee a vistor: ' . !(isset($_POST['checkedVisitor'])) . ' ", "color:green")</script>';
+
+        $conn->query("UPDATE user SET firstname = '$fname', lastname = '$lname' WHERE user.username = '$username';");
+        $_SESSION["userFirstname"] = $fname;
+        $_SESSION["userLastname"] = $lname;
+
+        $conn->query("UPDATE employee SET phone = $phone WHERE employee.username = '$username';");
+        $_SESSION["user_employeePhone"] = $phone;
+
+        if (strpos($userType, "Visitor") === false && isset($_POST['checkedVisitor'])) {
+            $conn->query("UPDATE user SET UserType = 'Employee, Visitor' WHERE user.username = '$username';");
+            $_SESSION["userType"] = "Employee, Visitor";
+        } else if (strpos($userType, "Visitor") !== false && !(isset($_POST['checkedVisitor']))) {
+            $conn->query("UPDATE user SET UserType = 'Employee' WHERE user.username = '$username';");
+            $_SESSION["userType"] = "Employee";
+        }
+
+        echo '<script>console.log("NEW User Type (from Session): ' . $_SESSION["userType"] . '")</script>';
+
+
+
+
+        // echo '<script>console.log("%cIs employee a vistor: ' . $stillVisitor . ' ", "color:green")</script>';
+
+
+        // $result = $conn->query("UPDATE user SET STATUS = 'Approved' WHERE user.username = '$selectUsername';");
+
+
+
+
+        // foreach ($_POST['email'] as $email) {
+        //     if ($email !== "") {
+        //         $result = $conn->query("INSERT into useremail VALUES('$username', '$email')");
+        //     }
+        // }
+        //     echo '<script>console.log("%cSuccessful Update", "color:green")</script>';
+        // } else {
+        //     echo '<script language="javascript">';
+        //     echo 'alert("Passwords Do Not Match. Please try registering again.")';
+        //     echo '</script>';
+        // }
+    } else {
+        echo '<script language="javascript">';
+        echo 'alert("Failed to Update. There was an empty field. Please try updating again.")';
+        echo '</script>';
+    }
+}
+
+?>
+
 
 
 <!DOCTYPE html>
@@ -132,14 +222,14 @@ if (isset($_POST['backButton'])) {
                 <div class="col-sm-6">
                     <label>First Name</label>
                     <?php
-                    echo '<input type="text" class="col-sm-6" style="padding: 0; margin-left: 2em;" value="' . $row['Firstname'] . '">';
+                    echo '<input type="text" class="col-sm-6" style="padding: 0; margin-left: 2em;" name="fname" value="' . $row['Firstname'] . '">';
                     ?>
                 </div>
 
                 <div class="col-sm-6">
                     <label>Last Name</label>
                     <?php
-                    echo '<input type="text" class="col-sm-6" style="padding: 0; margin-left: 2em;" value="' . $row['Lastname'] . '">'
+                    echo '<input type="text" class="col-sm-6" style="padding: 0; margin-left: 2em;" name="lname" value="' . $row['Lastname'] . '">'
                     ?>
                 </div>
             </div>
@@ -148,7 +238,7 @@ if (isset($_POST['backButton'])) {
                 <div class="col-sm-6">
                     <label>Username</label>
                     <?php
-                    echo '<span style="font-weight: 600; margin-left: 2.25em;">' . $row['Username'] . '</span>';
+                    echo '<span style="font-weight: 600; margin-left: 2.25em;>' . $row['Username'] . '</span>';
                     ?>
                 </div>
 
@@ -176,7 +266,7 @@ if (isset($_POST['backButton'])) {
                 <div class="col-sm-6">
                     <label>Phone</label>
                     <?php
-                    echo '<input type="tel" pattern="^\+?\d{10}" placeholder="10 digit number" class="col-sm-6" style="padding: 0; margin-left: 3.85em;" value="' . $row['Phone'] . '">'
+                    echo '<input type="tel" pattern="^\+?\d{10}" placeholder="10 digit number" class="col-sm-6" style="padding: 0; margin-left: 3.85em;" name="phoneNumber" value="' . $row['Phone'] . '">'
                     ?>
                 </div>
             </div>
@@ -225,10 +315,10 @@ if (isset($_POST['backButton'])) {
                     <?php
                     if (strpos($row['UserType'], "Visit") !== false) {
                         echo '<input type="checkbox" class="col-sm-1"
-                            style="text-align: center; margin-left: 0.5em; padding: 0em;" placeholder="" checked>';
+                            style="text-align: center; margin-left: 0.5em; padding: 0em;" name="checkedVisitor" placeholder="" checked>';
                     } else {
                         echo '<input type="checkbox" class="col-sm-1"
-                            style="text-align: center; margin-left: 0.5em; padding: 0em;" placeholder="">';
+                            style="text-align: center; margin-left: 0.5em; padding: 0em;" name="checkedVisitor" placeholder="">';
                     }
 
                     echo '<label>Visitor Account</label>';
@@ -240,9 +330,9 @@ if (isset($_POST['backButton'])) {
 
             <div class="form-row">'
                 <div class="form-group row col-sm-12 offset-3">
-                    <button type="submit" class="btn btn-primary" id="backButton" name="updateButton"
+                    <button type="submit" class="btn btn-primary" id="update" name="updateButton"
                         style="padding-left: 2.5em; padding-right: 2.5em; margin-left: .5em;">Update</button>
-                    <button type="submit" class="btn btn-primary" id="registerButton" name="backButton"
+                    <button type="submit" class="btn btn-primary" id="back" name="backButton"
                         style="padding-left: 3.25em; padding-right: 3.25em; margin-left: 4em;">Back</button>
                 </div>
             </div>

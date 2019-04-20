@@ -38,7 +38,7 @@ if (isset($_POST['registerButton'])) {
     }
 
     if (
-        !empty($_POST['lname']) && !empty($_POST['lname']) && !empty($_POST['username']) && !empty($_POST['password']) && !empty($_POST['cPass']) && !empty($_POST['email']) && !empty($_POST['phone']) &&
+        !empty($_POST['fname']) && !empty($_POST['lname']) && !empty($_POST['username']) && !empty($_POST['password']) && !empty($_POST['cPass']) && !empty($_POST['email']) && !empty($_POST['phone']) &&
         !empty($_POST['address']) && !empty($_POST['city']) && !empty($_POST['state']) && !empty($_POST['zip']) && $anyValidEmails
     ) {
 
