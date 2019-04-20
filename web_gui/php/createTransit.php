@@ -22,6 +22,31 @@ try {
 }
 ?>
 
+<?php
+ if (isset($_SESSION['route'])){
+    $route = $_SESSION['route'];
+    echo '<script>console.log("route name : ' . $route     . '")</script>';
+
+    // $result = $conn->query("SELECT siteName, siteAddress, siteZipcode,openEveryday, managerUsername, concat(firstname, ' ', lastname) AS name  from site s
+    //     inner join user u
+    //     on s.managerUsername = u.userName
+    //     where siteName = '$siteName';");
+
+    echo '<script>console.log("Query : ' . $_SESSION['siteName']     . '")</script>';
+
+    // $row = $result->fetch();
+
+    // $siteAddress = $row['siteAddress'];
+    // $siteZipCode = $row['siteZipcode'];
+    // $managerUsername = $row['managerUsername'];
+    // $openEveryday = $row['openEveryday'];
+    // $name = $row['name'];
+
+
+}
+?>
+
+
 
 
 <!DOCTYPE html>

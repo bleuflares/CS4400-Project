@@ -259,6 +259,9 @@ if (isset($_POST['backButton'])) {
                             $manager = $_POST['manager'];
                         }
 
+
+                        
+
                          echo '<script>console.log("siteName Input: ' . $site . '")</script>';
                         echo '<script>console.log("manager Input: ' . $manager     . '")</script>';
                         echo '<script>console.log("openEveryday Input: ' . $openEveryday . '")</script>';

@@ -183,6 +183,7 @@ if (isset($_POST['backButton'])) {
                     <label>Price Range</label>
 
                     <input type="number" class="col-sm-4" style="text-align: center;" placeholder="" name="price1Input">
+                    
 
                     <label> -- </label>
 
