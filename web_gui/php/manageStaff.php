@@ -1,6 +1,7 @@
 <?php
 // Start the session
 session_start();
+  $_SESSION['manageStaffFilterButton'] = false;
 
 if (!$_SESSION["logged_in"]) {
     header("Location: http://localhost/web_gui/php/userLogin.php");
@@ -20,6 +21,15 @@ try {
 } catch (PDOException $e) {
     echo '<script>console.log("%cConnection failed: ' . $e->getMessage() . '", "color:red")</script>';
 }
+
+
+if (isset($_POST['filterButton'])){
+    echo '<script>console.log("%cSuccessful Filter Button Push", "color:blue")</script>';
+    $_SESSION['manageStaffFilterButton'] = True;
+    echo '<script>console.log("%c Transit History Filter Session variable set", "color:blue")</script>';
+
+}
+
 ?>
 
 <?php
@@ -57,7 +67,7 @@ if (isset($_POST['backButton'])) {
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <meta http-equiv="refresh" content="3">
+   <!--  <meta http-equiv="refresh" content="3"> -->
 
     <link rel="stylesheet" href="..\css\_universalStyling.css">
 
@@ -67,7 +77,7 @@ if (isset($_POST['backButton'])) {
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 
-    <script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
+ <!--    <script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
     <script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
 
     <script type="text/javascript">
@@ -85,7 +95,7 @@ if (isset($_POST['backButton'])) {
     $(document).ready(function() {
         $('#test').DataTable();
     });
-    </script>
+    </script> -->
     <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
 </head>
 
@@ -97,7 +107,7 @@ if (isset($_POST['backButton'])) {
             <div class="row">
                 <div class="col-sm-12 offset-0">
                     <label class='offset-4'>Site</label>
-                    <select>
+                    <select name = "siteName">
                         <?php
                         $result = $conn->query("SELECT SiteName FROM Site");
 
@@ -111,7 +121,7 @@ if (isset($_POST['backButton'])) {
                             <label>First Name</label>
                         </div>
                         <div class="col-sm-3 offset-0">
-                            <input type="text" class="form-control col-sm-0 offset-0" id="inputAdress">
+                            <input type="text" class="form-control col-sm-0 offset-0" id="inputAdress" name = "firstName">
 
                         </div>
 
@@ -120,7 +130,7 @@ if (isset($_POST['backButton'])) {
                             <label>Last Name</label>
                         </div>
                         <div class="col-sm-3 offset-0">
-                            <input type="text" class="form-control col-sm-0 offset-0" id="inputAdress">
+                            <input type="text" class="form-control col-sm-0 offset-0" id="inputAdress" name ="lastName">
 
                         </div>
                     </div>
@@ -129,14 +139,14 @@ if (isset($_POST['backButton'])) {
                         <div class="col-sm-0 offset-0">
                             <label>Start Date</label>
 
-                            <input type="date" class="col-sm-0" style="padding: 0;" placeholder="">
+                            <input type="date" class="col-sm-0" style="padding: 0;" placeholder="" name = "startDate">
 
                         </div>
 
                         <div class="col-sm-0 offset-1">
                             <label>End Date</label>
 
-                            <input type="date" class="col-sm-0" style="padding: 0;" placeholder="">
+                            <input type="date" class="col-sm-0" style="padding: 0;" placeholder="" name = "endDate">
 
                         </div>
                     </div>
@@ -145,7 +155,7 @@ if (isset($_POST['backButton'])) {
 
                         <div class="col-sm-0 offset-6">
                             <button class="btn btn-sm btn-primary btn-block col-sm-0  " style=" height:40px;
-    width:60px;border-radius: 5px;">Filter</button>
+                             width:60px;border-radius: 5px;" name ="filterButton">Filter</button>
                         </div>
 
                     </div>
@@ -163,38 +173,112 @@ if (isset($_POST['backButton'])) {
 
                 <tbody>
 
+                    <?php
+
+                    if ($_SESSION['manageStaffFilterButton'] == True){
+                            echo '<script>console.log("%cSuccessful Filter", "color:blue")</script>';
+
                     
-                    else {$result = $conn->query("SELECT c.transitRoute, c.transitType,tt.transitPrice, c.connectedSites,tt.totalRiders
-                        FROM (select c.siteName, c.transitType, c.transitRoute, count(*) as connectedSites
-                        from connect c
-                        group by transitRoute) as c
-                        Join
-                        (select  t.transitRoute, t.transitPrice,
-                        count(*) as totalRiders 
-                        from taketransit tt
-                        inner join transit t
-                        on t.transitRoute = tt.transitRoute
-                        group by transitRoute) as tt
-                        where c.transitRoute = tt.transitRoute;");
+
+                        $siteName  = $_POST['siteName'];
+
+
+
+
+                        if (empty($_POST['firstName'])) {
+                            $firstName = "%%";
+
+                        } else {
+                            $firstName = $_POST['firstName'];
+                        }
+
+                        if (empty($_POST['lastName'])) {
+                            $lastName = "%%";
+
+                        } else {
+                            $lastName = $_POST['firstName'];
+                        }
+                        if (empty($_POST['startDate'])) {
+                            $startDate = "0000-00-00";
+                        } else {
+                            $startDate = $_POST['startDate'];
+                            
+                        }
+
+                        if (empty($_POST['endDate'])) {
+                            $endDate = "9999-12-12";
+                           
+                        } else {
+                            $endDate = $_POST['endDate'];
+                        }
+                echo '<script>console.log("Works Input: ' . $siteName . '")</script>';
+                echo '<script>console.log("Works Input: ' . $firstName . '")</script>';
+                 echo '<script>console.log("Works Input: ' . $lastName . '")</script>';
+                echo '<script>console.log("Works Input: ' . $startDate . '")</script>';
+                 echo '<script>console.log("Works Input: ' . $endDate . '")</script>';
+
+                 
+
+                $result = $conn->query("SELECT concat(user.firstname, ' ',user.lastname) as staffName, count(*) as eventShifts
+                                            FROM event 
+                                            left join assignto on event.eventName = assignTo.eventName
+                                            and event.startDate = assignTo.startDate
+                                            and event.siteName = assignTo.siteName
+                                            left join employee on assignTo.staffUsername = employee.username
+                                            left join user on employee.username = user.username
+                                            where event.siteName like '$siteName'
+                                            and user.firstname like '$firstName'
+                                            and user.lastname like '$lastName'
+                                            and event.startDate >= '$startDate'
+                                            and event.endDate <= '$endDate'
+                                            group by user.username
+                                            ;");
+
+
+
+
+
+
+
+                    while ($row = $result->fetch()) { 
+                           
+                        echo "<tr>";
+                        echo   "<td style='text-align:center'>" . $row['staffName'] . "</td>";
+                        echo "<td style='text-align:center'>" . $row['eventShifts'] . "</td>";
+                            
+
+                        echo "<tr>";
+
+                        }
+
+                    }
+                    else{$result = $conn->query("SELECT concat(user.firstname, ' ',user.lastname) as staffName, 
+                    count(*) as eventShifts
+                    FROM event 
+                    left join assignto on event.eventName = assignTo.eventName
+                    and event.startDate = assignTo.startDate
+                    and event.siteName = assignTo.siteName
+                    left join employee on assignTo.staffUsername = employee.username
+                    left join user on employee.username = user.username
+                    group by assignTo.staffUsername;");
 
                     
 
                         while ($row = $result->fetch()) { 
-                            $route = $row['transitRoute'];
+                           
                             echo "<tr>";
-                            echo    "<td style='padding-left:2.4em;'> 
-                                    <div class='radio'>
-                                    <label><input type='radio' id='express' name='optRadio' value ='$route'>" . $row['transitRoute'] . "</label>
-                                    </div>
-                                    </td>";
-                            echo "<td style='text-align:center'>" . $row['transitType'] . "</td>";
-                            echo "<td style='text-align:center'> " . $row['transitPrice'] . "</td>";
-                            echo "<td style='text-align:center'>" . $row['connectedSites'] . "</td>";
-                            echo "<td style='text-align:center'>" . $row['totalRiders'] . "</td>";
+                            echo   "<td style='text-align:center'>" . $row['staffName'] . "</td>";
+                            echo "<td style='text-align:center'>" . $row['eventShifts'] . "</td>";
+                            
+
                             echo "<tr>";
 
                         }
-            }
+                    }
+
+
+                        ?>
+            
                 </tbody>
             </table>
 
