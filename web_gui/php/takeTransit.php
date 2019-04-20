@@ -33,7 +33,7 @@ if (isset($_POST['logTransitButton'])) {
             if ($result->rowCount() == 0) {
                 $transitResult = $conn->query("SELECT * from transit where transitRoute = '$transitRoute';");
                 $transitRow = $transitResult->fetch();
-                $transitType = $transitRow['TransitType'];
+                $transitType = $transitRow['transitType'];
                 echo '<script>console.log("%cUser: ' . $username . '", "color:green")</script>';
                 echo '<script>console.log("%cDate: ' . $_POST['logDateInput'] . '", "color:green")</script>';
                 echo '<script>console.log("%cRoute: ' . $_POST['optRadio'] . '", "color:green")</script>';
