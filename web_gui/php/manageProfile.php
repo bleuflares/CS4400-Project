@@ -276,10 +276,10 @@ if (isset($_POST['updateButton'])) {
                     <label>Address</label>
                     <?php
                     echo '<span style="font-weight: 600; margin-left: 3.15em;">'
-                        . $row['EmployeeAddress'] . ', '
-                        . $row['EmployeeCity'] . ', '
-                        . $row['EmployeeState'] . ' '
-                        . $row['EmployeeZipcode'] .
+                        . $row['employeeAddress'] . ', '
+                        . $row['employeeCity'] . ', '
+                        . $row['employeeState'] . ' '
+                        . $row['employeeZipcode'] .
                         '</span>'
                     ?>
                 </div>
@@ -294,12 +294,12 @@ if (isset($_POST['updateButton'])) {
                     $currEmail = $emailsResults->fetch();
 
                     echo '<div class="col-sm-8">';
-                    echo '<span class="col-sm-8">' . $currEmail['Email'] . '</span>';
+                    echo '<span class="col-sm-8">' . $currEmail['email'] . '</span>';
                     echo '</div>';
                     echo '<button type="submit" class="btn btn-outline-dark">Remove</button>';
                     while ($currEmail = $emailsResults->fetch()) {
                         echo '<div class="col-sm-10">';
-                        echo '<span class="col-sm-8" style="margin-left: 6.5em;">' . $currEmail['Email'] . '</span>';
+                        echo '<span class="col-sm-8" style="margin-left: 6.5em;">' . $currEmail['email'] . '</span>';
                         echo '</div>';
                         echo '<button type="submit" class="btn btn-outline-dark">Remove</button>';
                     }
