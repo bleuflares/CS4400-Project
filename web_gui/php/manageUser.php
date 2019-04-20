@@ -49,6 +49,12 @@ if (isset($_POST['filterButton'])) {
     $status = $_POST['statusInput'];
 
     if ($type == 'Visitor' || $type == 'User') {
+
+        if ($type == 'User') {
+            $type = '%%';
+        } else if ($type == 'Visitor') {
+            $type = '%Visitor%';
+        }
         $result = $conn->query("SELECT u.username, ue.emailCount, u.userType, u.status 
                                 from (select username, count(*) as EmailCount from UserEmail group by Username) 
                                 as ue inner join (select username, userType, status from User) 
