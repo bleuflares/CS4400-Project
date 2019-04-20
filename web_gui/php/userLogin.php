@@ -24,19 +24,15 @@ if (isset($_POST['submit'])  && !empty($_POST['email']) && !empty($_POST['passwo
     $email = $_POST["email"];
     $password = $_POST["password"];
 
-    $user_userEmail_Result = $conn->query("SELECT u.*, ue.Email 
-                        FROM user AS u INNER JOIN useremail AS ue 
+    $user_userEmail_Result = $conn->query("SELECT u.*, ue.Email
+                        FROM user AS u INNER JOIN useremail AS ue
                         ON u.Username = ue.Username
                         WHERE ue.Email = '" . $email . "' AND u.Password = '" . $password . "';");
 
     if ($user_userEmail_Result->rowCount() > 0) {
 
-        echo '<script>console.log("%cSuccessful Login", "color:green")</script>';
-
         $row = $user_userEmail_Result->fetch();
 
-
-        $_SESSION["logged_in"] = true;
         $_SESSION["userEmail"] = $email;
         $_SESSION["userPassword"] = $password;
         $_SESSION["userName"] = $row["Username"];
@@ -45,86 +41,101 @@ if (isset($_POST['submit'])  && !empty($_POST['email']) && !empty($_POST['passwo
         $_SESSION["userLastname"] = $row["Lastname"];
         $_SESSION["userType"] = $row["userType"];
 
+        $userStatus = $row["Status"];
 
-        $userType  = $_SESSION["userType"];
+        if(strpos($userStatus, "Approved") !== false) {
 
-        if (strpos($userType, "Employee") !== false && strpos($userType, "Visitor") === false) {
-            echo '<script>console.log("%cUser is EMPLOYEE", "color:blue")</script>';
+        $_SESSION["logged_in"] = true;
 
-            $employeeData_Result = $conn->query("SELECT * FROM employee AS e 
-                                                WHERE e.Username = '" . $_SESSION["userName"] . "';");
+            echo '<script>console.log("%cSuccessful Login", "color:green")</script>';
 
-            // Make sure Employee is in DB
-            if ($employeeData_Result->rowCount() > 0) {
 
-                $employee_rowData = $employeeData_Result->fetch();
 
-                $_SESSION["user_employeeID"] = $employee_rowData["EmployeeID"];
-                $_SESSION["user_employeePhone"] = $employee_rowData["Phone"];
-                $_SESSION["user_employeeAddress"] = $employee_rowData["employeeAddress"];
-                $_SESSION["user_employeeCity"] = $employee_rowData["employeeCity"];
-                $_SESSION["user_employeeState"] = $employee_rowData["employeeState"];
-                $_SESSION["user_employeeZipcode"] = $employee_rowData["employeeZipcode"];
-                $_SESSION["user_employeeType"] = $employee_rowData["employeeType"];
+            $userType  = $_SESSION["userType"];
 
-                if (strpos($_SESSION["user_employeeType"], "Admin") !== false) {
-                    header('Location: http://localhost/web_gui/php/administratorFunctionality.php');
-                    exit();
-                } else if (strpos($_SESSION["user_employeeType"], "Manager") !== false) {
-                    header('Location: http://localhost/web_gui/php/managerFunctionality.php');
-                    exit();
-                } else if (strpos($_SESSION["user_employeeType"], "Staff") !== false) {
-                    header('Location: http://localhost/web_gui/php/staffFunctionality.php');
-                    exit();
+            if (strpos($userType, "Employee") !== false && strpos($userType, "Visitor") === false) {
+                echo '<script>console.log("%cUser is EMPLOYEE", "color:blue")</script>';
+
+                $employeeData_Result = $conn->query("SELECT * FROM employee AS e
+                                                    WHERE e.Username = '" . $_SESSION["userName"] . "';");
+
+                // Make sure Employee is in DB
+                if ($employeeData_Result->rowCount() > 0) {
+
+                    $employee_rowData = $employeeData_Result->fetch();
+
+                    $_SESSION["user_employeeID"] = $employee_rowData["EmployeeID"];
+                    $_SESSION["user_employeePhone"] = $employee_rowData["Phone"];
+                    $_SESSION["user_employeeAddress"] = $employee_rowData["employeeAddress"];
+                    $_SESSION["user_employeeCity"] = $employee_rowData["employeeCity"];
+                    $_SESSION["user_employeeState"] = $employee_rowData["employeeState"];
+                    $_SESSION["user_employeeZipcode"] = $employee_rowData["employeeZipcode"];
+                    $_SESSION["user_employeeType"] = $employee_rowData["employeeType"];
+
+                    if (strpos($_SESSION["user_employeeType"], "Admin") !== false) {
+                        header('Location: http://localhost/web_gui/php/administratorFunctionality.php');
+                        exit();
+                    } else if (strpos($_SESSION["user_employeeType"], "Manager") !== false) {
+                        header('Location: http://localhost/web_gui/php/managerFunctionality.php');
+                        exit();
+                    } else if (strpos($_SESSION["user_employeeType"], "Staff") !== false) {
+                        header('Location: http://localhost/web_gui/php/staffFunctionality.php');
+                        exit();
+                    } else {
+                        echo '<script>console.log("%cUser is EMPLOYEE, BUT they are NOT a Admin, Manager, or Staff", "color:red")</script>';;
+                    }
                 } else {
-                    echo '<script>console.log("%cUser is EMPLOYEE, BUT they are NOT a Admin, Manager, or Staff", "color:red")</script>';;
-                }
-            } else {
-                echo '<script>console.log("%cUser is EMPLOYEE, BUT they are not in the EMPLOYEE TABLE", "color:red")</script>';;
-            }
-        } else if (strpos($userType, "Employee") === false && strpos($userType, "Visitor") !== false) {
-            echo '<script>console.log("%cUser is ONLY a VISITOR", "color:blue")</script>';
-            header('Location: http://localhost/web_gui/php/visitorFunctionality.php');
-            exit();
-        } else if (strpos($userType, "Employee") !== false && strpos($userType, "Visitor") !== false) {
-            echo '<script>console.log("%cUser is BOTH an EMPLOYEE and VISITOR", "color:blue")</script>';
+                    echo '<script>console.log("%cUser is EMPLOYEE, BUT they are not in the EMPLOYEE TABLE", "color:red")</script>';;
+                    }
+            } else if (strpos($userType, "Employee") === false && strpos($userType, "Visitor") !== false) {
+                echo '<script>console.log("%cUser is ONLY a VISITOR", "color:blue")</script>';
+                header('Location: http://localhost/web_gui/php/visitorFunctionality.php');
+                exit();
+            } else if (strpos($userType, "Employee") !== false && strpos($userType, "Visitor") !== false) {
+                echo '<script>console.log("%cUser is BOTH an EMPLOYEE and VISITOR", "color:blue")</script>';
 
-            $employeeVisitorData_Result = $conn->query("SELECT * FROM employee AS e WHERE e.Username = '" . $_SESSION["userName"] . "';");
+                $employeeVisitorData_Result = $conn->query("SELECT * FROM employee AS e WHERE e.Username = '" . $_SESSION["userName"] . "';");
 
-            // Make sure Employee is in DB
-            if ($employeeVisitorData_Result->rowCount() > 0) {
+                // Make sure Employee is in DB
+                if ($employeeVisitorData_Result->rowCount() > 0) {
 
-                $employeeVisitor_rowData = $employeeVisitorData_Result->fetch();
+                    $employeeVisitor_rowData = $employeeVisitorData_Result->fetch();
 
-                $_SESSION["user_employeeVisitorID"] = $employeeVisitor_rowData["EmployeeID"];
-                $_SESSION["user_employeeVisitorPhone"] = $employeeVisitor_rowData["Phone"];
-                $_SESSION["user_employeeVisitorAddress"] = $employeeVisitor_rowData["employeeAddress"];
-                $_SESSION["user_employeeVisitorCity"] = $employeeVisitor_rowData["employeeCity"];
-                $_SESSION["user_employeeVisitorState"] = $employeeVisitor_rowData["employeeState"];
-                $_SESSION["user_employeeVisitorZipcode"] = $employeeVisitor_rowData["employeeZipcode"];
-                $_SESSION["user_employeeVisitorType"] = $employeeVisitor_rowData["employeeType"];
+                    $_SESSION["user_employeeVisitorID"] = $employeeVisitor_rowData["EmployeeID"];
+                    $_SESSION["user_employeeVisitorPhone"] = $employeeVisitor_rowData["Phone"];
+                    $_SESSION["user_employeeVisitorAddress"] = $employeeVisitor_rowData["employeeAddress"];
+                    $_SESSION["user_employeeVisitorCity"] = $employeeVisitor_rowData["employeeCity"];
+                    $_SESSION["user_employeeVisitorState"] = $employeeVisitor_rowData["employeeState"];
+                    $_SESSION["user_employeeVisitorZipcode"] = $employeeVisitor_rowData["employeeZipcode"];
+                    $_SESSION["user_employeeVisitorType"] = $employeeVisitor_rowData["employeeType"];
 
 
-                if (strpos($_SESSION["user_employeeVisitorType"], "Admin") !== false) {
-                    header('Location: http://localhost/web_gui/php/administratorVisitorFunctionality.php');
-                    exit();
-                } else if (strpos($_SESSION["user_employeeVisitorType"], "Manager") !== false) {
-                    header('Location: http://localhost/web_gui/php/managerVisitorFunctionality.php');
-                    exit();
-                } else if (strpos($_SESSION["user_employeeVisitorType"], "Staff") !== false) {
-                    header('Location: http://localhost/web_gui/php/staffVisitorFunctionality.php');
-                    exit();
+                    if (strpos($_SESSION["user_employeeVisitorType"], "Admin") !== false) {
+                        header('Location: http://localhost/web_gui/php/administratorVisitorFunctionality.php');
+                        exit();
+                    } else if (strpos($_SESSION["user_employeeVisitorType"], "Manager") !== false) {
+                        header('Location: http://localhost/web_gui/php/managerVisitorFunctionality.php');
+                        exit();
+                    } else if (strpos($_SESSION["user_employeeVisitorType"], "Staff") !== false) {
+                        header('Location: http://localhost/web_gui/php/staffVisitorFunctionality.php');
+                        exit();
+                    } else {
+                        echo '<script>console.log("%cUser is EMPLOYEE and VISITOR, BUT they are NOT a Admin, Manager, or Staff", "color:red")</script>';;
+                    }
                 } else {
-                    echo '<script>console.log("%cUser is EMPLOYEE and VISITOR, BUT they are NOT a Admin, Manager, or Staff", "color:red")</script>';;
+                    echo '<script>console.log("%cUser is EMPLOYEE and VISITOR, BUT they are not in the EMPLOYEE TABLE", "color:red")</script>';;
                 }
-            } else {
-                echo '<script>console.log("%cUser is EMPLOYEE and VISITOR, BUT they are not in the EMPLOYEE TABLE", "color:red")</script>';;
-            }
-        } else if (strpos($userType, "User") !== false) {
-            echo '<script>console.log("%cUser is JUST a USER", "color:blue")</script>';
+            } else if (strpos($userType, "User") !== false) {
+                echo '<script>console.log("%cUser is JUST a USER", "color:blue")</script>';
 
-            header('Location: http://localhost/web_gui/php/userFunctionality.php');
-            exit();
+                header('Location: http://localhost/web_gui/php/userFunctionality.php');
+                exit();
+            }
+        } else {
+            echo '<script>console.log("%cINVALID username/password", "color:red")</script>';
+        echo '<script language="javascript">';
+        echo 'alert("User status is still pending/declined")';
+        echo '</script>';
         }
     } else {
         echo '<script>console.log("%cINVALID username/password", "color:red")</script>';
