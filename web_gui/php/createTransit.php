@@ -135,9 +135,9 @@ try {
                 </div>
             </div> -->
 
-            <br>
 
-            <div class="row">
+
+            <div>
 
                 <label for="exampleFormControlSelect2" style="">Connected Sites</label>
 
