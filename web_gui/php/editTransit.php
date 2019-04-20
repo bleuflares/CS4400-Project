@@ -2,6 +2,8 @@
 // Start the session
 session_start();
 
+$_SESSION['updateButton'] = false;
+
 if (!$_SESSION["logged_in"]) {
     header("Location: http://localhost/web_gui/php/userLogin.php");
     exit();
@@ -28,12 +30,17 @@ try {
 
 <?php
 
+if (isset($_POST['updateButton'])) {
+    echo '<script>console.log("Create Button Pushed")</script>';
+
+    $_SESSION['updateButton'] = True;
+}
 
 
 if (($_SESSION['edit']) == true){
     $route = $_SESSION["route"];
     echo '<script>console.log("%cConnection to Data: ' . $_SESSION["route"]. '", "color:green")</script>';
-    
+
     $result = $conn->query("SELECT transitType, transitPrice from transit where transitRoute = '$route';");
 
     $row = $result->fetch();
@@ -80,13 +87,13 @@ if (($_SESSION['edit']) == true){
 
 <body>
         <?php
-    $result = $conn->query("select  e.*, u.Password, 
-                                            u.Status, 
-                                            u.Firstname, 
-                                            u.Lastname, 
-                                            u.UserType 
-                                    from employee e inner join user u 
-                                    on e.Username = u.Username 
+    $result = $conn->query("select  e.*, u.Password,
+                                            u.Status,
+                                            u.Firstname,
+                                            u.Lastname,
+                                            u.UserType
+                                    from employee e inner join user u
+                                    on e.Username = u.Username
                                     where u.Username = '" . $_SESSION["userName"] . "';");
 
     $row = $result->fetch();
@@ -103,7 +110,7 @@ if (($_SESSION['edit']) == true){
 
 
 
-    <form class="form-signin">
+    <form class="form-signin" method= "POST">
         <h1 class="h3 mb-3 font-weight-heavy" id="titleOfForm">Edit Transit</h1>
 
 
@@ -112,23 +119,23 @@ if (($_SESSION['edit']) == true){
             <div class="row">
                 <div class="col-sm-5">
                     <label>Transport Type</label>
-                    
+
                     <span style="font-weight: 600; margin-left: 1em;" value ="<?php echo $transitType; ?>" ><?php echo $transitType ?></span>
-                
+
                 </div>
 
                 <div class="col-sm-4">
                     <label>Route</label>
-                    
+
                     <input type="text" class="col-sm-4" style="padding: 0; margin-left: 0.5em;" value="<?php echo $route; ?>">
-                    
+
                 </div>
 
                 <div class="col-sm-3">
                     <label>Price ($)</label>
-                   
+
                     <input type="text" class="col-sm-5" style="padding: 0; margin-left: 0.5em;" value="<?php echo $transitPrice; ?>">
-                    
+
                 </div>
             </div>
 
@@ -180,14 +187,64 @@ if (($_SESSION['edit']) == true){
                 <div class="form-group row col-sm-12 offset-3">
                     <button type="submit" class="btn btn-primary" id="backButton"
                         style="padding-left: 2.5em; padding-right: 2.5em; margin-left: .75em;">Back</button>
-                    <button type="submit" class="btn btn-primary" id="registerButton" 
-                        style="padding-left: 2.5em; padding-right: 2.5em; margin-left: 4em;" name = "createButton">Edit</button>
+                    <button type="submit" class="btn btn-primary" id="registerButton"
+                        style="padding-left: 2.5em; padding-right: 2.5em; margin-left: 4em;" name = "updateButton">Edit</button>
                 </div>
             </div>
 
         </div>
 
     </form>
+
+    <?php
+                    if ($_SESSION['updateButton'] == true) {
+
+                        $route2 = $_POST['route'];
+                        $price2 = $_POST['price'];
+                        if(isset($_POST['connectedSites'])){
+                        } else {
+                            $connectedSites2 = $_POST['connectedSites'];
+                        }
+
+                        if(count($connectedSites) < 2){
+                            echo '<script language="javascript">';
+                            echo 'alert("You must choose two or more sites!")';
+                            echo '</script>';
+                        } else{
+                             $result = $conn->query("SELECT username from user u inner join site s on u.username = s.managerUsername where concat(firstname, ' ', lastname)='$siteManagerName2';");
+                                while ($row = $result->fetch()) {
+                                $username2 = $row['username'];
+                                }
+
+                        echo '<script>console.log("siteName Input: ' . $siteName . '")</script>';
+                        echo '<script>console.log("siteName Input: ' . $siteName2 . '")</script>';
+
+
+                        echo '<script>console.log("siteZipcodeO Input: ' . $siteZipCode     . '")</script>';
+                        echo '<script>console.log("siteZipcodeO Input: ' . $siteZipCode2     . '")</script>';
+
+
+                        echo '<script>console.log("siteAddressO Input: ' . $siteAddress     . '")</script>';
+                         echo '<script>console.log("siteAddressO Input: ' . $siteAddress2     . '")</script>';
+
+
+
+
+
+                        echo '<script>console.log("openEverydayO Input: ' . $openEveryday     . '")</script>';
+                        echo '<script>console.log("openEverydayO Input: ' . $openEveryday2     . '")</script>';
+
+
+                        echo '<script>console.log("managerUsernameO Input: ' . $managerUsername   . '")</script>';
+                        echo '<script>console.log("managerUsernameO Input: ' . $username2   . '")</script>';
+
+
+
+                             $result = $conn->query("UPDATE site SET SiteName = '$siteName2', SiteAddress = '$siteAddress2' , SiteZipCode = $siteZipCode2, OpenEveryday = '$openEveryday2' , ManagerUsername = '$username2' WHERE SiteName ='siteName' AND SiteAddress = 'siteAddress'AND SiteZipcode = $siteZipCode AND managerUsername = '$managerUsername' AND OpenEveryday = '$openEveryday';");
+
+                        }
+                    }
+                    ?>
 
 </body>
 
