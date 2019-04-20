@@ -20,6 +20,30 @@ try {
 } catch (PDOException $e) {
     echo '<script>console.log("%cConnection failed: ' . $e->getMessage() . '", "color:red")</script>';
 }
+
+?>
+
+
+
+
+<?php
+
+
+
+if (($_SESSION['edit']) == true){
+    $route = $_SESSION["route"];
+    echo '<script>console.log("%cConnection to Data: ' . $_SESSION["route"]. '", "color:green")</script>';
+    
+    $result = $conn->query("SELECT transitType, transitPrice from transit where transitRoute = '$route';");
+
+    $row = $result->fetch();
+    $transitType = $row['transitType'];
+    $transitPrice = $row['transitPrice'];
+    echo '<script>console.log("type name : ' . $transitType    . '")</script>';
+    echo '<script>console.log("price name : ' . $transitPrice     . '")</script>';
+
+
+}
 ?>
 
 
@@ -55,8 +79,7 @@ try {
 </head>
 
 <body>
-
-    <?php
+        <?php
     $result = $conn->query("select  e.*, u.Password, 
                                             u.Status, 
                                             u.Firstname, 
@@ -79,6 +102,7 @@ try {
     ?>
 
 
+
     <form class="form-signin">
         <h1 class="h3 mb-3 font-weight-heavy" id="titleOfForm">Edit Transit</h1>
 
@@ -88,25 +112,26 @@ try {
             <div class="row">
                 <div class="col-sm-5">
                     <label>Transport Type</label>
-                    <?php
-                    echo '<span style="font-weight: 600; margin-left: 1em;">' . $row['Username'] . '</span>';
-                    ?>
+                    
+                    <span style="font-weight: 600; margin-left: 1em;" value ="<?php echo $transitType; ?>" ><?php echo $transitType ?></span>
+                
                 </div>
 
                 <div class="col-sm-4">
                     <label>Route</label>
-                    <?php
-                    echo '<input type="text" class="col-sm-4" style="padding: 0; margin-left: 0.5em;" value="' . $row['Lastname'] . '">'
-                    ?>
+                    
+                    <input type="text" class="col-sm-4" style="padding: 0; margin-left: 0.5em;" value="<?php echo $route; ?>">
+                    
                 </div>
 
                 <div class="col-sm-3">
                     <label>Price ($)</label>
-                    <?php
-                    echo '<input type="text" class="col-sm-5" style="padding: 0; margin-left: 0.5em;" value="' . $row['Lastname'] . '">'
-                    ?>
+                   
+                    <input type="text" class="col-sm-5" style="padding: 0; margin-left: 0.5em;" value="<?php echo $transitPrice; ?>">
+                    
                 </div>
             </div>
+
 
 
             <!-- <div class="form-row">
@@ -137,13 +162,15 @@ try {
 
                 <label for="exampleFormControlSelect2" style="">Connected Sites</label>
 
-                <select multiple style="display: inline ;" class="form-control col-sm-6 offset-2"
-                    id="exampleFormControlSelect2">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
+                <select multiple style="display: inline ;" class="form-control col-sm-6 offset-3"
+                    id="exampleFormControlSelect2" name = 'connectedSites[]'>
+                        <?php
+                        $result = $conn->query("SELECT siteName FROM site");
+
+                        while ($row = $result->fetch()) {
+                            echo "<option>" . $row['siteName'] . "</option>";
+                        }
+                        ?>
                 </select>
 
             </div>
@@ -152,9 +179,9 @@ try {
             <div class="form-row">'
                 <div class="form-group row col-sm-12 offset-3">
                     <button type="submit" class="btn btn-primary" id="backButton"
-                        style="padding-left: 2.5em; padding-right: 2.5em; margin-left: .5em;">Update</button>
-                    <button type="submit" class="btn btn-primary" id="registerButton"
-                        style="padding-left: 3.25em; padding-right: 3.25em; margin-left: 4em;">Back</button>
+                        style="padding-left: 2.5em; padding-right: 2.5em; margin-left: .75em;">Back</button>
+                    <button type="submit" class="btn btn-primary" id="registerButton" 
+                        style="padding-left: 2.5em; padding-right: 2.5em; margin-left: 4em;" name = "createButton">Edit</button>
                 </div>
             </div>
 
