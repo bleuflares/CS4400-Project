@@ -61,13 +61,27 @@ if (isset($_POST['backButton'])) {
 
 ?>
 
+<?php
+
+if (isset($_POST['filterButton'])) { }
+
+
+?>
+
+
+
+
 <!DOCTYPE html>
 <html>
 
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+<<<<<<< HEAD
    <!--  <meta http-equiv="refresh" content="3"> -->
+=======
+    <!-- <meta http-equiv="refresh" content="3"> -->
+>>>>>>> a7e06bb2098fcc13901c6c86ec50ba1097ef5bdf
 
     <link rel="stylesheet" href="..\css\_universalStyling.css">
 
@@ -107,13 +121,18 @@ if (isset($_POST['backButton'])) {
             <div class="row">
                 <div class="col-sm-12 offset-0">
                     <label class='offset-4'>Site</label>
+<<<<<<< HEAD
                     <select name = "siteName">
+=======
+                    <select name="siteInput">
+>>>>>>> a7e06bb2098fcc13901c6c86ec50ba1097ef5bdf
                         <?php
                         $result = $conn->query("SELECT SiteName FROM Site");
 
                         while ($row = $result->fetch()) {
                             echo "<option>" . $row['SiteName'] . "</option>";
                         }
+                        echo "<option>ALL</option>";
                         ?>
                     </select>
                     <div class="row">
@@ -121,7 +140,11 @@ if (isset($_POST['backButton'])) {
                             <label>First Name</label>
                         </div>
                         <div class="col-sm-3 offset-0">
+<<<<<<< HEAD
                             <input type="text" class="form-control col-sm-0 offset-0" id="inputAdress" name = "firstName">
+=======
+                            <input type="text" class="form-control col-sm-0 offset-0" name="fnameInput">
+>>>>>>> a7e06bb2098fcc13901c6c86ec50ba1097ef5bdf
 
                         </div>
 
@@ -130,7 +153,11 @@ if (isset($_POST['backButton'])) {
                             <label>Last Name</label>
                         </div>
                         <div class="col-sm-3 offset-0">
+<<<<<<< HEAD
                             <input type="text" class="form-control col-sm-0 offset-0" id="inputAdress" name ="lastName">
+=======
+                            <input type="text" class="form-control col-sm-0 offset-0" name="lnameInput">
+>>>>>>> a7e06bb2098fcc13901c6c86ec50ba1097ef5bdf
 
                         </div>
                     </div>
@@ -139,14 +166,22 @@ if (isset($_POST['backButton'])) {
                         <div class="col-sm-0 offset-0">
                             <label>Start Date</label>
 
+<<<<<<< HEAD
                             <input type="date" class="col-sm-0" style="padding: 0;" placeholder="" name = "startDate">
+=======
+                            <input type="date" class="col-sm-0" style="padding: 0;" name="startDateInput">
+>>>>>>> a7e06bb2098fcc13901c6c86ec50ba1097ef5bdf
 
                         </div>
 
                         <div class="col-sm-0 offset-1">
                             <label>End Date</label>
 
+<<<<<<< HEAD
                             <input type="date" class="col-sm-0" style="padding: 0;" placeholder="" name = "endDate">
+=======
+                            <input type="date" class="col-sm-0" style="padding: 0;" name="endDateInput">
+>>>>>>> a7e06bb2098fcc13901c6c86ec50ba1097ef5bdf
 
                         </div>
                     </div>
@@ -155,7 +190,11 @@ if (isset($_POST['backButton'])) {
 
                         <div class="col-sm-0 offset-6">
                             <button class="btn btn-sm btn-primary btn-block col-sm-0  " style=" height:40px;
+<<<<<<< HEAD
                              width:60px;border-radius: 5px;" name ="filterButton">Filter</button>
+=======
+    width:60px;border-radius: 5px;" name="filterButton">Filter</button>
+>>>>>>> a7e06bb2098fcc13901c6c86ec50ba1097ef5bdf
                         </div>
 
                     </div>
@@ -173,6 +212,7 @@ if (isset($_POST['backButton'])) {
 
                 <tbody>
 
+<<<<<<< HEAD
                     <?php
 
                     if ($_SESSION['manageStaffFilterButton'] == True){
@@ -261,6 +301,21 @@ if (isset($_POST['backButton'])) {
                     left join employee on assignTo.staffUsername = employee.username
                     left join user on employee.username = user.username
                     group by assignTo.staffUsername;");
+=======
+
+                    <!-- else {$result = $conn->query("SELECT c.transitRoute, c.transitType,tt.transitPrice, c.connectedSites,tt.totalRiders
+                        FROM (select c.siteName, c.transitType, c.transitRoute, count(*) as connectedSites
+                        from connect c
+                        group by transitRoute) as c
+                        Join
+                        (select  t.transitRoute, t.transitPrice,
+                        count(*) as totalRiders 
+                        from taketransit tt
+                        inner join transit t
+                        on t.transitRoute = tt.transitRoute
+                        group by transitRoute) as tt
+                        where c.transitRoute = tt.transitRoute;");
+>>>>>>> a7e06bb2098fcc13901c6c86ec50ba1097ef5bdf
 
                     
 
@@ -274,11 +329,15 @@ if (isset($_POST['backButton'])) {
                             echo "<tr>";
 
                         }
+<<<<<<< HEAD
                     }
 
 
                         ?>
             
+=======
+            } -->
+>>>>>>> a7e06bb2098fcc13901c6c86ec50ba1097ef5bdf
                 </tbody>
             </table>
 
