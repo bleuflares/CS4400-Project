@@ -175,42 +175,42 @@ if (isset($_POST['createButton'])) {
                 <div class="col-sm-0 offset-0">
                     <label>Duration Range</label>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-5">
 
-                    <input type="text" class="col-sm-1" style="text-align: center;" placeholder="" name = lowDurRange>
+                    <input type="number" class="col-sm-4" style="text-align: center;" placeholder="" name = "lowDurRange">
 
                     <label> -- </label>
 
-                    <input type="text" class="col-sm-1" style="text-align: center;" placeholder="" name = "highDurRange">
+                    <input type="number" class="col-sm-4" style="text-align: center; width: 300px; " placeholder="" name = "highDurRange">
                 </div>
-
-
+                <div class="row">
                 <div class="col-sm-0 offset-0">
                     <label>Total Visits Range</label>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-5">
 
-                    <input type="text" class="col-sm-1" style="text-align: center;" placeholder="" name = "lowVisitRange">
+                    <input type="text" class="col-sm-4" style="text-align: center;" placeholder="" name = "lowVisitRange">
 
                     <label> -- </label>
 
-                    <input type="text" class="col-sm-1" style="text-align: center;" placeholder="" name = "highVisitRange">
+                    <input type="text" class="col-sm-4" style="text-align: center;" placeholder="" name = "highVisitRange">
                 </div>
+            </div>
 
             </div>
         </div>
 
         <div class="row">
-            <div class="col-sm-4 offset-2">
+            <div class="col-sm-4 offset-0">
                 <label>Total Revenue Range</label>
             </div>
-            <div class="col-sm-3">
+            <div class="col-sm-5">
 
-                <input type="text" class="col-sm-1" style="text-align: center;" placeholder="" name = "lowRevRange">
+                <input type="text" class="col-sm-4" style="text-align: center;" placeholder="" name = "lowRevRange">
 
                 <label> -- </label>
 
-                <input type="text" class="col-sm-1" style="text-align: center;" placeholder="" name = "highRevRange">
+                <input type="text" class="col-sm-4" style="text-align: center;" placeholder="" name = "highRevRange">
             </div>
         </div>
 
@@ -260,19 +260,94 @@ if (isset($_POST['createButton'])) {
                 <?php
                 if ($_SESSION['manageEventFilter'] == true) {
 
-                        if (isempty($_POST['eventName'])) {
+                        echo '<script>console.log("Here")</script>';
+                        if (empty($_POST['eventName'])) {
                             $eventName = "%%";
 
                         } else {
                             $eventName = $_POST['eventName'];
                         }
 
-                        if(isempty($_POST['descKey'])){
+                        if (empty($_POST['startDate'])) {
+                            $startDate = "0000-00-00";
+                        } else {
+                            $startDate = $_POST['startDate'];
+                            
+                        }
+
+                        if (empty($_POST['endDate'])) {
+                            $endDate = "9999-12-12";
+                        } else {
+                            $endDate = $_POST['endDate'];
+                        }
+                        
+                        if (empty($_POST['descKey'])) {
                             $descKey = "%%";
                         } else {
                             $descKey = $_POST['descKey'];
                         }
-                    }
+
+                        if (empty($_POST['startDate'])) {
+                            $startDate = "0000-00-00";
+                        } else {
+                            $startDate = $_POST['startDate'];
+                            echo '<script>console.log("Works Input: ' . $startDate . '")</script>';
+                        }
+
+
+                        if (empty($_POST['lowDurRange'])) {
+                            $lowDurRange = 0;
+                            
+                        } else {
+                            $lowDurRange = $_POST['lowDurRange'];
+                        }
+                        
+                        if(empty($_POST['highDurRange'])){
+                            $highDurRange = 9223372036854775807;;
+                        } else {
+                            $highDurRange = $_POST['highDurRange'];
+                        }
+                        if (empty($_POST['lowVisitRange'])) {
+                            $lowVisitRange = 0;
+                            
+                        } else {
+                            $lowVisitRange = $_POST['lowVisitRange'];
+                        }
+                        
+                        if(empty($_POST['highVisitRange'])){
+                            $highVisitRange = 9223372036854775807;;
+                        } else {
+                            $highVisitRange = $_POST['highVisitRange'];
+                        }
+
+                        if (empty($_POST['lowRevRange'])) {
+                            $lowRevRange = 0;
+                            
+                        } else {
+                            $lowRevRange = $_POST['lowRevRange'];
+                        }
+                        
+                        if(empty($_POST['highRevRange'])){
+                            $highRevRange = 9223372036854775807;;
+                        } else {
+                            $highRevRange = $_POST['highRevRange'];
+                        }
+
+
+                        echo '<script>console.log("eventName: ' . $eventName . '")</script>';
+                        echo '<script>console.log("startDate: ' . $startDate . '")</script>';
+                        echo '<script>console.log("endDate: ' . $endDate . '")</script>';
+                        echo '<script>console.log("descKey: ' . $descKey . '")</script>';
+                        echo '<script>console.log("lowDurRange: ' . $lowDurRange . '")</script>';
+                        echo '<script>console.log("highDurRange: ' . $highDurRange . '")</script>';
+                        echo '<script>console.log("lowVisitRange: ' . $lowVisitRange . '")</script>';
+                        echo '<script>console.log("highVisitRange: ' . $highVisitRange . '")</script>';
+                        echo '<script>console.log("lowRevRange ' . $lowRevRange . '")</script>';
+                        echo '<script>console.log("highRevRange: ' . $highRevRange . '")</script>';
+
+
+
+
 
                         //  echo '<script>console.log("siteName Input: ' . $site . '")</script>';
                         // echo '<script>console.log("manager Input: ' . $manager     . '")</script>';
@@ -286,7 +361,6 @@ if (isset($_POST['createButton'])) {
                             //     And  concat(FirstName, ' ', LastName) like '$manager'
                             //     And s.OpenEveryday = '$openEveryday';");
 
-<<<<<<< HEAD
 
                             // while ($row = $result->fetch()) {
                             // echo "<tr>";
@@ -297,8 +371,6 @@ if (isset($_POST['createButton'])) {
                             //         </td>";
                             // echo "<td style='text-align:center'>" . $row['manager'] . "</td>";
                             // echo "<td style='text-align:center'> " . $row['openEveryday'] . "</td>";
-=======
->>>>>>> 73e0c08f9407849e02aa4ff0c23d9bd2cd68e1c5
                     $result = $conn->query("SELECT event.eventName,
                                                     staffassign.staffCount,
                                                     datediff(event.endDate, event.startDate) as duration,
@@ -311,10 +383,7 @@ if (isset($_POST['createButton'])) {
                                                     on event.eventName = visitors.eventName
                                                     and event.startDate = visitors.startDate
                                                     group by event.eventName,event.startDate;");
-<<<<<<< HEAD
                 
-=======
->>>>>>> 73e0c08f9407849e02aa4ff0c23d9bd2cd68e1c5
 
 
                             while ($row = $result->fetch()) {
@@ -330,6 +399,7 @@ if (isset($_POST['createButton'])) {
                             echo "<td style='text-align:center'> " . $row['totalVisits'] . "</td>";
                             echo "<td style='text-align:center'> " . $row['TotalRevenue'] . "</td>";
                         }
+                    }
                 ?>
 
             </tbody>
