@@ -36,8 +36,11 @@ if (isset($_POST['filter'])){
 
 if (isset($_POST['create'])){
         if (isset($_POST['optRadio'])){
+            
         
         $route = $_POST['optRadio'];
+         echo '<script>console.log("route name : ' . $route     . '")</script>';
+
 
         $_SESSION["route"] = $route;
 
@@ -352,9 +355,10 @@ if (isset($_POST['backButton'])) {
                         group by transitRoute) as tt
                         where c.transitRoute = tt.transitRoute;");
 
-                    $route = $row['transitRoute'];
+                    
 
                         while ($row = $result->fetch()) { 
+                            $route = $row['transitRoute'];
                             echo "<tr>";
                             echo    "<td style='padding-left:2.4em;'> 
                                     <div class='radio'>
