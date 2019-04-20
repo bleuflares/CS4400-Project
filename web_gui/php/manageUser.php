@@ -68,6 +68,9 @@ if (isset($_POST['filterButton'])) {
 } else {
     echo '<script>console.log("%cFailed Filter", "color:red")</script>';
 }
+?>
+
+<?php
 
 
 // Updating DB by changing User Status to Approved
@@ -76,24 +79,46 @@ if (isset($_POST['approveButton']) && isset($_POST['optRadio'])) {
     $selectUsername = $_POST['optRadio'];
 
     echo '<script language="javascript">';
-    echo 'alert("The User selected is: ' . $selectUsername . ' and their status has been set to approved.")';
+    echo 'alert("The User selected is: ' . $selectUsername . ' and their status has been set to Approved.")';
     echo '</script>';
 
-    $result = $conn->query("UPDATE user SET STATUS = 'Approved' WHERE user.username = '$selectUsername';");
+    $conn->query("UPDATE user SET STATUS = 'Approved' WHERE user.username = '$selectUsername';");
 }
+
+?>
+
+<?php
 
 // Updating DB by changing User Status to Declined
 if (isset($_POST['declineButton']) && isset($_POST['optRadio'])) {
 
     $selectUsername = $_POST['optRadio'];
 
-    echo '<script language="javascript">';
-    echo 'alert("The User selected is: ' . $selectUsername . ' and their status has been set to declined.")';
-    echo '</script>';
+    // echo '<script language="javascript">';
+    // echo 'alert("The User selected is: ' . $selectUsername . ' and their status has been set to declined.")';
+    // echo '</script>';
 
-    $result = $conn->query("UPDATE user SET STATUS = 'Declined' WHERE user.username = '$selectUsername';");
+
+    $result = $conn->query("SELECT username, status from user where user.username = '$selectUsername';");
+
+    $currentSelectedUserRow = $result->fetch();
+
+    echo '<script>console.log("%cCurrent Status of selected user: ' . $currentSelectedUserRow['status'] . '", "color:blue")</script>';
+
+    $currentStatus = $currentSelectedUserRow['status'];
+
+    if (strpos($currentStatus, "Pending") !== false) {
+        $conn->query("UPDATE user SET STATUS = 'Declined' WHERE user.username = '$selectUsername';");
+    } else {
+        echo '<script language="javascript">';
+        echo 'alert("Cannot Decline a User who is already Approved or Declined.")';
+        echo '</script>';
+    }
 }
 
+?>
+
+<?php
 
 // Navigation of Back Button
 if (isset($_POST['backButton'])) {
