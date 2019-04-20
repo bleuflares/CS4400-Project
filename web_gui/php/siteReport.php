@@ -1,10 +1,19 @@
 <?php
 // Start the session
 session_start();
+$_SESSION['staffReportFilterButton'] = false;
 
 if (!$_SESSION["logged_in"]) {
     header("Location: http://localhost/web_gui/php/userLogin.php");
     exit();
+}
+
+
+if (isset($_POST['filterButton'])){
+    echo '<script>console.log("%cSuccessful Filter Button Push", "color:blue")</script>';
+    $_SESSION['staffReportFilterButton'] = True;
+    echo '<script>console.log("%c Transit History Filter Session variable set", "color:blue")</script>';
+
 }
 
 global $conn;
@@ -82,7 +91,7 @@ if (isset($_POST['backButton'])) {
 
 <body>
     <form class="form-signin" method="post">
-        <h1 class="h3 mb-3 font-weight-heavy" id="titleOfForm">Site Report</h1>
+        <h1 class="h3 mb-3 font-weight-heavy" id="titleOfForm" name ="Site Report">Site Report</h1>
 
         <div class="container">
             <div class="row">
@@ -91,7 +100,7 @@ if (isset($_POST['backButton'])) {
                 </div>
 
                 <div class="col-sm-4 offset-0">
-                    <input type="Date" class="form-control col-sm-0 offset-0" id="inputAdress">
+                    <input type="Date" class="form-control col-sm-0 offset-0" id="inputAdress" name ="startDate">
                 </div>
 
                 <div class="col-sm-2 offset-0">
@@ -99,7 +108,7 @@ if (isset($_POST['backButton'])) {
                 </div>
 
                 <div class="col-sm-4 offset-0">
-                    <input type="Date" class="form-control col-sm-0 offset-0" id="inputAdress">
+                    <input type="Date" class="form-control col-sm-0 offset-0" id="inputAdress" name = "endDate">
                 </div>
             </div>
 
@@ -108,26 +117,26 @@ if (isset($_POST['backButton'])) {
                     <label>Event Count Range</label>
                 </div>
 
-                <div class="col-sm-3">
+                <div class="col-sm-5">
 
-                    <input type="text" class="col-sm-1" style="text-align: center;" placeholder="">
+                    <input type="text" class="col-sm-3" style="text-align: center;" placeholder="" name ="lowCntRng">
 
                     <label> -- </label>
 
-                    <input type="text" class="col-sm-1" style="text-align: center;" placeholder="">
+                    <input type="text" class="col-sm-3" style="text-align: center;" placeholder="" name ="upCntRng">
                 </div>
-
+                <div class="row">
                 <div class="col-sm-0 offset-0">
                     <label>Staff Count Range</label>
                 </div>
 
-                <div class="col-sm-3">
+                <div class="col-sm-5">
 
-                    <input type="text" class="col-sm-1" style="text-align: center;" placeholder="">
+                    <input type="text" class="col-sm-3" style="text-align: center;" placeholder="" name = "staffCntRng">
 
                     <label> -- </label>
 
-                    <input type="text" class="col-sm-1" style="text-align: center;" placeholder="">
+                    <input type="text" class="col-sm-3" style="text-align: center;" placeholder="" name = "upCntRng">
                 </div>
 
             </div>
@@ -138,25 +147,26 @@ if (isset($_POST['backButton'])) {
                 <label>Total Visits Range</label>
             </div>
 
-            <div class="col-sm-3">
+            <div class="col-sm-5">
 
-                <input type="text" class="col-sm-1" style="text-align: center;" placeholder="">
+                <input type="text" class="col-sm-3" style="text-align: center;" placeholder="" name ="lowTotalVisitRng">
 
                 <label> -- </label>
 
-                <input type="text" class="col-sm-1" style="text-align: center;" placeholder="">
+                <input type="text" class="col-sm-3" style="text-align: center;" placeholder="" name = "upTotalVisitRng">
             </div>
+            <div class="row">
 
             <div class="col-sm-0 offset-0">
                 <label>Total Revenue Range</label>
             </div>
-            <div class="col-sm-3">
+            <div class="col-sm-5">
 
-                <input type="text" class="col-sm-1" style="text-align: center;" placeholder="">
+                <input type="text" class="col-sm-3" style="text-align: center;" placeholder="" name = "lowRevRng">
 
                 <label> -- </label>
 
-                <input type="text" class="col-sm-1" style="text-align: center;" placeholder="">
+                <input type="text" class="col-sm-3" style="text-align: center;" placeholder=""name = "lowRevRng">
             </div>
 
         </div>
@@ -165,7 +175,7 @@ if (isset($_POST['backButton'])) {
         <div class="row col-sm-12">
 
             <div class="col-sm-0 offset-2">
-                <button class="btn btn-sm btn-primary btn-block col-sm-0" style="border-radius: 5px;">Filter</button>
+                <button class="btn btn-sm btn-primary btn-block col-sm-0" style="border-radius: 5px;" nzmd = "filterButton">Filter</button>
             </div>
 
             <div class="col-sm-0 offset-7">
