@@ -189,11 +189,11 @@ if (isset($_POST['createButton'])) {
                 </div>
                 <div class="col-sm-5">
 
-                    <input type="text" class="col-sm-4" style="text-align: center;" placeholder="" name = "lowVisitRange">
+                    <input type="number" class="col-sm-4" style="text-align: center;" placeholder="" name = "lowVisitRange">
 
                     <label> -- </label>
 
-                    <input type="text" class="col-sm-4" style="text-align: center;" placeholder="" name = "highVisitRange">
+                    <input type="number" class="col-sm-4" style="text-align: center;" placeholder="" name = "highVisitRange">
                 </div>
             </div>
 
@@ -206,11 +206,11 @@ if (isset($_POST['createButton'])) {
             </div>
             <div class="col-sm-5">
 
-                <input type="text" class="col-sm-4" style="text-align: center;" placeholder="" name = "lowRevRange">
+                <input type="number" class="col-sm-4" style="text-align: center;" placeholder="" name = "lowRevRange">
 
                 <label> -- </label>
 
-                <input type="text" class="col-sm-4" style="text-align: center;" placeholder="" name = "highRevRange">
+                <input type="number" class="col-sm-4" style="text-align: center;" placeholder="" name = "highRevRange">
             </div>
         </div>
 
@@ -260,6 +260,7 @@ if (isset($_POST['createButton'])) {
                 <?php
                 if ($_SESSION['manageEventFilter'] == true) {
 
+
                         echo '<script>console.log("Here")</script>';
                         if (empty($_POST['eventName'])) {
                             $eventName = "%%";
@@ -284,7 +285,7 @@ if (isset($_POST['createButton'])) {
                         if (empty($_POST['descKey'])) {
                             $descKey = "%%";
                         } else {
-                            $descKey = $_POST['descKey'];
+                            $descKey = '%'.$_POST['descKey'].'%';
                         }
 
                         if (empty($_POST['startDate'])) {
@@ -346,32 +347,43 @@ if (isset($_POST['createButton'])) {
                         echo '<script>console.log("highRevRange: ' . $highRevRange . '")</script>';
 
 
+            
+                           $result = $conn->query("SELECT event.eventName,
+                            datediff(event.endDate, event.startDate) as duration,
+                               staffassign.staffCount,
+                               visitors.totalVisits,
+                               visitors.totalVisits*eventPrice as totalRevenue
+                               FROM event left join (SELECT eventName, startDate, count(*) as staffCount FROM assignTo group by 1,2) as staffAssign
+                               on event.eventName = staffAssign.eventName
+                            and event.startDate = staffAssign.startDate
+                            left join (SELECT eventName, startDate, count(*) as totalVisits FROM visitEvent group by 1,2) as visitors
+                            on event.eventName = visitors.eventName
+                            and event.startDate = visitors.startDate
+                               where event.eventName like '$eventName'
+                               and event.startDate >= '$startDate'
+                               and event.endDate <= '$endDate'
+                               and event.description like '$descKey'
+                               and (event.endDate - event.startDate) between $lowDurRange and $highDurRange
+                               and visitors.totalVisits between $lowVisitRange and $highVisitRange
+                               and visitors.totalVisits*eventPrice between $lowRevRange and $highRevRange
+                               group by event.eventName,event.startDate;");
 
 
+                               while ($row = $result->fetch()) {
+                            $value = $row['eventName'];
+                            echo "<tr>";
+                            echo    "<td style='padding-left:2.4em;'>
+                                    <div class='radio'>
+                                    <label><input type='radio' id='express' name='optRadio' value ='$value'>" . $row['eventName'] . "</label>
+                                    </div>
+                                    </td>";
+                            echo "<td style='text-align:center'>" . $row['duration'] . "</td>";
+                            echo "<td style='text-align:center'> " . $row['staffCount'] . "</td>";
+                            echo "<td style='text-align:center'> " . $row['totalVisits'] . "</td>";
+                            echo "<td style='text-align:center'> $" . $row['totalRevenue'] . "</td>";
+                            }
 
-                        //  echo '<script>console.log("siteName Input: ' . $site . '")</script>';
-                        // echo '<script>console.log("manager Input: ' . $manager     . '")</script>';
-                        // echo '<script>console.log("openEveryday Input: ' . $openEveryday . '")</script>';
-
-                            // $result = $conn->query("SELECT  s.siteName, concat(FirstName, ' ', LastName) as manager, s.openEveryday
-                            //     from site s
-                            //     inner join user u on
-                            //     s.managerUserName  = u.userName
-                            //     where s.siteName like '$site'
-                            //     And  concat(FirstName, ' ', LastName) like '$manager'
-                            //     And s.OpenEveryday = '$openEveryday';");
-
-
-                            // while ($row = $result->fetch()) {
-                            // echo "<tr>";
-                            // echo    "<td style='padding-left:2.4em;'>
-                            //         <div class='radio'>
-                            //         <label><input type='radio' id='express' name='optRadio' value ='$site'>" . $row['siteName'] . "</label>
-                            //         </div>
-                            //         </td>";
-                            // echo "<td style='text-align:center'>" . $row['manager'] . "</td>";
-                            // echo "<td style='text-align:center'> " . $row['openEveryday'] . "</td>";
-                    $result = $conn->query("SELECT event.eventName,
+                        } else {$result = $conn->query("SELECT event.eventName,
                                                     staffassign.staffCount,
                                                     datediff(event.endDate, event.startDate) as duration,
                                                     visitors.totalVisits,
@@ -397,7 +409,7 @@ if (isset($_POST['createButton'])) {
                             echo "<td style='text-align:center'>" . $row['duration'] . "</td>";
                             echo "<td style='text-align:center'> " . $row['staffCount'] . "</td>";
                             echo "<td style='text-align:center'> " . $row['totalVisits'] . "</td>";
-                            echo "<td style='text-align:center'> " . $row['TotalRevenue'] . "</td>";
+                            echo "<td style='text-align:center'> $" . $row['TotalRevenue'] . "</td>";
                         }
                     }
                 ?>
