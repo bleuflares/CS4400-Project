@@ -5,6 +5,8 @@ session_start();
 $_SESSION['manageEventFilter'] = false;
 $_SESSION['deleteButton'] = false;
 
+echo '<script>console.log("Input: ' . $_SESSION["user_employeeType"] . '")</script>';
+
 
 if (!$_SESSION["logged_in"]) {
     header("Location: http://localhost/web_gui/php/userLogin.php");
@@ -73,7 +75,9 @@ if (isset($_POST['deleteButton'])) {
 
 if (isset($_POST['view_editButton'])) {
 
+
     $userType  = $_SESSION["userType"];
+    echo '<script>console.log("Input: ' . $_SESSION["user_employeeType"] . '")</script>';
 
 
     if (strpos($userType, "Employee") !== false && strpos($userType, "Visitor") === false) {

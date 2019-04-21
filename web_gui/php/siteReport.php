@@ -119,11 +119,11 @@ if (isset($_POST['backButton'])) {
 
                 <div class="col-sm-5">
 
-                    <input type="text" class="col-sm-3" style="text-align: center;" placeholder="" name ="lowCntRng">
+                    <input type="text" class="col-sm-3" style="text-align: center;" placeholder="" name ="eventLowCountRange">
 
                     <label> -- </label>
 
-                    <input type="text" class="col-sm-3" style="text-align: center;" placeholder="" name ="upCntRng">
+                    <input type="text" class="col-sm-3" style="text-align: center;" placeholder="" name ="eventUpCountRange">
                 </div>
                 <div class="row">
                 <div class="col-sm-0 offset-0">
@@ -132,11 +132,11 @@ if (isset($_POST['backButton'])) {
 
                 <div class="col-sm-5">
 
-                    <input type="text" class="col-sm-3" style="text-align: center;" placeholder="" name = "staffCntRng">
+                    <input type="text" class="col-sm-3" style="text-align: center;" placeholder="" name = "staffLowCountRange">
 
                     <label> -- </label>
 
-                    <input type="text" class="col-sm-3" style="text-align: center;" placeholder="" name = "upCntRng">
+                    <input type="text" class="col-sm-3" style="text-align: center;" placeholder="" name = "staffUpCountRange">
                 </div>
 
             </div>
@@ -149,11 +149,11 @@ if (isset($_POST['backButton'])) {
 
             <div class="col-sm-5">
 
-                <input type="text" class="col-sm-3" style="text-align: center;" placeholder="" name ="lowTotalVisitRng">
+                <input type="text" class="col-sm-3" style="text-align: center;" placeholder="" name ="lowTotalVisitRange">
 
                 <label> -- </label>
 
-                <input type="text" class="col-sm-3" style="text-align: center;" placeholder="" name = "upTotalVisitRng">
+                <input type="text" class="col-sm-3" style="text-align: center;" placeholder="" name = "upTotalVisitRange">
             </div>
             <div class="row">
 
@@ -162,11 +162,11 @@ if (isset($_POST['backButton'])) {
             </div>
             <div class="col-sm-5">
 
-                <input type="text" class="col-sm-3" style="text-align: center;" placeholder="" name = "lowRevRng">
+                <input type="text" class="col-sm-3" style="text-align: center;" placeholder="" name = "lowRevRange">
 
                 <label> -- </label>
 
-                <input type="text" class="col-sm-3" style="text-align: center;" placeholder=""name = "lowRevRng">
+                <input type="text" class="col-sm-3" style="text-align: center;" placeholder=""name = "upRevRange">
             </div>
 
         </div>
@@ -199,8 +199,129 @@ if (isset($_POST['backButton'])) {
             </thead>
 
             <tbody>
+                <?php
+                #filter statement
+                if ($_SESSION['siteReportFilterButton'] == True) {
+                    echo '<script>console.log("%cSuccessful Filter", "color:blue")</script>';
+
+                    
+                    if (empty($_POST['startDate'])) {
+                        $startDate = "0000-00-00";
+                    } else {
+                        $startDate = $_POST['startDate'];
+                    }
+
+                    if (empty($_POST['eventLowCountRange'])) {
+                        $eventLowCountRange = 0;
+                    } else {
+                        $lowCountRange = $_POST['eventLowCountRange'];
+                    }
+                    
+                    if (empty($_POST['"eventUpCountRange "'])) {
+                        $eventUpCountRange = 9223372036854775807;
+                    } else {
+                        $eventUpCountRange  = $_POST['"eventUpCountRange "'];
+                    }
+
+                    if (empty($_POST['staffLowCountRange'])) {
+                        $staffLowCountRange = 0;
+                    } else {
+                        $staffLowCountRange = $_POST['staffLowCountRange'];
+                    }
+
+                    if (empty($_POST['staffUpCountRange'])) {
+                        $staffUpCountRange = 9223372036854775807;
+                    } else {
+                        $staffUpCountRange = $_POST['"staffUpCountRange"'];
+                    }
+
+                    if (empty($_POST['lowTotalVisitRange'])) {
+                        $lowTotalVisitRange = 0;
+                    } else {
+                        $lowTotalVisitRange = $_POST['lowTotalVisitRange'];
+                    }
+
+                     if (empty($_POST['upTotalVisitRange'])) {
+                        $upTotalVisitRange = 9223372036854775807;
+                    } else {
+                        $upTotalVisitRange = $_POST['upTotalVisitRange'];
+                    }
+
+                    if (empty($_POST['lowRevRange'])) {
+                        $lowRevRange = 0;
+                    } else {
+                        $lowRevRange = $_POST['lowRevRange'];
+                    }
+
+                    if (empty($_POST['upRevRange'])) {
+                        $upRevRange = 0;
+                    } else {
+                        $upRevRange = $_POST['upRevRange'];
+                    }
+
+
+                     echo '<script>console.log("Start Date ' . $startDate . '")</script>';
+                    echo '<script>console.log("Event Low Count Range ' . $eventLowCountRange . '")</script>';
+                    echo '<script>console.log("Event up count range' . $eventUpCountRange . '")</script>';
+                    echo '<script>console.log("staff low count range' . $staffLowCountRange . '")</script>';
+                    echo '<script>console.log("staff up count range ' . $staffUpCountRange . '")</script>';
+                    echo '<script>console.log("low total visit range' . $lowTotalVisitRange . '")</script>';
+                    echo '<script>console.log("up total visit range' . $upTotalVisitRange . '")</script>';
+                    echo '<script>console.log("low rev range' . $lowRevRange . '")</script>';
+                    echo '<script>console.log("uprevrange' . $upRevRange . '")</script>';
+                    
+
+
+
+
+                    
+
+                    
+
+                    
+                    
+                    $result = $conn->query("");
+
+
+                    while ($row = $result->fetch()) {
+
+                            echo "<tr>";
+
+                            echo "<td style='text-align:center'>" . $row['date'] . "</td>";
+                            echo "<td style='text-align:center'>" . $row['eventCount'] . "</td>";
+                            echo "<td style='text-align:center'>" . $row['staffCount'] . "</td>";
+                            echo "<td style='text-align:center'>" . $row['totalVisits'] . "</td>";
+                            echo "<td style='text-align:center'>" . $row['totalRevenue'] . "</td>";
+                            echo "<tr>";
+                        }
+
+                    #default table
+                 }  else {
+
+                     $result = $conn->query("");
+
+
+                        while ($row = $result->fetch()) {
+
+                            echo "<tr>";
+
+                            echo "<td style='text-align:center'>" . $row['date'] . "</td>";
+                            echo "<td style='text-align:center'>" . $row['eventCount'] . "</td>";
+                            echo "<td style='text-align:center'>" . $row['staffCount'] . "</td>";
+                            echo "<td style='text-align:center'>" . $row['totalVisits'] . "</td>";
+                            echo "<td style='text-align:center'>" . $row['totalRevenue'] . "</td>";
+                            echo "<tr>";
+                        }
+
+
+ 
+                    
+                }
+                ?>
 
             </tbody>
+
+
         </table>
 
         <div class="container">
