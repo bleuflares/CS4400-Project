@@ -36,7 +36,7 @@ if (isset($_POST['backButton'])) {
             header('Location: http://localhost/web_gui/php/manageEvent.php');
             exit();
         } else {
-            echo '<script>console.log("%cUser is EMPLOYEE, BUT they are NOT a Admin, Manager, or Staff", "color:red")</script>';;
+            echo '<script>console.log("%cUser is EMPLOYEE, BUT they are NOT a Admin, Manager, or Staff", "color:red")</script>';
         }
     } else if (strpos($userType, "Employee") !== false && strpos($userType, "Visitor") !== false) {
         echo '<script>console.log("%cUser is BOTH an EMPLOYEE and VISITOR", "color:blue")</script>';
@@ -45,9 +45,18 @@ if (isset($_POST['backButton'])) {
             header('Location: http://localhost/web_gui/php/manageEvent.php');
             exit();
         } else {
-            echo '<script>console.log("%cUser is EMPLOYEE and VISITOR, BUT they are NOT a Admin, Manager, or Staff", "color:red")</script>';;
+            echo '<script>console.log("%cUser is EMPLOYEE and VISITOR, BUT they are NOT a Admin, Manager, or Staff", "color:red")</script>';
         }
     }
+}
+
+?>
+
+<?php
+
+if (isset($_POST['createButton'])) {
+
+    echo '<script>console.log("%cClicked the Create Button", "color:green")</script>';
 }
 
 ?>
@@ -59,7 +68,7 @@ if (isset($_POST['backButton'])) {
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <meta http-equiv="refresh" content="3">
+    <!-- <meta http-equiv="refresh" content="3"> -->
 
     <link rel="stylesheet" href="..\css\_universalStyling.css">
 
@@ -91,11 +100,25 @@ if (isset($_POST['backButton'])) {
 
 
             <div class="row">
-                <div class="col-sm-12">
+                <div class="col-sm-6">
                     <label>Name</label>
                     <?php
-                    echo '<input type="text" class="col-sm-8 offset-2" style="padding: 0; margin-left: 2em;" name="fname" value="">';
+                    echo '<input type="text" class="col-sm-6 offset-2" style="padding: 0; margin-left: 2em;" name="fname" value="">';
                     ?>
+                </div>
+
+                <div class="col-sm-6 offset-0">
+                    <label class=''>Site</label>
+                    <select name="siteName">
+                        <?php
+                        $result = $conn->query("SELECT SiteName FROM Site");
+
+                        while ($row = $result->fetch()) {
+                            echo "<option>" . $row['SiteName'] . "</option>";
+                        }
+                        echo "<option>ALL</option>";
+                        ?>
+                    </select>
                 </div>
 
             </div>
@@ -104,7 +127,7 @@ if (isset($_POST['backButton'])) {
                 <div class="col-sm-3">
                     <label>Price</label>
                     <?php
-                    echo '<input type="text" class="col-sm-3 offset-0" style="padding: 0; margin-left: 2em;" name="price" value="">';
+                    echo '<input type="number" class="col-sm-6 offset-0" style="padding: 0;" name="price" value="" min="0">';
                     // echo '<span style="font-weight: 600; margin-left: 2.25em;"></span>';
                     ?>
                 </div>
@@ -112,7 +135,7 @@ if (isset($_POST['backButton'])) {
                 <div class="col-sm-3">
                     <label>Capacity</label>
                     <?php
-                    echo '<input type="text" class="col-sm-3 offset-0" style="padding: 0; margin-left: 2em;" name="price" value="">';
+                    echo '<input type="number" class="col-sm-6 offset-0" style="padding: 0;" name="price" value="">';
                     // echo '<span style="font-weight: 600; margin-left: 2.25em;"></span>';
                     ?>
                 </div>
@@ -120,7 +143,7 @@ if (isset($_POST['backButton'])) {
                 <div class="col-sm-6">
                     <label>Minimum Staff Required</label>
                     <?php
-                    echo '<input type="text" class="col-sm-3 offset-0" style="padding: 0; margin-left: 2em;" name="price" value="">';
+                    echo '<input type="number" class="col-sm-3 offset-0" style="padding: 0;" name="price" value="">';
                     // echo '<span style="font-weight: 600; margin-left: 2.25em;"></span>';
                     ?>
                 </div>
@@ -130,20 +153,14 @@ if (isset($_POST['backButton'])) {
                 <div class="col-sm-6">
                     <label>Start Date</label>
                     <?php
-                    echo '<input type="text" class="col-sm-4 offset-2" style="padding: 0; margin-left: 2em;" name="price" value="">';
-                    echo '<span style="font-weight: 600; margin-left: 2.25em;"></span>';
+                    echo '<input type="date" class="col-sm-6 offset-2" style="padding: 0; margin-left: 2em;" name="startDate" value="">';
                     ?>
                 </div>
 
                 <div class="col-sm-6">
                     <label>End Date</label>
                     <?php
-                    echo '<input type="text" class="col-sm-4 offset-2" style="padding: 0; margin-left: 2em;" name="price" value="">';
-                    // if ($siteRow) {
-                    //     echo '<span style="font-weight: 600; margin-left: 2.25em;"></span>';
-                    // } else {
-                    //     echo '<span style="font-weight: 600; margin-left: 2.25em;">N/a</span>';
-                    // }
+                    echo '<input type="date" class="col-sm-6 offset-2" style="padding: 0; margin-left: 2em;" name="endDate" value="">';
                     ?>
                 </div>
 
@@ -169,11 +186,46 @@ if (isset($_POST['backButton'])) {
 
                 <select multiple style="display: inline; margin-left: 6em;" class="form-control col-sm-6 offset-1"
                     id="exampleFormControlSelect2">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
+                    <?php
+
+                    // echo '<script>console.log("%cDate ' . $_POST['startDate'] . '", "color:green")</script>';
+
+                    // while (!isset($_POST['startDate']) && !isset($_POST['endDate'])) {
+                    //     echo '<script>console.log("%cLooping", "color:red")</script>';
+                    //     // usleep(2 * 1000000);
+                    // }
+                    // echo '<script>console.log("%cStopped", "color:green")</script>';
+
+
+                    $availableStaffResult = $conn->query("SELECT concat(user.firstName,' ' ,user.lastName) as Name 
+                                                            from user inner join employee on user.Username = employee.Username where employeeType = 'Staff';");
+
+                    // $startDate = date('Y-m-d', strtotime($_SESSION['manageEvent_eventStartDate']));
+                    // $endDate = date('Y-m-d', strtotime($_SESSION['manageEvent_eventEndDate']));
+
+                    // $availableStaffResult = $conn->query("SELECT distinct concat(user.firstName,' ',user.lastName) as Name 
+                    //                                     from employee left join user on user.username = employee.username
+                    //                                     where concat(user.firstName,' ',user.lastName) not in (
+                    //                                         select distinct concat(user.firstName,' ',user.lastName) as Name 
+                    //                                         from employee left join user on user.username = employee.username
+                    //                                         left join assignTo on employee.username = assignTo.staffUsername
+                    //                                         left join event on event.eventName = assignTo.eventName
+                    //                                         and event.startDate = assignTo.startDate
+                    //                                         and event.siteName = assignTo.siteName
+                    //                                         and (
+                    //                                             (event.startDate between '$startDate' and '$endDate') 
+                    //                                             or (event.endDate between '$startDate' and '$endDate') 
+                    //                                             or (event.startDate <= '$startDate' and event.endDate >= '$endDate'))
+                    //                                     where event.eventName is not null)
+                    //                                     and employee.employeeType = 'Staff';");
+
+
+                    while ($availableStaffDataRow = $availableStaffResult->fetch()) {
+                        $availableStaffName = $availableStaffDataRow['Name'];
+
+                        echo "<option>" . $availableStaffName . "</option>";
+                    }
+                    ?>
                 </select>
 
             </div>
@@ -193,12 +245,22 @@ if (isset($_POST['backButton'])) {
                     name="backButton">Back</button>
             </div>
             <div class="col-sm-2 offset-4">
-                <button class="btn btn-sm btn-primary btn-block col-sm-0" style="border-radius: 5px;">Create</button>
+                <button class="btn btn-sm btn-primary btn-block col-sm-0" style="border-radius: 5px;"
+                    name="createButton">Create</button>
             </div>
         </div>
 
     </form>
 
 </body>
+
+<script>
+$(document).keypress(
+    function(event) {
+        if (event.which == '13') {
+            event.preventDefault();
+        }
+    });
+</script>
 
 </html>
