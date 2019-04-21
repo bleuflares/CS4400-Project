@@ -15,6 +15,9 @@ try {
 } catch (PDOException $e) {
     echo '<script>console.log("%cConnection failed: ' . $e->getMessage() . '", "color:red")</script>';
 }
+
+
+
 ?>
 
 
@@ -65,9 +68,17 @@ if (isset($_POST['registerButton'])) {
         $zip = $_POST['zip'];
         $type = $_POST['type'];
 
+        date_default_timezone_set('America/New_York');
+        $timezone = date_default_timezone_get();
+
+        $date = date('m/d/Y h:i:s a', time());
+        $uniqueDateTimeString = strtotime($date);
+
+        echo '<script>console.log("%cDateTime that will be Employee ID : ' . $uniqueDateTimeString . ' ", "color:green")</script>';
+
         if ($password == $cPass) {
             $result = $conn->query("INSERT into user VALUES('$username', '$password','Pending', '$fname', '$lname', 'Employee, Visitor')");
-            $result = $conn->query("INSERT into employee VALUES('$username', null,'$phone','$address','$city','$state','$zip','$type')");
+            $result = $conn->query("INSERT into employee VALUES('$username', '$uniqueDateTimeString' ,'$phone','$address','$city','$state','$zip','$type')");
 
             foreach ($_POST['email'] as $email) {
                 if ($email !== "") {
