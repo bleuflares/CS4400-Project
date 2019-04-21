@@ -39,14 +39,14 @@ if (isset($_POST['filterButton'])) {
 }
 
 if (isset($_POST['siteDetailButton'])) {
-   echo '<script>console.log("%cSuccessful Detail Button Push", "color:blue")</script>'; 
+   echo '<script>console.log("%cSuccessful Detail Button Push", "color:blue")</script>';
    if (isset($_POST['optRadio'])) {
         $data = explode("_", $_POST['optRadio']);
 
 
-    
-    
-    
+
+
+
 }
 }
 
@@ -88,7 +88,7 @@ if (isset($_POST['backButton'])) {
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  
+
 
     <link rel="stylesheet" href="..\css\_universalStyling.css">
 
@@ -276,11 +276,11 @@ if (isset($_POST['backButton'])) {
                 } else {
                     $upEventCountRange = $_POST['upEventCountRange'];
                 }
-                
+
                $openEveryday = $_POST['openEveryday'];
 
 
-               
+
                echo '<script>console.log("userName Input: ' . $username . '")</script>';
                echo '<script>console.log("SiteName Input: ' . $siteName . '")</script>';
                echo '<script>console.log("DEscription Input: ' . $descriptionKeyword . '")</script>';
@@ -290,30 +290,35 @@ if (isset($_POST['backButton'])) {
                echo '<script>console.log("upTotalVisitRange Input: ' . $upTotalVisitsRange . '")</script>';
                echo '<script>console.log("upEvent Input: ' . $upEventCountRange . '")</script>';
                echo '<script>console.log("LowEvent Input: ' . $lowEventCountRange . '")</script>';
-       
-
-               
-                $result = $conn->query("select sites.siteName, eventCount.eventCount, totalVisits.totalVisits, coalesce(myVisits.myVisits + siteVisits.siteVisits, myVisits.myVisits, siteVisits.siteVisits, 0) as myVisits from
-                (select siteName from site 
-                where openEveryday like '$openEveryday' group by siteName) as sites left join (select siteName, count(visitorUsername) as totalVisits from visitevent
-                where visitEventDate between $lowtTotalVisitsRange and $upTotalVisitsRange group by siteName) as totalVisits on sites.siteName = totalVisits.siteName left join (select siteName, count(visitorUsername) as myVisits from visitevent 
-                where visitorUsername = '$username' and visitEventDate between $lowtTotalVisitsRange and $upTotalVisitsRange group by siteName) as myVisits on sites.siteName = myVisits.siteName left join (select siteName, count(eventName) as eventCount from event 
-                where (startDate between '$startDate' and '$startDate' or endDate between '$endDate' and '$endDate') group by siteName) as eventCount on sites.siteName = eventCount.siteName left join(select *, count(*) as siteVisits from visitSite where visitorUsername = 'mary.smith' and visitSiteDate between '0000-00-00' and '9999-12-12' group by siteName) as siteVisits on siteVisits.siteName = sites.siteName
-                where sites.siteName like '$siteName'
-                AND eventCount.eventCount between $lowEventCountRange and $upEventCountRange
-                group by sites.siteName, eventCount.eventCount, totalVisits.totalVisits;");
 
 
 
+                $result = $conn->query("SELECT sites.siteName, eventCount.eventCount, totalVisits.totalVisits, coalesce(myVisits.myVisits + siteVisits.siteVisits, myVisits.myVisits, siteVisits.siteVisits, 0) as myVisits from
+                                        (select siteName from site
+                                        where openEveryday like '$openEveryday' group by siteName) as sites left join
+                                        (select siteName, count(visitorUsername) as totalVisits from visitevent
+                                        where visitEventDate between $lowtTotalVisitsRange and $upTotalVisitsRange group by siteName) as totalVisits on sites.siteName = totalVisits.siteName left join
+                                        (select siteName, count(visitorUsername) as myVisits from visitevent
+                                        where visitorUsername = '$username' and visitEventDate between $lowtTotalVisitsRange and $upTotalVisitsRange group by siteName) as myVisits on sites.siteName = myVisits.siteName left join
+                                        (select siteName, count(eventName) as eventCount from event
+                                        where (startDate between '$startDate' and '$endDate' or endDate between '$startDate' and '$endDate') group by siteName) as eventCount on sites.siteName = eventCount.siteName left join
+                                        (select *, count(*) as siteVisits from visitSite
+                                        where visitorUsername = '$username' and visitSiteDate between '$startDate' and '$endDate' group by siteName) as siteVisits on siteVisits.siteName = sites.siteName
+                                        where sites.siteName like '$siteName'
+                                        AND eventCount.eventCount between $lowEventCountRange and $upEventCountRange
+                                        group by sites.siteName, eventCount.eventCount, totalVisits.totalVisits;");
 
-                while ($row = $result->fetch()) {              
+
+
+
+                while ($row = $result->fetch()) {
                 echo "<tr>";
                 echo    "<td style='padding-left:2.4em;'>
                             <div class='radio'>
                             <label><input type='radio' id='express' name='optRadio' value ='value'>" . $row['siteName'] . "</label>
                             </div>
                             </td>";
-               
+
                 echo "<td style='text-align:center'> " . $row['eventCount'] . "</td>";
                 echo "<td style='text-align:center'> " . $row['totalVisits'] . "</td>";
                 echo "<td style='text-align:center'> " . $row['myVisits'] . "</td>";
@@ -330,20 +335,20 @@ if (isset($_POST['backButton'])) {
                 (select *, count(*) as siteVisits from visitSite where visitorUsername = 'mary.smith' and visitSiteDate between '0000-00-00' and '9999-12-12' group by siteName) as siteVisits on siteVisits.siteName = sites.siteName
                 group by sites.siteName, eventCount.eventCount, totalVisits.totalVisits;");
                 while ($row = $result->fetch()) {
-                    
-                    
+
+
                     echo "<tr>";
                     echo    "<td style='padding-left:2.4em;'>
                                 <div class='radio'>
                                 <label><input type='radio' id='express' name='optRadio' value ='value'>" . $row['siteName'] . "</label>
                                 </div>
                                 </td>";
-                   
+
                     echo "<td style='text-align:center'> " . $row['eventCount'] . "</td>";
                     echo "<td style='text-align:center'> " . $row['totalVisits'] . "</td>";
                     echo "<td style='text-align:center'> " . $row['myVisits'] . "</td>";
                 }
-                                
+
 
 
             }
