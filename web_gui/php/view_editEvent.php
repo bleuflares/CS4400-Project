@@ -31,6 +31,7 @@ try {
 
 $eventName = $_SESSION['manageEvent_eventName'];
 $startDate = date('Y-m-d', strtotime($_SESSION['manageEvent_eventStartDate']));
+$endDate = date('Y-m-d', strtotime($_SESSION['manageEvent_eventEndDate']));
 
 $result = $conn->query("SELECT * 
                             FROM cs4400_testdata.event 
@@ -193,6 +194,32 @@ if (isset($_POST['backButton'])) {
                         $staffNameRow = $staffNameTable->fetch();
                         echo "<option selected='selected'>" . $staffNameRow['fullName'] . "</option>";
                     }
+
+                    $startDate = date('Y-m-d', strtotime($_SESSION['manageEvent_eventStartDate']));
+                    $endDate = date('Y-m-d', strtotime($_SESSION['manageEvent_eventEndDate']));
+
+                    $availableStaffResult = $conn->query("SELECT distinct concat(user.firstName,' ',user.lastName) as Name 
+                                                        from employee left join user on user.username = employee.username
+                                                        where concat(user.firstName,' ',user.lastName) not in (
+                                                            select distinct concat(user.firstName,' ',user.lastName) as Name 
+                                                            from employee left join user on user.username = employee.username
+                                                            left join assignTo on employee.username = assignTo.staffUsername
+                                                            left join event on event.eventName = assignTo.eventName
+                                                            and event.startDate = assignTo.startDate
+                                                            and event.siteName = assignTo.siteName
+                                                            and (
+                                                                (event.startDate between '$startDate' and '$endDate') 
+                                                                or (event.endDate between '$startDate' and '$endDate') 
+                                                                or (event.startDate <= '$startDate' and event.endDate >= '$endDate'))
+                                                        where event.eventName is not null)
+                                                        and employee.employeeType = 'Staff';");
+
+
+                    while ($availableStaffDataRow = $availableStaffResult->fetch()) {
+                        $availableStaffName = $availableStaffDataRow['Name'];
+
+                        echo "<option>" . $availableStaffName . "</option>";
+                    }
                     ?>
                 </select>
 
@@ -206,8 +233,6 @@ if (isset($_POST['backButton'])) {
                     <?php
                     echo '<textarea name="paragraph_text" cols="50" rows="8">' . $dataRow['description'] . '</textarea>'
                     ?>
-
-
                 </div>
 
             </div>
@@ -264,9 +289,48 @@ if (isset($_POST['backButton'])) {
                 <tr>
                     <th style='text-align:center'>Date</th>
                     <th style='text-align:center'>Daily Visits</th>
-                    <th style='text-align:center'>Daily Revenue (S)</th>
+                    <th style='text-align:center'>Daily Revenue ($)</th>
                 </tr>
             </thead>
+
+            <?php
+
+            $startDate = strtotime($_SESSION['manageEvent_eventStartDate']);
+            $endDate = strtotime($_SESSION['manageEvent_eventEndDate']);
+            $eventPrice = $_SESSION['manageEvent_eventPrice'];
+
+            $durationOfEvent = $endDate - $startDate;
+            $durationInDays  = round($durationOfEvent / (60 * 60 * 24));
+
+
+            while ($durationInDays >= 0) {
+
+
+                // $startDate = date('Y-m-d', strtotime("+1 day", $startDate));
+
+                $currentDate = date('Y-m-d', $startDate);
+
+                $eventName = $_SESSION['manageEvent_eventName'];
+
+                $totalDailyVisits = $conn->query("SELECT eventName, startDate, siteName, visitEventDate
+                                                    FROM visitevent 
+                                                    WHERE eventName = '$eventName' and visitEventDate = '$currentDate';");
+
+
+
+                echo '<script>console.log("%cValue: ' . $durationInDays . '", "color:green")</script>';
+
+                echo "<tr>";
+                echo   "<td style='text-align:center'>" . date('Y-m-d', $startDate) . "</td>";
+                echo "<td style='text-align:center'>" . $totalDailyVisits->rowCount()  . "</td>";
+                echo "<td style='text-align:center'>" .  $totalDailyVisits->rowCount() * $eventPrice . "</td>";
+                echo "<tr>";
+
+                $startDate = $startDate + (60 * 60 * 24);
+                $durationInDays = $durationInDays - 1;
+            }
+
+            ?>
 
             <tbody>
 
