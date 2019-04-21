@@ -22,6 +22,68 @@ try {
     echo '<script>console.log("%cConnection failed: ' . $e->getMessage() . '", "color:red")</script>';
 }
 
+if (isset($_POST['siteDetailButton'])) {
+    echo '<script>console.log("Site Detail Button clicked ")</script>';
+    if (isset($_POST['optRadio'])) {
+        $data = explode("_", $_POST['optRadio']);
+
+        echo '<script>console.log("Input: ' . $_POST['optRadio'] . '")</script>';
+        echo '<script>console.log("eventName: ' . $data[0] . '")</script>';
+
+
+        $_SESSION["exploreSiteDetailSiteName"]= $data[0];
+        $test =$_SESSION["exploreSiteDetailSiteName"];
+        echo '<script>console.log("Sitedetail ' . $test . '")</script>';
+        // $_SESSION["toEventDetailSiteName"]= $data[1];
+        // $_SESSION["toEventDetailStartDate"]= $data[2];
+        // $_SESSION["toEventDetailEndDate"]= $data[3];
+
+
+     header('Location: http://localhost/web_gui/php/siteDetail.php');
+          exit();
+    } else {
+        echo '<script>console.log("%cINVALID username/password", "color:red")</script>';
+    echo '<script language="javascript">';
+    echo 'alert("Must choose a Site to view Site Details")';
+    echo '</script>';
+    }
+
+
+
+}
+
+
+if (isset($_POST['siteTransitButton'])) {
+    echo '<script>console.log("Site Detail Button clicked ")</script>';
+    if (isset($_POST['optRadio'])) {
+        $data = explode("_", $_POST['optRadio']);
+
+        echo '<script>console.log("Input: ' . $_POST['optRadio'] . '")</script>';
+        echo '<script>console.log("eventName: ' . $data[0] . '")</script>';
+
+
+        $_SESSION["exploreSiteTransitName"]= $data[0];
+        $test =$_SESSION["exploreSiteTransitName"];
+        echo '<script>console.log("Transit ' . $test . '")</script>';
+
+        // $_SESSION["toEventDetailSiteName"]= $data[1];
+        // $_SESSION["toEventDetailStartDate"]= $data[2];
+        // $_SESSION["toEventDetailEndDate"]= $data[3];
+
+
+    // header('Location: http://localhost/web_gui/php/visitorEventDetail.php');
+    //      exit();
+    } else {
+        echo '<script>console.log("%cINVALID username/password", "color:red")</script>';
+    echo '<script language="javascript">';
+    echo 'alert("Must choose a Transit view Transit Details")';
+    echo '</script>';
+    }
+
+
+
+}
+
 
 
 ?>
@@ -38,17 +100,8 @@ if (isset($_POST['filterButton'])) {
     echo '<script>console.log("%c Transit History Filter Session variable set", "color:blue")</script>';
 }
 
-if (isset($_POST['siteDetailButton'])) {
-   echo '<script>console.log("%cSuccessful Detail Button Push", "color:blue")</script>';
-   if (isset($_POST['optRadio'])) {
-        $data = explode("_", $_POST['optRadio']);
 
 
-
-
-
-}
-}
 
 
 if (isset($_POST['backButton'])) {
@@ -195,15 +248,15 @@ if (isset($_POST['backButton'])) {
                             style="border-radius: 5px;" name = "filterButton">Filter</button>
                     </div>
 
-                    <div class="col-sm-0 offset-2" style="text-align: right;">
-                        <input id="button" class="btn btn-sm btn-primary btn-block col-sm-0" type="submit" name="siteDetailButton"
-                            onclick="filter();" value="Site Detail" />
+                    <div class="col-sm-5 offset-2" style="text-align: right;">
+                    <button class="btn btn-sm btn-primary btn-block col-sm-8" style="width:150px"
+                            style="border-radius: 5px;" name = "siteDetailButton">Site Detail</button>
 
                     </div>
 
                     <div class="col-sm-0 offset-1">
-                        <input id="button" class="btn btn-sm btn-primary btn-block col-sm-0 offset-6" type="submit"
-                            name="button" onclick="myFunction();" value="Transit Detail" />
+                    <button class="btn btn-sm btn-primary btn-block col-sm-8" style="width:150px"
+                            style="border-radius: 5px;" name = "siteTransitButton">Transit Detail</button>
                     </div>
 
                 </div>
@@ -235,11 +288,10 @@ if (isset($_POST['backButton'])) {
                     $siteName = $_POST['siteName'];
                 }
 
-                if (empty($_POST['descriptionKeyword'])){
+                if (empty($_POST['descriptionKeyword'])) {
                     $descriptionKeyword = "%%";
-
-                }else {
-                    $descriptionKeyword = $_POST['descriptionKeyword'];
+                } else {
+                    $descriptionKeyword = '%' . $_POST['descriptionKeyword'] . '%';
                 }
 
                 if (empty($_POST['startDate'])) {
@@ -301,7 +353,7 @@ if (isset($_POST['backButton'])) {
                                         (select siteName, count(visitorUsername) as myVisits from visitevent
                                         where visitorUsername = '$username' and visitEventDate between $lowtTotalVisitsRange and $upTotalVisitsRange group by siteName) as myVisits on sites.siteName = myVisits.siteName left join
                                         (select siteName, count(eventName) as eventCount from event
-                                        where (startDate between '$startDate' and '$endDate' or endDate between '$startDate' and '$endDate') group by siteName) as eventCount on sites.siteName = eventCount.siteName left join
+                                        where (startDate between '$startDate' and '$endDate' or endDate between '$startDate' and '$endDate') and description like '$descriptionKeyword' group by siteName) as eventCount on sites.siteName = eventCount.siteName left join
                                         (select *, count(*) as siteVisits from visitSite
                                         where visitorUsername = '$username' and visitSiteDate between '$startDate' and '$endDate' group by siteName) as siteVisits on siteVisits.siteName = sites.siteName
                                         where sites.siteName like '$siteName'
@@ -312,10 +364,12 @@ if (isset($_POST['backButton'])) {
 
 
                 while ($row = $result->fetch()) {
+                $value = $row['siteName'];
+
                 echo "<tr>";
                 echo    "<td style='padding-left:2.4em;'>
                             <div class='radio'>
-                            <label><input type='radio' id='express' name='optRadio' value ='value'>" . $row['siteName'] . "</label>
+                            <label><input type='radio' id='express' name='optRadio' value ='$value'>" . $row['siteName'] . "</label>
                             </div>
                             </td>";
 
@@ -335,12 +389,11 @@ if (isset($_POST['backButton'])) {
                 (select *, count(*) as siteVisits from visitSite where visitorUsername = 'mary.smith' and visitSiteDate between '0000-00-00' and '9999-12-12' group by siteName) as siteVisits on siteVisits.siteName = sites.siteName
                 group by sites.siteName, eventCount.eventCount, totalVisits.totalVisits;");
                 while ($row = $result->fetch()) {
-
-
+                    $value = $row['siteName'];
                     echo "<tr>";
                     echo    "<td style='padding-left:2.4em;'>
                                 <div class='radio'>
-                                <label><input type='radio' id='express' name='optRadio' value ='value'>" . $row['siteName'] . "</label>
+                                <label><input type='radio' id='express' name='optRadio' value ='$value'>" . $row['siteName'] . "</label>
                                 </div>
                                 </td>";
 

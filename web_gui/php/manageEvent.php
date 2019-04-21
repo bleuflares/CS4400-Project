@@ -93,9 +93,6 @@ if (isset($_POST['view_editButton'])) {
 
                 $_SESSION['manageEvent_eventName'] = $data[0];
                 $_SESSION['manageEvent_eventStartDate'] = $data[1];
-                $_SESSION['manageEvent_eventEndDate'] = $data[2];
-                $_SESSION['manageEvent_eventPrice'] = $data[3];
-
 
                 echo '<script>console.log("%cDate: ' . $data[1] . '", "color:green")</script>';
 
@@ -124,8 +121,6 @@ if (isset($_POST['view_editButton'])) {
 
                 $_SESSION['manageEvent_eventName'] = $data[0];
                 $_SESSION['manageEvent_eventStartDate'] = $data[1];
-                $_SESSION['manageEvent_eventEndDate'] = $data[2];
-                $_SESSION['manageEvent_eventPrice'] = $data[3];
 
                 echo '<script>console.log("%cDate: ' . $data[1] . '", "color:green")</script>';
 
@@ -369,7 +364,7 @@ if (isset($_POST['createButton'])) {
                     }
 
                     if (empty($_POST['highDurRange'])) {
-                        $highDurRange = 9223372036854775807;;
+                        $highDurRange = 9223372036854775807;
                     } else {
                         $highDurRange = $_POST['highDurRange'];
                     }
@@ -414,8 +409,6 @@ if (isset($_POST['createButton'])) {
                     $result = $conn->query("SELECT event.eventName,
                             datediff(event.endDate, event.startDate) as duration,
                                 event.startDate,
-                                event.endDate,
-                                event.eventPrice,
                                staffassign.staffCount,
                                visitors.totalVisits,
                                visitors.totalVisits*eventPrice as totalRevenue
@@ -436,7 +429,7 @@ if (isset($_POST['createButton'])) {
 
 
                     while ($row = $result->fetch()) {
-                        $value = $row['eventName'] . "_" . $row['startDate'] . "_" . $row['endDate'] . "_" . $row['eventPrice'];
+                        $value = $row['eventName'] . "_" . $row['startDate'];
                         echo "<tr>";
                         echo    "<td style='padding-left:2.4em;'>
                                     <div class='radio'>
@@ -452,8 +445,6 @@ if (isset($_POST['createButton'])) {
                     $result = $conn->query("SELECT event.eventName,
                             datediff(event.endDate, event.startDate) as duration,
                                 event.startDate,
-                                event.endDate,
-                                event.eventPrice,
                                staffassign.staffCount,
                                visitors.totalVisits,
                                visitors.totalVisits*eventPrice as totalRevenue
@@ -468,7 +459,7 @@ if (isset($_POST['createButton'])) {
 
 
                     while ($row = $result->fetch()) {
-                        $value = $row['eventName'] . "_" . $row['startDate'] . "_" . $row['endDate'] . "_" . $row['eventPrice'];
+                        $value = $row['eventName'] . "_" . $row['startDate'];
                         // $value_date = $row['startDate'];
                         echo "<tr>";
                         echo    "<td style='padding-left:2.4em;'>

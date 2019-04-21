@@ -2,6 +2,8 @@
 // Start the session
 session_start();
 
+$siteName = $_SESSION["exploreSiteDetailSiteName"];
+
 if (!$_SESSION["logged_in"]) {
     header("Location: http://localhost/web_gui/php/userLogin.php");
     exit();
@@ -20,6 +22,10 @@ try {
 } catch (PDOException $e) {
     echo '<script>console.log("%cConnection failed: ' . $e->getMessage() . '", "color:red")</script>';
 }
+
+if(isset($_POST['logVisit'])){
+
+}
 ?>
 
 
@@ -30,7 +36,7 @@ try {
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <meta http-equiv="refresh" content="3">
+    <!-- <meta http-equiv="refresh" content="3"> -->
 
     <link rel="stylesheet" href="..\css\_universalStyling.css">
 
@@ -53,15 +59,15 @@ try {
 </head>
 
 <body>
-<!-- 
+<!--
     <?php
-    $result = $conn->query("select  e.*, u.Password, 
-                                            u.Status, 
-                                            u.Firstname, 
-                                            u.Lastname, 
-                                            u.UserType 
-                                    from employee e inner join user u 
-                                    on e.Username = u.Username 
+    $result = $conn->query("select  e.*, u.Password,
+                                            u.Status,
+                                            u.Firstname,
+                                            u.Lastname,
+                                            u.UserType
+                                    from employee e inner join user u
+                                    on e.Username = u.Username
                                     where u.Username = '" . $_SESSION["userName"] . "';");
 
     $row = $result->fetch();
@@ -77,7 +83,7 @@ try {
     ?> -->
 
 
-    <form class="form-signin">
+    <form class="form-signin" method = "post">
         <h1 class="h3 mb-3 font-weight-heavy" id="titleOfForm">Site Detail</h1>
 
 
@@ -94,7 +100,7 @@ try {
                 <div class="col-sm-6">
                     <label>Site</label>
                     <?php
-                    echo '<span style="font-weight: 600; margin-left: 2.25em;">' . $row['Username'] . '</span>';
+                    echo '<span style="font-weight: 600; margin-left: 2.25em;">' . $siteName . '</span>';
                     ?>
                 </div>
 
@@ -108,34 +114,40 @@ try {
                 <div class="col-sm-6">
                     <label>Open Everyday</label>
                     <?php
-                    echo '<span style="font-weight: 600; margin-left: 2.25em;">' . $row['Username'] . '</span>';
+                    $result = $conn->query("SELECT openEveryday FROM site where siteName = '$siteName';");
+
+                    while ($row = $result->fetch()) {
+                            echo "<span style='font-weight: 600 ; text-align:center'>" . $row['openEveryday'] . "</span>";
+                        }
                     ?>
                 </div>
             </div>
 
             <div class="row">
-                <div class="col-sm-4">
+                <div class="col-sm-6">
                     <label>Address</label>
                     <?php
-                    echo '<span style="font-weight: 600; margin-left: 2.25em;">' . $row['Username'] . '</span>';
+                    $result = $conn->query("SELECT coalesce(siteAddress,'None') as Address, FROM site where siteName = '$siteName';");
+
+                    while ($row = $result->fetch()) {
+                            echo "<span style='font-weight: 600 ; text-align:center'>" . $row['Address'] . "</span>";
+                        }
                     ?>
                 </div>
-
-                <div class="col-sm-4">
+            </div>
+            <div class="row">
+                <div class="col-sm-7">
                     <label>Visit Date</label>
-                    <?php
-                    if ($siteRow) {
-                        echo '<span style="font-weight: 600; margin-left: 2.25em;">' .  $siteRow['SiteName'] . '</span>';
-                    } else {
-                        echo '<span style="font-weight: 600; margin-left: 2.25em;">N/a</span>';
-                    }
-                    ?>
+                        <input type="date" class="col-sm-5 offset = 0" style="text-align:center;padding: 0; margin-left: 2em;" name ="actualDateVisited"/>
                 </div>
+                <div class="col-sm-5">
+                    <button class="btn btn-sm btn-primary btn-block col-sm-4" style="border-radius: 5px; margin-left: 0em;"
+                        name="logVisit">Log Visit</button>
+                </div>
+
             </div>
 
-     
-                <
-            </div>
+
 
         </div>
 
