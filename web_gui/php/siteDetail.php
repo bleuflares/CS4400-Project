@@ -2,6 +2,7 @@
 // Start the session
 session_start();
 
+$userName = $_SESSION["userName"];
 $siteName = $_SESSION["exploreSiteDetailSiteName"];
 
 if (!$_SESSION["logged_in"]) {
@@ -24,7 +25,24 @@ try {
 }
 
 if(isset($_POST['logVisit'])){
+    $dateVisited = $_POST['actualDateVisited'];
+    $result = $conn->query("SELECT exists (select * from visitsite
+                            where visitorUsername = '$userName' and siteName = '$siteName' and visitSiteDate = '$dateVisited') as visitAlreadyLogged");
+    while ($row = $result->fetch()) {
+                            $visitAlreadyLogged = $row['visitAlreadyLogged'];
+                        }
+    if ($visitAlreadyLogged) {
+        unset($_POST['logVisit']);
+        echo '<script language="javascript">';
+        echo 'alert("This visit has already been logged.")';
+        echo '</script>';
+        echo '<script>console.log("Already Logged")</script>';
+    } else {
+        echo '<script>console.log("Logging...")</script>';
 
+        $result = $conn->query("INSERT into visitsite values('$userName','$siteName','$dateVisited')");
+
+    }
 }
 ?>
 
@@ -124,13 +142,21 @@ if(isset($_POST['logVisit'])){
             </div>
 
             <div class="row">
-                <div class="col-sm-6">
+                <div class="col-sm-12">
                     <label>Address</label>
                     <?php
-                    $result = $conn->query("SELECT coalesce(siteAddress,'None') as Address, FROM site where siteName = '$siteName';");
+
+                    $result = $conn->query("SELECT length(siteAddress) as addressLength,
+                                                    concat(siteAddress,' Atlanta,GA ', siteZipcode) as Address,
+                                                    concat(siteName,' Atlanta,GA ', siteZipcode) as noAddress
+                                                    FROM site where siteName = '$siteName';");
 
                     while ($row = $result->fetch()) {
+                        if($row['addressLength'] > 0){
                             echo "<span style='font-weight: 600 ; text-align:center'>" . $row['Address'] . "</span>";
+                        } else{
+                            echo "<span style='font-weight: 600 ; text-align:center'>" . $row['noAddress'] . "</span>";
+                        }
                         }
                     ?>
                 </div>
