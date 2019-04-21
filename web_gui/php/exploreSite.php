@@ -48,6 +48,7 @@ if (isset($_POST['siteDetailButton'])) {
     
     
 }
+}
 
 
 if (isset($_POST['backButton'])) {
@@ -96,18 +97,6 @@ if (isset($_POST['backButton'])) {
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
-
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
-    <script type="text/javascript">
-    $(document).ready(function() {
-        var table = $('#test').DataTable({
-            "stateSave": true
-
-        });
-
-    });
-    </script>
 </head>
 
 <body>
@@ -286,12 +275,34 @@ if (isset($_POST['backButton'])) {
                     $upEventCountRange = $_POST['upEventCountRange'];
                 }
 
-
-                
+               
 
 
 
             }else{
+
+                $result = $conn->query("SELECT sites.siteName, eventCount.eventCount, totalVisits.totalVisits, coalesce(myVisits.myVisits + siteVisits.siteVisits, myVisits.myVisits, siteVisits.siteVisits, 0) as myVisits from
+                (select siteName from site group by siteName) as sites left join
+                (select siteName, count(visitorUsername) as totalVisits from visitevent group by siteName) as totalVisits on sites.siteName = totalVisits.siteName left join
+                (select siteName, count(visitorUsername) as myVisits from visitevent where visitorUsername = 'mary.smith' group by siteName) as myVisits on sites.siteName = myVisits.siteName left join
+                (select siteName, count(eventName) as eventCount from event group by siteName) as eventCount on sites.siteName = eventCount.siteName left join
+                (select *, count(*) as siteVisits from visitSite where visitorUsername = 'mary.smith' and visitSiteDate between '0000-00-00' and '9999-12-12' group by siteName) as siteVisits on siteVisits.siteName = sites.siteName
+                group by sites.siteName, eventCount.eventCount, totalVisits.totalVisits;");
+                while ($row = $result->fetch()) {
+                    
+                    
+                    echo "<tr>";
+                    echo    "<td style='padding-left:2.4em;'>
+                                <div class='radio'>
+                                <label><input type='radio' id='express' name='optRadio' value ='value'>" . $row['siteName'] . "</label>
+                                </div>
+                                </td>";
+                   
+                    echo "<td style='text-align:center'> " . $row['eventCount'] . "</td>";
+                    echo "<td style='text-align:center'> " . $row['totalVisits'] . "</td>";
+                    echo "<td style='text-align:center'> $ " . $row['myVisits'] . ".00</td>";
+                }
+                                
 
 
             }

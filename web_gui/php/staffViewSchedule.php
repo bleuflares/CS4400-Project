@@ -213,6 +213,10 @@ if (isset($_POST['viewEventButton'])){
                                         event.capacity,
                                         event.eventPrice,
                                         event.description
+                                        from event left join assignTo on
+                                        event.eventName = assignTo.eventName
+                                        and event.siteName = assignTo.siteName
+                                        and event.startDate = assignTo.startDate
                                         where event.eventName like '$eventName'
                                         and description like '$descKey'
                                         and event.startDate >= '$startDate'

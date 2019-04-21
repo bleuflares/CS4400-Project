@@ -1,6 +1,7 @@
 <?php
 // Start the session
 session_start();
+$_SESSION['exploreSiteFilter'] = False;
 
 if (!$_SESSION["logged_in"]) {
     header("Location: http://localhost/web_gui/php/userLogin.php");
@@ -19,7 +20,19 @@ try {
     echo '<script>console.log("Connected Successfully to DB")</script>';
 } catch (PDOException $e) {
     echo '<script>console.log("%cConnection failed: ' . $e->getMessage() . '", "color:red")</script>';
+
 }
+
+
+if (isset($_POST['filterButton'])) {
+    echo '<script>console.log("%cSuccessful Filter Button Push", "color:blue")</script>';
+    $_SESSION['exploreSiteFilter'] = True;
+    echo '<script>console.log("% Filter Session variable set", "color:blue")</script>';
+}
+
+
+
+
 ?>
 
 <?php
@@ -61,8 +74,7 @@ if (isset($_POST['backButton'])) {
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <meta http-equiv="refresh" content="3">
-
+    
     <link rel="stylesheet" href="..\css\_universalStyling.css">
 
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
@@ -71,26 +83,9 @@ if (isset($_POST['backButton'])) {
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 
-    <script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
-    <script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
-
-    <script type="text/javascript">
-    $(document).ready(function() {
-        var table = $('#test').DataTable({
 
 
-        });
 
-    });
-    </script>
-
-
-    <script type="text/javascript">
-    $(document).ready(function() {
-        $('#test').DataTable();
-    });
-    </script>
-    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
 </head>
 
 <body>
@@ -104,14 +99,15 @@ if (isset($_POST['backButton'])) {
                     <label>Event</label>
                 </div>
                 <div class="col-sm-3 offset-0">
-                    <input type="text" class="form-control col-sm-0 offset-0" id="inputAdress">
+                    <input type="text" class="form-control col-sm-0 offset-0" id="inputAdress" name ="eventName">
 
                 </div>
 
 
                 <div class="col-sm-0 offset-1">
                     <label>Site</label>
-                    <select>
+                    <select name = "siteName">
+                    <option value="ALL">ALL</option>
                         <?php
                         $result = $conn->query("SELECT SiteName FROM Site");
 
@@ -126,14 +122,14 @@ if (isset($_POST['backButton'])) {
                     <div class="col-sm-0 offset-0">
                         <label>Start Date</label>
 
-                        <input type="date" class="col-sm-0" style="padding: 0;" placeholder="">
+                        <input type="date" class="col-sm-0" style="padding: 0;" placeholder="" name = "startDate">
 
                     </div>
 
                     <div class="col-sm-0 offset-1">
                         <label>End Date</label>
 
-                        <input type="date" class="col-sm-0 offset-0" style="padding: 0;" placeholder="">
+                        <input type="date" class="col-sm-0 offset-0" style="padding: 0;" placeholder="" name ="endDate">
 
                     </div>
                 </div>
@@ -142,7 +138,7 @@ if (isset($_POST['backButton'])) {
 
                     <div class="col-sm-0 offset-6">
                         <button class="btn btn-sm btn-primary btn-block col-sm-0  " style=" height:40px;
-    width:60px;border-radius: 5px;">Filter</button>
+    width:60px;border-radius: 5px;" name = "filterButton">Filter</button>
                     </div>
 
                 </div>
@@ -162,6 +158,94 @@ if (isset($_POST['backButton'])) {
                 <tbody>
 
                 </tbody>
+                <?php
+                if (($_SESSION['exploreSiteFilter']) == TRUE) {
+                    echo '<script>console.log("%cMade it", "color:blue")</script>';
+                    $username = $_SESSION["userName"];
+
+                    if (empty($_POST['eventName'])) {
+                        $eventName = "%%";
+
+                    } else {
+                        $eventName = $_POST['eventName'];
+                    }
+
+                    if ($_POST['siteName'] == "ALL") {
+                                $siteName = "%%";
+
+                    } else {
+                        $siteName = $_POST['siteName'];
+                    }
+
+                
+
+                    if (empty($_POST['startDate'])) {
+                        $startDate = "0000-00-00";
+                    } else {
+                        $startDate = $_POST['startDate'];
+                    }
+
+                    if (empty($_POST['endDate'])) {
+                        $endDate = "9999-12-12";
+                    } else {
+                        $endDate = $_POST['endDate'];
+                    }
+
+                    echo '<script>console.log("%cConnection failed: ' . $eventName . '", "color:red")</script>';
+                    echo '<script>console.log("%cConnection failed: ' . $siteName . '", "color:red")</script>';
+                   
+                    echo '<script>console.log("%cConnection failed: ' . $startDate . '", "color:red")</script>';
+                    echo '<script>console.log("%cConnection failed: ' . $endDate . '", "color:red")</script>';
+
+                    $result = $conn->query("SELECT visitsite.visitSiteDate, coalesce(event.eventName,'None') as eventName, visitsite.siteName, coalesce(event.eventPrice, 0) as eventP FROM visitsite
+                        left join visitevent on visitsite.visitorUsername = visitevent.visitorUsername
+                        and visitsite.siteName = visitevent.siteName
+                                        and visitsite.visitSiteDate = visitevent.visitEventDate
+                        left join event on visitevent.eventName = event.eventName
+                        and visitevent.siteName = event.siteName
+                        and visitevent.startDate = event.startDate
+                        where visitsite.visitorUsername = '$username'
+                        and coalesce(event.eventName,'None') like '$eventName'
+                        and visitsite.siteName like '$siteName'
+                        and visitsite.visitSiteDate between '$startDate' and '$endDate';");
+
+                        while ($row = $result->fetch()) {
+                            echo "<tr>";
+                        
+                        
+                            echo "<td style='text-align:center'> " . $row['visitSiteDate'] . "</td>";
+                            echo "<td style='text-align:center'> " . $row['eventName'] . "</td>";
+                            echo "<td style='text-align:center'> " . $row['siteName'] . "</td>";
+                            echo "<td style='text-align:center'> $ " . $row['eventP'] . ".00</td>";
+                        }
+                    
+
+                } else{ 
+
+                    $username = $_SESSION["userName"];
+
+                    $result = $conn->query("SELECT visitsite.visitSiteDate, event.eventName, visitsite.siteName, coalesce(event.eventPrice, 0) as eventP FROM visitsite
+                    left join visitevent on visitsite.visitorUsername = visitevent.visitorUsername
+                    and visitsite.siteName = visitevent.siteName
+                                       and visitsite.visitSiteDate = visitevent.visitEventDate
+                    left join event on visitevent.eventName = event.eventName
+                    and visitevent.siteName = event.siteName
+                    and visitevent.startDate = event.startDate
+                    where visitsite.visitorUsername = '$username';");
+
+                    while ($row = $result->fetch()) {
+                        echo "<tr>";
+                      
+                       
+                        echo "<td style='text-align:center'> " . $row['visitSiteDate'] . "</td>";
+                        echo "<td style='text-align:center'> " . $row['eventName'] . "</td>";
+                        echo "<td style='text-align:center'> " . $row['siteName'] . "</td>";
+                        echo "<td style='text-align:center'> $ " . $row['eventP'] . ".00</td>";
+                    }
+                }
+
+?>
+
             </table>
 
             <div class="container">
