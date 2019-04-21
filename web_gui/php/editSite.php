@@ -80,7 +80,7 @@ if (isset($_POST['updateButton'])){
 
      $openEveryday2 =  $_POST['openEveryday'];
      
-     $result = $conn->query("SELECT username from user u inner join site s on u.username = s.managerUsername where concat(firstname, ' ', lastname)='$siteManagerName2';");
+     $result = $conn->query("SELECT username from user u where concat(firstname, ' ', lastname)='$siteManagerName2';");
 
      if ($result->rowCount() > 0) {
          while ($row = $result->fetch()) {
@@ -108,25 +108,33 @@ if (isset($_POST['updateButton'])){
     
          echo '<script>console.log("managerUsernameO Input: ' . $managerUsername   . '")</script>';
          echo '<script>console.log("managerUsernameO Input: ' . $username2   . '")</script>';
-    
-    
-    
-         $result = $conn->query("UPDATE site 
-                                 SET SiteName = '$siteName2', SiteAddress = '$siteAddress2' , SiteZipCode = $siteZipCode2, OpenEveryday = '$openEveryday2' , ManagerUsername = '$username2' 
-                                 WHERE SiteName ='$siteName';");
-    
-        $siteName = $siteName2;
-        $siteZipCode = $siteZipCode2;
-        $siteAddress = $siteAddress2;
-        $openEveryday = $openEveryday2;
-        $managerUsername = $username2;
 
-        $newNameResult = $conn->query("SELECT siteName, siteAddress, siteZipcode,openEveryday, managerUsername, concat(firstname, ' ', lastname) AS name  from site s
-                inner join user u
-                on s.managerUsername = u.userName
-                where siteName = '$siteName';");
-        $newNameRow = $newNameResult->fetch();
-        $name = $newNameRow['name'];
+         $testIfSiteNameExistResult = $conn->query("SELECT * from site WHERE sitename = '$siteName2';");
+
+         if($testIfSiteNameExistResult->rowCount() == 0) {
+             
+             $result = $conn->query("UPDATE site 
+                                     SET SiteName = '$siteName2', SiteAddress = '$siteAddress2' , SiteZipCode = $siteZipCode2, OpenEveryday = '$openEveryday2' , ManagerUsername = '$username2' 
+                                     WHERE SiteName ='$siteName';");
+        
+            $siteName = $siteName2;
+            $siteZipCode = $siteZipCode2;
+            $siteAddress = $siteAddress2;
+            $openEveryday = $openEveryday2;
+            $managerUsername = $username2;
+    
+            $newNameResult = $conn->query("SELECT siteName, siteAddress, siteZipcode,openEveryday, managerUsername, concat(firstname, ' ', lastname) AS name  from site s
+                    inner join user u
+                    on s.managerUsername = u.userName
+                    where siteName = '$siteName';");
+            $newNameRow = $newNameResult->fetch();
+            $name = $newNameRow['name'];
+         } else {
+            echo '<script language="javascript">';
+            echo 'alert("Cannot edit site to have the same site name as another site. Please try again.")';
+            echo '</script>';
+         }
+    
 
      } else {
         echo '<script language="javascript">';
@@ -209,10 +217,17 @@ if (isset($_POST['updateButton'])){
                         <option value='<?php echo $name;?>'><?php echo $name;?></option>
 
                         <?php
-                        $result = $conn->query("SELECT concat(firstname, ' ', lastname) AS name FROM user u
-                                                INNER Join site s on
-                                                u.username = s.managerUsername
-                                                where managerUsername != '$managerUsername'");
+
+                        // List of manager of other sites who are not the current manager
+                        // $result = $conn->query("SELECT concat(firstname, ' ', lastname) AS name FROM user u
+                        //                         INNER Join site s on
+                        //                         u.username = s.managerUsername
+                        //                         where managerUsername != '$managerUsername'");
+
+                        // List of managers who are not managing any sites.
+                        $result = $conn->query("SELECT concat(firstname, ' ', lastname) AS name 
+                                                from user as u inner join employee as e on u.username = e.username 
+                                                where employeeType = 'Manager' and e.username not in (select managerUsername from site);");
 
                         while ($row = $result->fetch()) {
                             echo "<option>" . $row['name'] . "</option>";
