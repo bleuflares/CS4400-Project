@@ -34,40 +34,60 @@ if (isset($_POST['backButton'])) {
     exit();
 }
 
-if (isset($_POST['nameInput'])  && !empty($_POST['zipInput']) && !empty($_POST['addressInput']) && !empty($_POST['managerInput']) && !empty($_POST['openInput'])) {
+?>
 
-    echo '<script>console.log("%cSuccessful Creation", "color:green")</script>';
+<?php
 
-    echo '<script>console.log("Name Input: ' . $_POST['nameInput'] . '")</script>';
-    echo '<script>console.log("Zip Input: ' . $_POST['zipInput'] . '")</script>';
-    echo '<script>console.log("address Input: ' . $_POST['addressInput'] . '")</script>';
-    echo '<script>console.log("manager Input: ' . $_POST['managerInput'] . '")</script>';
-    echo '<script>console.log("open Input: ' . $_POST['openInput'] . '")</script>';
+if (isset($_POST['createButton'])) {
 
-    $nameInput = $_POST['nameInput'];
-    $zipInput = $_POST['zipInput'];
-    $addressInput = $_POST['addressInput'];
-    $managerInput = $_POST['managerInput'];
-    $openInput = $_POST['openInput'];
+    if (
+        isset($_POST['nameInput'])  && !empty($_POST['zipInput'])
+        && !empty($_POST['managerInput']) && !empty($_POST['openInput'])
+    ) {
 
-     $result = $conn->query("SELECT username from user u inner join site s on u.username = s.managerUsername where concat(firstname, ' ', lastname)='$managerInput';");
+
+        echo '<script>console.log("%cSuccessful Creation", "color:green")</script>';
+
+        echo '<script>console.log("Name Input: ' . $_POST['nameInput'] . '")</script>';
+        echo '<script>console.log("Zip Input: ' . $_POST['zipInput'] . '")</script>';
+        echo '<script>console.log("address Input: ' . $_POST['addressInput'] . '")</script>';
+        echo '<script>console.log("manager Input: ' . $_POST['managerInput'] . '")</script>';
+        echo '<script>console.log("open Input: ' . $_POST['openInput'] . '")</script>';
+
+        $nameInput = $_POST['nameInput'];
+        $zipInput = $_POST['zipInput'];
+        $managerInput = $_POST['managerInput'];
+        $openInput = $_POST['openInput'];
+        if (!empty($_POST['addressInput'])) {
+            $addressInput = $_POST['addressInput'];
+        } else {
+            $addressInput = "";
+        }
+
+        $result = $conn->query("SELECT username from user u inner join site s on u.username = s.managerUsername where concat(firstname, ' ', lastname)='$managerInput';");
         while ($row = $result->fetch()) {
-                $username = $row['username'];
-                        }
-        
+            $username = $row['username'];
+        }
+
         echo '<script>console.log("got Username")</script>';
 
-    $result = $conn->query("INSERT into site VALUES('$nameInput', '$addressInput', '$zipInput', '$openInput', '$username')");
-    echo '<script language="javascript">';
-                echo 'alert("Successful Creation of Site!")';
-                echo '</script>';
+        $result = $conn->query("INSERT into site VALUES('$nameInput', '$addressInput', '$zipInput', '$openInput', '$username')");
+        echo '<script language="javascript">';
+        echo 'alert("Successful Creation of Site!")';
+        echo '</script>';
 
-    // $result = $conn->query("INSERT into site VALUES(".$_POST['nameInput'].", ".$_POST['addressInput'].", ".$_POST['zipInput']", ".$_POST['openInput'].", ".$_POST['managerInput'].")");
+        // $result = $conn->query("INSERT into site VALUES(".$_POST['nameInput'].", ".$_POST['addressInput'].", ".$_POST['zipInput']", ".$_POST['openInput'].", ".$_POST['managerInput'].")");
 
 
-} else {
-    echo '<script>console.log("%cFailed Creation", "color:red")</script>';
+    } else {
+        echo '<script language="javascript">';
+        echo 'alert("Failed to create of site because there are fields that are empty!")';
+        echo '</script>';
+
+        echo '<script>console.log("%cFailed Creation", "color:red")</script>';
+    }
 }
+
 ?>
 
 
@@ -112,7 +132,8 @@ if (isset($_POST['nameInput'])  && !empty($_POST['zipInput']) && !empty($_POST['
                         value="j">Zipcode</label>
 
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" id="inputLastName" name="zipInput" pattern='^\+?\d{5}' placeholder="5 digits">
+                        <input type="text" class="form-control" id="inputLastName" name="zipInput" pattern='^\+?\d{5}'
+                            placeholder="5 digits">
                     </div>
                 </div>
 
@@ -152,7 +173,7 @@ if (isset($_POST['nameInput'])  && !empty($_POST['zipInput']) && !empty($_POST['
                             echo "<option>" . $row['name'] . "</option>";
                         };
 
-                         
+
                         ?>
 
                     </select>
@@ -176,9 +197,10 @@ if (isset($_POST['nameInput'])  && !empty($_POST['zipInput']) && !empty($_POST['
 
             <div class="form-row">'
                 <div class="form-group row col-sm-12">
-                    <button type="submit" class="btn btn-primary offset-1" id="createButton"name = "backButton">Back</button>
+                    <button type="submit" class="btn btn-primary offset-1" id="backButton"
+                        name="backButton">Back</button>
                     <button type="submit" class="btn btn-primary offset-7" id="createButton"
-                        name="createSite">Create</button>
+                        name="createButton">Create</button>
                 </div>
             </div>
 

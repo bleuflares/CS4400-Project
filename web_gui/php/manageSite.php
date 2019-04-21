@@ -29,59 +29,100 @@ try {
 ?>
 
 <?php
-
-if (isset($_POST['filterButton'])){
+// filter button
+if (isset($_POST['filterButton'])) {
     echo '<script>console.log("%cSuccessful Filter Button Push", "color:blue")</script>';
     $_SESSION['transitHistoryFilter'] = True;
     echo '<script>console.log("%c Transit History Filter Session variable set", "color:blue")</script>';
-
 }
 
-if (isset($_POST['create'])) {
+?>
 
 
-        header('Location: http://localhost/web_gui/php/createSite.php');
-            exit();
-
-
-
-}
-if (isset($_POST['delete'])){
-
-
-        $_SESSION['deleteButton'] = True;
-        echo '<script>console.log("%cSuccessful Delete Button Push", "color:blue")</script>';
-}
-
-
-
+<?php
+// edit button
 if (isset($_POST['edit'])) {
-    if (isset($_POST['optRadio'])){
+    if (isset($_POST['optRadio'])) {
 
         $siteName = $_POST['optRadio'];
 
-        $_SESSION["siteName"] = $siteName;
+        $_SESSION["manageSite_siteName"] = $siteName;
 
-         echo '<script>console.log("manager Input: ' . $siteName     . '")</script>';
-         echo '<script>console.log("session Input: ' . $_SESSION['siteName']     . '")</script>';
+        echo '<script>console.log("manager Input: ' . $siteName     . '")</script>';
+        echo '<script>console.log("session Input: ' . $_SESSION['manageSite_siteName']     . '")</script>';
 
         header('Location: http://localhost/web_gui/php/editSite.php');
-            exit();
-
-
-
-    } else{
-           echo '<script language="javascript">';
-                echo 'alert("No Site Selected!")';
-                echo '</script>';
-
+        exit();
+    } else {
+        echo '<script language="javascript">';
+        echo 'alert("No Site Selected!")';
+        echo '</script>';
     }
 }
 
+?>
+
+<?php
+// delete Button
+if (isset($_POST['delete'])) {
+
+    echo '<script>console.log("%cSuccessful Delete Button Push", "color:blue")</script>';
 
 
 
+    $siteName = $_POST['optRadio'];
 
+    echo '<script>console.log("%cGrabbed the right site name: "' . $siteName . '", "color:green")</script>';
+
+    $result = $conn->query("SELECT siteName, siteAddress, siteZipCode, openEveryday, managerusername from site WHERE siteName = '$siteName';");
+
+
+    $row = $result->fetch();
+
+    $siteAddress = $row['siteAddress'];
+    $siteZipcode = $row['siteZipCode'];
+    $openEveryday = $row['openEveryday'];
+    $managerusername = $row['managerusername'];
+
+
+    echo '<script>console.log("%c address ' . $siteAddress . '", "color:green")</script>';
+    echo '<script>console.log("%c zip ' . $siteZipcode . '", "color:green")</script>';
+    echo '<script>console.log("%c openEveryday ' . $openEveryday . '", "color:green")</script>';
+    echo '<script>console.log("%c manageruser ' . $managerusername . '", "color:green")</script>';
+
+
+    $result = $conn->query("Delete from site
+                            Where
+                            siteName = '$siteName'
+                            AND
+                            siteAddress = '$siteAddress'
+                            AND siteZipcode = '$siteZipcode'
+                            AND openEveryday = '$openEveryday'
+                            AND managerusername = '$managerusername';");
+
+    // $_SESSION['deleteButton'] == false;
+
+    echo '<script language="javascript">';
+    echo 'alert("Successful Delete of Site!")';
+    echo '</script>';
+}
+
+?>
+
+<?php
+
+// create Button
+if (isset($_POST['create'])) {
+
+
+    header('Location: http://localhost/web_gui/php/createSite.php');
+    exit();
+}
+
+
+?>
+
+<?php
 
 // Navigation of Back Button
 if (isset($_POST['backButton'])) {
@@ -114,19 +155,19 @@ if (isset($_POST['backButton'])) {
 ?>
 
 
+
 <!DOCTYPE html>
 <html>
 
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-<!--
+    <!--
     <meta http-equiv="refresh" content="3"> -->
 
     <link rel="stylesheet" href="..\css\_universalStyling.css">
 
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 
@@ -154,7 +195,7 @@ if (isset($_POST['backButton'])) {
                 <div class="col-sm-6">
 
                     <label>Site</label>
-                    <select name ="site">
+                    <select name="site">
                         <option value="ALL">ALL</option>
                         <?php
                         $result = $conn->query("SELECT siteName FROM site");
@@ -173,7 +214,7 @@ if (isset($_POST['backButton'])) {
                 </div>
                 <div class="col-sm-3 offset-1">
 
-                    <select name ="manager">
+                    <select name="manager">
                         <option value="ALL">ALL</option>
                         <?php
                         $result = $conn->query("SELECT  concat(FirstName, ' ', LastName) as Username
@@ -193,7 +234,7 @@ if (isset($_POST['backButton'])) {
                     <div class="col-sm-7 offset-5">
                         <label>Open Everyday</label>
 
-                        <select name ="openEveryday">
+                        <select name="openEveryday">
                             <option value="Yes">Yes</option>
                             <option value="No">No</option>
                         </select>
@@ -203,26 +244,21 @@ if (isset($_POST['backButton'])) {
 
                     <div class="row col-sm-12">
 
-                        <div class="col-sm-0 offset-2">
-                            <button class="btn btn-sm btn-primary btn-block col-sm-0"
-                                style="border-radius: 5px;" name="filterButton">Filter</button>
+                        <div class="col-sm-3">
+                            <button class="btn btn-sm btn-primary btn-block"  name="filterButton">Filter</button>
                         </div>
 
-                        <div class="col-sm-0 offset-2" style="text-align: right;">
-                            <input id="button" class="btn btn-sm btn-primary btn-block col-sm-0 offset-5" type="submit"
-                                name="create" onclick="filter();" value="Create" />
-
+                        <div class="col-sm-3" >
+                            <input id="button" class="btn btn-sm btn-primary btn-block" type="submit" name="create" onclick="filter();" value="Create" />
 
                         </div>
 
-
-                        <div class="col-sm-0 offset-1">
-                            <input id="button" class="btn btn-sm btn-primary btn-block col-sm-0 offset-7" type="submit"
-                                name="edit" onclick="myFunction();" value="Edit" />
+                        <div class="col-sm-3">
+                            <input id="button" class="btn btn-sm btn-primary btn-block" type="submit" name="edit" value="Edit" />
                         </div>
-                        <div class="col-sm-0">
-                            <input id="button" class="btn btn-sm btn-primary btn-block offset-10" type="submit"
-                                name="delete" onclick="myFunction();" value="Delete" />
+
+                        <div class="col-sm-3">
+                            <input id="button" class="btn btn-sm btn-primary btn-block" type="submit" name="delete" value="Delete" />
                         </div>
                     </div>
 
@@ -241,20 +277,17 @@ if (isset($_POST['backButton'])) {
                 <tbody>
                     <?php
 
-                        if ($_SESSION['transitHistoryFilter'] == true) {
+                    if ($_SESSION['transitHistoryFilter'] == true) {
 
                         $openEveryday  = $_POST['openEveryday'];
 
                         if ($_POST['site'] == "ALL") {
                             $site = "%%";
-
                         } else {
                             $site = $_POST['site'];
                         }
-                        if($_POST['manager'] == "ALL"){
+                        if ($_POST['manager'] == "ALL") {
                             $manager  = "%%";
-
-
                         } else {
                             $manager = $_POST['manager'];
                         }
@@ -262,11 +295,11 @@ if (isset($_POST['backButton'])) {
 
 
 
-                         echo '<script>console.log("siteName Input: ' . $site . '")</script>';
+                        echo '<script>console.log("siteName Input: ' . $site . '")</script>';
                         echo '<script>console.log("manager Input: ' . $manager     . '")</script>';
                         echo '<script>console.log("openEveryday Input: ' . $openEveryday . '")</script>';
 
-                            $result = $conn->query("SELECT  s.siteName, concat(FirstName, ' ', LastName) as manager, s.openEveryday
+                        $result = $conn->query("SELECT  s.siteName, concat(FirstName, ' ', LastName) as manager, s.openEveryday
                                 from site s
                                 inner join user u on
                                 s.managerUserName  = u.userName
@@ -275,8 +308,8 @@ if (isset($_POST['backButton'])) {
                                 And s.OpenEveryday = '$openEveryday';");
 
 
-                            while ($row = $result->fetch()) {
-                                $value = $row['siteName'];
+                        while ($row = $result->fetch()) {
+                            $value = $row['siteName'];
                             echo "<tr>";
                             echo    "<td style='padding-left:2.4em;'>
                                     <div class='radio'>
@@ -286,24 +319,21 @@ if (isset($_POST['backButton'])) {
                             echo "<td style='text-align:center'>" . $row['manager'] . "</td>";
                             echo "<td style='text-align:center'> " . $row['openEveryday'] . "</td>";
 
-                        //     while ($row = $result->fetch()) {
-                        //     echo "<tr>";
-                        //     echo "<td style='text-align:center'>" . $row['siteName'] . "</td>";
-                        //     echo "<td style='text-align:center'>" . $row['manager'] . "</td>";
-                        //     echo "<td style='text-align:center'>" . $row['openEveryday'] . "</td>";
+                            //     while ($row = $result->fetch()) {
+                            //     echo "<tr>";
+                            //     echo "<td style='text-align:center'>" . $row['siteName'] . "</td>";
+                            //     echo "<td style='text-align:center'>" . $row['manager'] . "</td>";
+                            //     echo "<td style='text-align:center'>" . $row['openEveryday'] . "</td>";
 
-                        //     echo "<tr>";
+                            //     echo "<tr>";
 
-                        // }
-                        $_SESSION['transitHistoryFilter'] = false;
+                            // }
+                            $_SESSION['transitHistoryFilter'] = false;
 
-                    echo '<script>console.log("%cSuccessful Delete Button Push", "color:blue")</script>';
-                            }
+                            echo '<script>console.log("%cSuccessful Delete Button Push", "color:blue")</script>';
                         }
-
-
-
-                    else {$result = $conn->query("SELECT  s.siteName, concat(FirstName, ' ', LastName) as manager, s.openEveryday
+                    } else {
+                        $result = $conn->query("SELECT  s.siteName, concat(FirstName, ' ', LastName) as manager, s.openEveryday
                                                 from site s
                                                 inner join user u on
                                                 s.managerUserName = u.userName;");
@@ -322,51 +352,7 @@ if (isset($_POST['backButton'])) {
                         }
                     }
 
-                    if ($_SESSION['deleteButton'] == true){
-                         $siteName = $_POST['optRadio'];
-
-
-                        echo '<script>console.log("%cConnection failed: ' . $siteName . '", "color:green")</script>';
-
-                         $result = $conn->query("SELECT siteName, siteAddress, siteZipCode, openEveryday, managerusername from site WHERE siteName = '$siteName';");
-                        while ($row = $result->fetch()) {
-                            $siteAddress = $row['siteAddress'];
-                            $siteZipcode = $row['siteZipCode'];
-                            $openEveryday = $row['openEveryday'];
-                            $managerusername = $row['managerusername'];
-
-                        }
-
-                        echo '<script>console.log("%c address ' . $siteAddress . '", "color:green")</script>';
-                         echo '<script>console.log("%c zip ' . $siteZipcode . '", "color:green")</script>';
-                          echo '<script>console.log("%c openEveryday ' . $openEveryday . '", "color:green")</script>';
-                           echo '<script>console.log("%c manageruser ' . $managerusername . '", "color:green")</script>';
-
-
-
-
-
-
-
-
-
-                        $result = $conn->query("Delete from site
-                                                Where
-                                                siteName = '$siteName'
-                                                AND
-                                                siteAddress = '$siteAddress'
-                                                AND siteZipcode = '$siteZipcode'
-                                                AND openEveryday = '$openEveryday'
-                                                AND managerusername = '$managerusername';");
-                                        echo '<script language="javascript">';
-                echo 'alert("Successful Delete of Site!")';
-                echo '</script>';
-
-
-
-
-                }
-                ?>
+                    ?>
 
 
 
@@ -375,13 +361,21 @@ if (isset($_POST['backButton'])) {
 
             <div class="row">
                 <div class="col-sm-3 offset-4">
-                    <button class="btn btn-sm btn-primary btn-block" style="border-radius: 5px; margin-left: 1.5em;"
-                        name="backButton">Back</button>
+                    <button class="btn btn-sm btn-primary btn-block" style="border-radius: 5px; margin-left: 1.5em;" name="backButton">Back</button>
                 </div>
             </div>
 
     </form>
 
 </body>
+
+<script>
+$(document).keypress(
+    function(event) {
+        if (event.which == '13') {
+            event.preventDefault();
+        }
+    });
+</script>
 
 </html>

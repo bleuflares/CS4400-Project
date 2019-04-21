@@ -3,7 +3,7 @@
 session_start();
 $_SESSION['updateButton'] = False;
 
-echo '<script>console.log("manager Input: ' . $_SESSION['siteName']     . '")</script>';
+echo '<script>console.log("manager Input: ' . $_SESSION['manageSite_siteName']     . '")</script>';
 
 
 if (!$_SESSION["logged_in"]) {
@@ -69,15 +69,15 @@ if (isset($_POST['updateButton'])){
 
 <?php
 
- if (isset($_SESSION['siteName'])){
-    $siteName = $_SESSION['siteName'];
+ if (isset($_SESSION['manageSite_siteName'])){
+    $siteName = $_SESSION['manageSite_siteName'];
 
     $result = $conn->query("SELECT siteName, siteAddress, siteZipcode,openEveryday, managerUsername, concat(firstname, ' ', lastname) AS name  from site s
         inner join user u
         on s.managerUsername = u.userName
         where siteName = '$siteName';");
 
-    echo '<script>console.log("Query : ' . $_SESSION['siteName']     . '")</script>';
+    echo '<script>console.log("Query : ' . $_SESSION['manageSite_siteName']     . '")</script>';
 
     $row = $result->fetch();
 
