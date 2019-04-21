@@ -1,6 +1,7 @@
 <?php
 // Start the session
 session_start();
+$_SESSION['exploreSiteFilter'] = False;
 
 if (!$_SESSION["logged_in"]) {
     header("Location: http://localhost/web_gui/php/userLogin.php");
@@ -20,10 +21,34 @@ try {
 } catch (PDOException $e) {
     echo '<script>console.log("%cConnection failed: ' . $e->getMessage() . '", "color:red")</script>';
 }
+
+
+
 ?>
 
 
+
+
 <?php
+
+
+if (isset($_POST['filterButton'])) {
+    echo '<script>console.log("%cSuccessful Filter Button Push", "color:blue")</script>';
+    $_SESSION['exploreSiteFilter'] = True;
+    echo '<script>console.log("%c Transit History Filter Session variable set", "color:blue")</script>';
+}
+
+if (isset($_POST['siteDetailButton'])) {
+   echo '<script>console.log("%cSuccessful Detail Button Push", "color:blue")</script>'; 
+   if (isset($_POST['optRadio'])) {
+        $data = explode("_", $_POST['optRadio']);
+
+
+    
+    
+    
+}
+
 
 if (isset($_POST['backButton'])) {
 
@@ -95,7 +120,8 @@ if (isset($_POST['backButton'])) {
                 <div class="row">
                     <div class="col-sm-0 offset-0">
                         <label class='offset-0'>Name</label>
-                        <select>
+                        <select name = "siteName">
+                        <option value="ALL">ALL</option>
                             <?php
                             $result = $conn->query("SELECT SiteName FROM Site");
 
@@ -104,11 +130,12 @@ if (isset($_POST['backButton'])) {
                             }
                             ?>
                         </select>
-                        <div class="col-sm-4 offset-1">
+                        <div class="row">
+                        <div class="col-sm-5 offset-1">
                             <label>Description Keyword</label>
                         </div>
-                        <input type="text" class="form-control col-sm-1 offset-0 width:200px" width:200px
-                            id="inputAdress">
+                        <input type="text" class="form-control col-sm-4 offset-0 width:200px" width:200px
+                            id="inputAdress" name = "descriptionKeyword">
 
                     </div>
                 </div>
@@ -118,7 +145,7 @@ if (isset($_POST['backButton'])) {
                         <label>Start Date</label>
                     </div>
                     <div class="col-sm-4 offset-0">
-                        <input type="Date" class="form-control col-sm-0 offset-0" id="inputAdress">
+                        <input type="Date" class="form-control col-sm-0 offset-0" id="inputAdress" name = "startDate">
 
                     </div>
 
@@ -127,7 +154,7 @@ if (isset($_POST['backButton'])) {
                         <label>End Date</label>
                     </div>
                     <div class="col-sm-4 offset-0">
-                        <input type="date" class="form-control col-sm-0 offset-0" id="inputAdress">
+                        <input type="date" class="form-control col-sm-0 offset-0" id="inputAdress" name = "endDate">
 
                     </div>
                 </div>
@@ -136,26 +163,26 @@ if (isset($_POST['backButton'])) {
                     <div class="col-sm-0 offset-0">
                         <label>Total Visits Range</label>
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-sm-5">
 
-                        <input type="text" class="col-sm-1" style="text-align: center;" placeholder="">
+                        <input type="text" class="col-sm-4" style="text-align: center;" placeholder="" name = "lowtTotalVisitsRange">
 
                         <label> -- </label>
 
-                        <input type="text" class="col-sm-1" style="text-align: center;" placeholder="">
+                        <input type="text" class="col-sm-4" style="text-align: center;" placeholder="" name ="upTotalVisitsRange">
                     </div>
 
-
-                    <div class="col-sm-0 offset-0">
+                    <div class="row">
+                    <div class="col-sm-0 offset-1">
                         <label>Event Count Range</label>
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-sm-5">
 
-                        <input type="text" class="col-sm-1" style="text-align: center;" placeholder="">
+                        <input type="text" class="col-sm-4" style="text-align: center;" placeholder="" name ="lowEventCountRange">
 
                         <label> -- </label>
 
-                        <input type="text" class="col-sm-1" style="text-align: center;" placeholder="">
+                        <input type="text" class="col-sm-4" style="text-align: center;" placeholder="" name = "upEventCountRange">
                     </div>
 
                 </div>
@@ -165,19 +192,22 @@ if (isset($_POST['backButton'])) {
                 <div class="col-sm-4 offset-5">
                     <label for="inputLastName" class="label .col-form-label col-sm-6" id="lastNameLabel">Open
                         Everyday</label>
-                    <input type="checkbox" class="col-sm-1">
+                        <select name ="openEveryday">
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
 
                 </div>
 
                 <div class="row col-sm-12">
 
-                    <div class="col-sm-0 offset-2">
-                        <button class="btn btn-sm btn-primary btn-block col-sm-12" style="width:150px"
-                            style="border-radius: 5px;">Filter</button>
+                    <div class="col-sm-0 offset-0">
+                        <button class="btn btn-sm btn-primary btn-block col-sm-8" style="width:150px"
+                            style="border-radius: 5px;" name = "filterButton">Filter</button>
                     </div>
 
                     <div class="col-sm-0 offset-2" style="text-align: right;">
-                        <input id="button" class="btn btn-sm btn-primary btn-block col-sm-0" type="submit" name="button"
+                        <input id="button" class="btn btn-sm btn-primary btn-block col-sm-0" type="submit" name="siteDetailButton"
                             onclick="filter();" value="Site Detail" />
 
                     </div>
@@ -204,6 +234,68 @@ if (isset($_POST['backButton'])) {
             </thead>
 
             <tbody>
+            <?php
+            if (($_SESSION['exploreSiteFilter']) == TRUE) {
+
+                if ($_POST['siteName'] == "ALL") {
+                            $siteName = "%%";
+
+                } else {
+                    $siteName = $_POST['siteName'];
+                }
+
+                if (empty($_POST['descriptionKeyword'])){
+                    $descriptionKeyword = "%%";
+
+                }else {
+                    $descriptionKeyword = $_POST['descriptionKeyword'];
+                }
+
+                if (empty($_POST['startDate'])) {
+                    $startDate = "0000-00-00";
+                } else {
+                    $startDate = $_POST['startDate'];
+                }
+
+                if (empty($_POST['endDate'])) {
+                    $endDate = "9999-12-12";
+                } else {
+                    $endDate = $_POST['endDate'];
+                }
+
+                if (empty($_POST['"lowtTotalVisitsRange"'])) {
+                    $lowtTotalVisitsRange = 0;
+                } else {
+                    $lowtTotalVisitsRange = $_POST['lowTotalVisitsRangetDate'];
+                }
+
+                if (empty($_POST['upTotalVisitsRange'])) {
+                    $upTotalVisitsRange = 9223372036854775807;
+                } else {
+                    $upTotalVisitsRange = $_POST['upTotalVisitsRange'];
+                }
+                if (empty($_POST['lowEventCountRange'])) {
+                    $lowEventCountRange = 0;
+                } else {
+                    $lowEventCountRange = $_POST['lowEventCountRange'];
+                }
+
+                if (empty($_POST['upEventCountRange'])) {
+                    $upEventCountRange = 9223372036854775807;
+                } else {
+                    $upEventCountRange = $_POST['upEventCountRange'];
+                }
+
+
+                
+
+
+
+            }else{
+
+
+            }
+                ?>
 
             </tbody>
         </table>
