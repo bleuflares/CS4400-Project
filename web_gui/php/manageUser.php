@@ -257,7 +257,9 @@ if (isset($_POST['backButton'])) {
                                 echo "<tr >";
                                 echo    "<td style='padding-left:2.4em;'> 
                                             <div class='radio'>
-                                                <label name ='selectUsername'><input type='radio' id='express' name ='optRadio'> " . $row['username'] . "</label>
+                                                <label name ='selectUsername'>
+                                                    <input type='radio' id='express' name ='optRadio' value='$username'> " . $row['username'] . "
+                                                </label>
                                             </div>
                                         </td>";
 
@@ -276,7 +278,7 @@ if (isset($_POST['backButton'])) {
                                 echo    "<td style='padding-left:2.4em;'> 
                                             <div class='radio'>
                                                 <label name ='selectUsername'>
-                                                    <input type='radio' id='express' name='$username' value='kljsdkl'> " . $row['username'] . "
+                                                    <input type='radio' id='express' name='optRadio' value='$username'> " . $row['username'] . "
                                                 </label>
                                             </div>
                                         </td>";
@@ -297,7 +299,9 @@ if (isset($_POST['backButton'])) {
                                 echo "<tr>";
                                 echo    "<td style='padding-left:2.4em;'> 
                                             <div class='radio'>
-                                                <label name ='selectUsername'><input type='radio' id='express' name='optRadio' value='$username'> " . $row['username'] . "</label>
+                                                <label name ='selectUsername'>
+                                                    <input type='radio' id='express' name='optRadio' value='$username'> " . $row['username'] . "
+                                                </label>
                                             </div>
                                         </td>";
 
