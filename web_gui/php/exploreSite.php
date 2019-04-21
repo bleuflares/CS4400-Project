@@ -71,8 +71,8 @@ if (isset($_POST['siteTransitButton'])) {
         // $_SESSION["toEventDetailEndDate"]= $data[3];
 
         
-    // header('Location: http://localhost/web_gui/php/visitorEventDetail.php');
-    //      exit();
+    header('Location: http://localhost/web_gui/php/TransitDetail.php');
+         exit();
     } else {
         echo '<script>console.log("%cINVALID username/password", "color:red")</script>';
     echo '<script language="javascript">';
