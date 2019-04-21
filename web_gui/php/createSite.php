@@ -64,17 +64,32 @@ if (isset($_POST['createButton'])) {
             $addressInput = "";
         }
 
-        $result = $conn->query("SELECT username from user u inner join site s on u.username = s.managerUsername where concat(firstname, ' ', lastname)='$managerInput';");
-        while ($row = $result->fetch()) {
-            $username = $row['username'];
-        }
+        $testIfSiteNameExistResult = $conn->query("SELECT * from site WHERE sitename = '$nameInput';");
 
-        echo '<script>console.log("got Username")</script>';
+         if($testIfSiteNameExistResult->rowCount() == 0) {
 
-        $result = $conn->query("INSERT into site VALUES('$nameInput', '$addressInput', '$zipInput', '$openInput', '$username')");
-        echo '<script language="javascript">';
-        echo 'alert("Successful Creation of Site!")';
-        echo '</script>';
+            
+
+             $result = $conn->query("SELECT username from user u where concat(firstname, ' ', lastname)='$managerInput';");
+             while ($row = $result->fetch()) {
+                 $username = $row['username'];
+             }
+     
+             echo '<script>console.log("got Username")</script>';
+     
+             $result = $conn->query("INSERT into site VALUES('$nameInput', '$addressInput', '$zipInput', '$openInput', '$username')");
+             
+             
+             echo '<script language="javascript">';
+             echo 'alert("Successful Creation of Site!")';
+             echo '</script>';
+
+         } else {
+            echo '<script language="javascript">';
+            echo 'alert("Cannot edit site to have the same site name as another site. Please try again.")';
+            echo '</script>';
+         }
+
 
         // $result = $conn->query("INSERT into site VALUES(".$_POST['nameInput'].", ".$_POST['addressInput'].", ".$_POST['zipInput']", ".$_POST['openInput'].", ".$_POST['managerInput'].")");
 
@@ -164,10 +179,18 @@ if (isset($_POST['createButton'])) {
                         id="firstNameLabel">Manager</label>
                     <select class="col-sm-6" style="margin-left: 1em;" name="managerInput">
                         <?php
-                        $result = $conn->query("SELECT concat(firstname, ' ', lastname) AS name FROM user u 
-                                                INNER Join site s on
-                                                u.username = s.managerUsername
-                                                where managerUsername != '$managerUsername'");
+                        // $result = $conn->query("SELECT concat(firstname, ' ', lastname) AS name FROM user u 
+                        //                         INNER Join site s on
+                        //                         u.username = s.managerUsername
+                        //                         where managerUsername != '$managerUsername'");
+
+                        // while ($row = $result->fetch()) {
+                        //     echo "<option>" . $row['name'] . "</option>";
+                        // };
+
+                        $result = $conn->query("SELECT concat(firstname, ' ', lastname) AS name 
+                                                from user as u inner join employee as e on u.username = e.username 
+                                                where employeeType = 'Manager' and e.username not in (select managerUsername from site);");
 
                         while ($row = $result->fetch()) {
                             echo "<option>" . $row['name'] . "</option>";
