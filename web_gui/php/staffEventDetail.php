@@ -11,6 +11,7 @@ $capacity =$_SESSION["toEventDetail2capacity"];
 $eventPrice =$_SESSION["toEventDetail2EventPrice"];
 $eventDescription= $_SESSION["toEventDetail2EventDescription"];
 
+
 // if (!$_SESSION["logged_in"]) {
 //     header("Location: http://localhost/web_gui/php/userLogin.php");
 //     exit();
@@ -64,13 +65,13 @@ try {
 <body>
 
     <?php
-    $result = $conn->query("select  e.*, u.Password, 
-                                            u.Status, 
-                                            u.Firstname, 
-                                            u.Lastname, 
-                                            u.UserType 
-                                    from employee e inner join user u 
-                                    on e.Username = u.Username 
+    $result = $conn->query("select  e.*, u.Password,
+                                            u.Status,
+                                            u.Firstname,
+                                            u.Lastname,
+                                            u.UserType
+                                    from employee e inner join user u
+                                    on e.Username = u.Username
                                     where u.Username = '" . $_SESSION["userName"] . "';");
 
     $row = $result->fetch();
@@ -92,7 +93,7 @@ try {
 
         <div class="container">
 
-        
+
 
                 <div class="col-sm-6">
                     <label>Event</label>
@@ -148,7 +149,15 @@ try {
                 <div class="col-sm-4">
                     <label>Staff Assigned</label>
                     <?php
-                    echo '<span style="font-weight: 600; margin-left: 1.15em;">' . $staffCount . '</span>'
+                    $result = $conn->query("SELECT concat(firstname,' ',lastname) as staffNames from assignTo left join
+                                user on assignTo.staffUsername = user.username
+                                where assignTo.eventName like '$eventName'
+                                and assignTo.startDate = '$startDate' and assignTo.siteName = '$siteName';");
+
+                    while ($row = $result->fetch()) {
+                            echo "<span style='font-weight: 600 ; text-align:center'>" . $row['staffNames'] . "</span>";
+
+                        }
                     ?>
                 </div>
 
@@ -173,7 +182,7 @@ try {
                     <?php
                     echo '<span style="font-weight: 600; margin-left: 2.25em;">' . $eventDescription . '</span>';
                     ?>
-                
+
                 </div>
             </div>
 
