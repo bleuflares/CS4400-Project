@@ -20,6 +20,37 @@ try {
 } catch (PDOException $e) {
     echo '<script>console.log("%cConnection failed: ' . $e->getMessage() . '", "color:red")</script>';
 }
+
+
+
+
+
+?>
+
+<?php
+
+$eventName = $_SESSION['manageEvent_eventName'];
+$startDate = date('Y-m-d', strtotime($_SESSION['manageEvent_eventStartDate']));
+
+$result = $conn->query("SELECT * 
+                            FROM cs4400_testdata.event 
+                            WHERE eventName = '$eventName' AND startDate = '" . $startDate . "';");
+
+echo '<script>console.log("%cValue: ' . $eventName . '", "color:green")</script>';
+
+echo '<script>console.log("%cValue: ' . $startDate . '", "color:green")</script>';
+
+echo '<script>console.log("%cRow Count: ' . $result->rowCount()  . '", "color:green")</script>';
+
+
+if ($result->rowCount() > 0) {
+    $dataRow = $result->fetch();
+
+    echo '<script>console.log("%cValue: ' . $dataRow['startDate'] . '", "color:green")</script>';
+} else {
+    echo '<script>console.log("%cFailed to Find the Event Entry in the Database", "color:red")</script>';
+}
+
 ?>
 
 
@@ -95,14 +126,14 @@ if (isset($_POST['backButton'])) {
                 <div class="col-sm-6">
                     <label>Name</label>
                     <?php
-                    // echo '<span style="font-weight: 600; margin-left: 2.25em;">' . $row['Username'] . '</span>';
+                    echo '<span style="font-weight: 600; margin-left: 2.25em;">' . $dataRow['eventName'] . '</span>';
                     ?>
                 </div>
 
                 <div class="col-sm-6">
                     <label>Price ($)</label>
                     <?php
-                    // echo '<span style="font-weight: 600; margin-left: 2.25em;">' . $row['Username'] . '</span>';
+                    echo '<span style="font-weight: 600; margin-left: 2.25em;">' . $dataRow['eventPrice'] . '</span>';
                     ?>
                 </div>
             </div>
@@ -111,18 +142,14 @@ if (isset($_POST['backButton'])) {
                 <div class="col-sm-6">
                     <label>Start Date</label>
                     <?php
-                    // echo '<span style="font-weight: 600; margin-left: 2.25em;">' . $row['Username'] . '</span>';
+                    echo '<span style="font-weight: 600; margin-left: 2.25em;">' . $dataRow['startDate'] . '</span>';
                     ?>
                 </div>
 
                 <div class="col-sm-6">
                     <label>End Date</label>
                     <?php
-                    // if ($siteRow) {
-                    //     // echo '<span style="font-weight: 600; margin-left: 2.25em;">' .  $siteRow['SiteName'] . '</span>';
-                    // } else {
-                    //     // echo '<span style="font-weight: 600; margin-left: 2.25em;">N/a</span>';
-                    // }
+                    echo '<span style="font-weight: 600; margin-left: 2.25em;">' .  $dataRow['endDate'] . '</span>';
                     ?>
                 </div>
 
@@ -133,13 +160,13 @@ if (isset($_POST['backButton'])) {
                 <div class="col-sm-6">
                     <label>Minimum Staff Required</label>
                     <?php
-                    // echo '<span style="font-weight: 600; margin-left: 2.25em;">' . $row['Username'] . '</span>';
+                    echo '<span style="font-weight: 600; margin-left: 2.25em;">' . $dataRow['minStaffRequired'] . '</span>';
                     ?>
                 </div>
                 <div class="col-sm-6">
                     <label>Capacity</label>
                     <?php
-                    // echo '<span style="font-weight: 600; margin-left: 1.15em;">' . $row['EmployeeID'] . '</span>'
+                    echo '<span style="font-weight: 600; margin-left: 1.15em;">' . $dataRow['capacity'] . '</span>'
                     ?>
                 </div>
             </div>
@@ -151,11 +178,22 @@ if (isset($_POST['backButton'])) {
 
                 <select multiple style="display: inline; margin-left: 5em;" class="form-control col-sm-6 offset-1"
                     id="exampleFormControlSelect2">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
+                    <?php
+                    $staffResult = $conn->query("SELECT * 
+                                                FROM assignto 
+                                                WHERE eventName ='$eventName' 
+                                                AND startDate = '$startDate';");
+
+                    while ($staffDataRow = $staffResult->fetch()) {
+                        $staffUsername = $staffDataRow['staffUsername'];
+                        $staffNameTable = $conn->query("SELECT concat(user.firstname, ' ',user.lastname) as fullName
+                                                        FROM user 
+                                                        WHERE userName = '$staffUsername' ;");
+
+                        $staffNameRow = $staffNameTable->fetch();
+                        echo "<option selected='selected'>" . $staffNameRow['fullName'] . "</option>";
+                    }
+                    ?>
                 </select>
 
             </div>
@@ -165,7 +203,10 @@ if (isset($_POST['backButton'])) {
                     <label>Description</label>
                 </div>
                 <div class="col-sm-4 offset-1">
-                    <textarea name="paragraph_text" cols="50" rows="8"></textarea>
+                    <?php
+                    echo '<textarea name="paragraph_text" cols="50" rows="8">' . $dataRow['description'] . '</textarea>'
+                    ?>
+
 
                 </div>
 

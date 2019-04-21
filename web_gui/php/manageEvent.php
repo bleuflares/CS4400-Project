@@ -92,7 +92,9 @@ if (isset($_POST['view_editButton'])) {
                 // echo '<script>console.log("Input: ' . $data[1] . '")</script>';
 
                 $_SESSION['manageEvent_eventName'] = $data[0];
-                $_SESSION['manageEvent_eventStartDate'] = $date[1];
+                $_SESSION['manageEvent_eventStartDate'] = $data[1];
+
+                echo '<script>console.log("%cDate: ' . $data[1] . '", "color:green")</script>';
 
                 header('Location: http://localhost/web_gui/php/view_editEvent.php');
                 exit();
@@ -118,7 +120,9 @@ if (isset($_POST['view_editButton'])) {
                 // echo '<script>console.log("Input: ' . $data[1] . '")</script>';
 
                 $_SESSION['manageEvent_eventName'] = $data[0];
-                $_SESSION['manageEvent_eventStartDate'] = $date[1];
+                $_SESSION['manageEvent_eventStartDate'] = $data[1];
+
+                echo '<script>console.log("%cDate: ' . $data[1] . '", "color:green")</script>';
 
                 header('Location: http://localhost/web_gui/php/view_editEvent.php');
                 exit();
