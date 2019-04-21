@@ -293,12 +293,13 @@ if (isset($_POST['backButton'])) {
                     } else {
                         $eventName = $_POST['eventName'];
                     }
+
                     if (empty($_POST['descriptionKeyword'])) {
                         $descriptionKeyword = "%%";
-
                     } else {
-                        $descriptionKeyword = $_POST['descriptionKeyword'];
+                        $descriptionKeyword = '%' . $_POST['descriptionKeyword'] . '%';
                     }
+                   
                     
 
                     if (($_POST['siteName']) == "ALL") {
