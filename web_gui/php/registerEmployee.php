@@ -64,10 +64,17 @@ if (isset($_POST['registerButton'])) {
         $zip = $_POST['zip'];
         $type = $_POST['type'];
 
+        date_default_timezone_set('America/New_York');
+        $timezone = date_default_timezone_get();
+
+        $date = date('m/d/Y h:i:s a', time());
+        $uniqueDateTimeString = strtotime($date);
+
+
         if ($password == $cPass) {
 
             $result = $conn->query("INSERT into user VALUES('$username', '$password','Pending', '$fname', '$lname', 'Employee')");
-            $result = $conn->query("INSERT into Employee VALUES('$username', null,'$phone','$address','$city','$state','$zip','$type')");
+            $result = $conn->query("INSERT into Employee VALUES('$username', '$uniqueDateTimeString','$phone','$address','$city','$state','$zip','$type')");
 
             foreach ($_POST['email'] as $email) {
                 if ($email !== "") {
