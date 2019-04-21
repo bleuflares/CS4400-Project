@@ -1,6 +1,14 @@
 <?php
 // Start the session
 session_start();
+$eventName = $_SESSION["toEventDetailEventName"];
+$siteName = $_SESSION["toEventDetailSiteName"];
+$startDate = $_SESSION["toEventDetailStartDate"];
+$endDate = $_SESSION["toEventDetailEndDate"];
+$eventPrice = $_SESSION["toEventDetailEEventPrice"];
+$tixRemainder = $_SESSION["toEventDetailTixRemaining"];
+$descritpion = $_SESSION["toEventDetailEventDecription"];
+$username = $_SESSION["userName"];
 
 if (!$_SESSION["logged_in"]) {
     header("Location: http://localhost/web_gui/php/userLogin.php");
@@ -20,6 +28,53 @@ try {
 } catch (PDOException $e) {
     echo '<script>console.log("%cConnection failed: ' . $e->getMessage() . '", "color:red")</script>';
 }
+
+if (isset($_POST['visitDateButton'])) {
+    $actualDateVisited = $_POST['actualDateVisited'];
+
+
+
+    echo '<script>console.log("eventName: ' . $actualDateVisited . '")</script>';
+    echo '<script>console.log("highRevRange:")</script>';
+
+    $result = $conn->query("SELECT endDate from event where siteName = '$siteName' AND eventName = '$eventName' AND startDate = '$startDate';");
+    while ($row = $result->fetch()) {
+        $endDate = $row['endDate'];
+    
+    }
+
+    echo '<script>console.log("eventName: ' . $startDate . '")</script>';
+    echo '<script>console.log("eventName: ' . $endDate . '")</script>';
+    echo '<script>console.log("eventName: ' . $actualDateVisited . '")</script>';
+    
+    // $conn->query("INSERT into visitevent values ('$username', '$eventName', '$startDate' ,'$siteName' , '$actualDateVisited');");
+
+
+
+    if ($actualDateVisited > $endDate){
+        echo '<script language="javascript">';
+        echo 'alert("Cannot attend an Event that has already ended.")';
+        echo '</script>';
+    }
+
+    else if ($actualDateVisited < $startDate){
+        echo '<script language="javascript">';
+        echo 'alert("Cannot attend an Event that has not started.")';
+        echo '</script>';
+    }
+    else{
+        $conn->query("INSERT into visitevent values ('$username', '$eventName', '$startDate' ,'$siteName' , '$actualDateVisited');");
+    }
+
+}
+if (isset($_POST['backButton'])) {
+    header('Location: http://localhost/web_gui/php/exploreEvent.php');
+    exit();
+}
+
+
+
+
 ?>
 
 
@@ -30,7 +85,7 @@ try {
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <meta http-equiv="refresh" content="3">
+
 
     <link rel="stylesheet" href="..\css\_universalStyling.css">
 
@@ -77,24 +132,19 @@ try {
     ?>
 
 
-    <form class="form-signin">
+    <form class="form-signin" method = "post">
         <h1 class="h3 mb-3 font-weight-heavy" id="titleOfForm">Event Detail</h1>
 
 
         <div class="container">
 
             <div class="row">
-                <!-- <div class="col-sm-6">
-                    <label>First Name</label>
-                    <?php
-                    echo '<input type="text" class="col-sm-6" style="padding: 0; margin-left: 2em;" value="' . $row['Firstname'] . '">';
-                    ?>
-                </div> -->
+               
 
                 <div class="col-sm-6">
                     <label>Event</label>
                     <?php
-                    echo '<span style="font-weight: 600; margin-left: 2.25em;">' . $row['Username'] . '</span>';
+                    echo '<span style="font-weight: 600; margin-left: 2.25em;">' . $eventName . '</span>';
                     ?>
                 </div>
 
@@ -108,7 +158,7 @@ try {
                 <div class="col-sm-6">
                     <label>Site</label>
                     <?php
-                    echo '<span style="font-weight: 600; margin-left: 2.25em;">' . $row['Username'] . '</span>';
+                    echo '<span style="font-weight: 600; margin-left: 2.25em;">' . $siteName . '</span>';
                     ?>
                 </div>
             </div>
@@ -117,7 +167,7 @@ try {
                 <div class="col-sm-6">
                     <label>Start Date</label>
                     <?php
-                    echo '<span style="font-weight: 600; margin-left: 2.25em;">' . $row['Username'] . '</span>';
+                    echo '<span style="font-weight: 600; margin-left: 2.25em;">' . $startDate . '</span>';
                     ?>
                 </div>
 
@@ -125,7 +175,7 @@ try {
                     <label>End Date</label>
                     <?php
                     if ($siteRow) {
-                        echo '<span style="font-weight: 600; margin-left: 2.25em;">' .  $siteRow['SiteName'] . '</span>';
+                        echo '<span style="font-weight: 600; margin-left: 2.25em;">' .  $endDate . '</span>';
                     } else {
                         echo '<span style="font-weight: 600; margin-left: 2.25em;">N/a</span>';
                     }
@@ -139,14 +189,14 @@ try {
                 <div class="col-sm-6">
                     <label>Ticket Price</label>
                     <?php
-                    echo '<span style="font-weight: 600; margin-left: 1.15em;">' . $row['EmployeeID'] . '</span>'
+                    echo '<span style="font-weight: 600; margin-left: 1.15em;">' . $eventPrice . '</span>'
                     ?>
                 </div>
 
                 <div class="col-sm-6">
                     <label>Ticket Remaining</label>
                     <?php
-                    echo '<span style="font-weight: 600; margin-left: 2.25em;">' . $row['Username'] . '</span>';
+                    echo '<span style="font-weight: 600; margin-left: 2.25em;">' . $tixRemainder . '</span>';
                     ?>
                 </div>
 
@@ -157,28 +207,31 @@ try {
                     <label>Description</label>
                     <?php
                     echo '<span style="font-weight: 600; margin-left: 3.15em;">'
-                        . $row['EmployeeAddress'] . ', '
-                        . $row['EmployeeCity'] . ', '
-                        . $row['EmployeeState'] . ' '
-                        . $row['EmployeeZipcode'] .
+                        . $descritpion .
                         '</span>'
                     ?>
                 </div>
             </div>
 
-            <div class="form-row">'
+            <div class="form-row">
                 <div class="col-sm-6">
                     <label>Visit Date</label>
-                    <?php
-                    echo '<input type="date" class="col-sm-6" style="padding: 0; margin-left: 3.85em;" value="' . $row['Phone'] . '">'
-                    ?>
+                    
+                    '<input type="date" class="col-sm-6" style="padding: 0; margin-left: 3.85em;" name ="actualDateVisited">
+                    
                 </div>
                 <div class="form-group row col-sm-6 ">
-                    <a type="submit" class="btn btn-primary" id="registerButton"
+                    <button type="submit" class="btn btn-primary" id="registerButton"
                         style="padding-left: 3.25em; padding-right: 3.25em; margin-left: 4em;"
-                        href="./staffViewSchedule.php">Back</a>
+                        name = "visitDateButton">Log Visit</button>
                 </div>
             </div>
+            <div class="container">
+            <div class="col-sm-2 offset-5">
+                <button class="btn btn-sm btn-primary btn-block col-sm-0" style="border-radius: 5px;"
+                    name="backButton">Back</button>
+            </div>
+        </div>
 
         </div>
 
