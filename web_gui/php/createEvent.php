@@ -56,7 +56,27 @@ if (isset($_POST['backButton'])) {
 
 if (isset($_POST['createButton'])) {
 
-    echo '<script>console.log("%cClicked the Create Button", "color:green")</script>';
+    if (
+        isset($_POST['siteName'])  && !empty($_POST['fname']) && !empty($_POST['price'])
+        && !empty($_POST['capacity'])  && !empty($_POST['minStaffReq']) && !empty($_POST['textDescription'])
+        && isset($_POST['staffSelect']) && isset($_POST['startDate']) && isset($_POST['endDate'])
+    ) {
+        echo '<script>console.log("%cClicked the Create Button", "color:green")</script>';
+    }
+
+    if (isset($_POST['textDescription'])) {
+        echo '<script>console.log("%c Found Text:", "color:green")</script>';
+    }
+
+    if (!empty($_POST['textDescription'])) {
+        echo '<script>console.log("%c Found Text:", "color:green")</script>';
+    }
+
+    // $test = !isset($_POST['textDescription']) && $_POST['textDescription'] === '';
+
+    // echo htmlspecialchars($_POST['textDescription']);
+
+    // echo '<script>console.log("%cSet? : ' . $test . ' ", "color:green")</script>';
 }
 
 ?>
@@ -98,7 +118,6 @@ if (isset($_POST['createButton'])) {
 
         <div class="container">
 
-
             <div class="row">
                 <div class="col-sm-6">
                     <label>Name</label>
@@ -135,7 +154,7 @@ if (isset($_POST['createButton'])) {
                 <div class="col-sm-3">
                     <label>Capacity</label>
                     <?php
-                    echo '<input type="number" class="col-sm-6 offset-0" style="padding: 0;" name="price" value="">';
+                    echo '<input type="number" class="col-sm-6 offset-0" style="padding: 0;" name="capacity" value="">';
                     // echo '<span style="font-weight: 600; margin-left: 2.25em;"></span>';
                     ?>
                 </div>
@@ -143,7 +162,7 @@ if (isset($_POST['createButton'])) {
                 <div class="col-sm-6">
                     <label>Minimum Staff Required</label>
                     <?php
-                    echo '<input type="number" class="col-sm-3 offset-0" style="padding: 0;" name="price" value="">';
+                    echo '<input type="number" class="col-sm-3 offset-0" style="padding: 0;" name="minStaffReq" value="">';
                     // echo '<span style="font-weight: 600; margin-left: 2.25em;"></span>';
                     ?>
                 </div>
@@ -175,7 +194,7 @@ if (isset($_POST['createButton'])) {
                     <label>Description</label>
                 </div>
                 <div class="col-sm-4 offset-1">
-                    <textarea name="paragraph_text" cols="50" rows="8"></textarea>
+                    <textarea name="paragraph_text" cols="50" rows="8" name="textDescription"></textarea>
 
                 </div>
 
@@ -185,7 +204,7 @@ if (isset($_POST['createButton'])) {
                 <label for="exampleFormControlSelect2" style="">Assign Staff</label>
 
                 <select multiple style="display: inline; margin-left: 6em;" class="form-control col-sm-6 offset-1"
-                    id="exampleFormControlSelect2">
+                    id="exampleFormControlSelect2" name="staffSelect">
                     <?php
 
                     // echo '<script>console.log("%cDate ' . $_POST['startDate'] . '", "color:green")</script>';
@@ -245,7 +264,7 @@ if (isset($_POST['createButton'])) {
                     name="backButton">Back</button>
             </div>
             <div class="col-sm-2 offset-4">
-                <button class="btn btn-sm btn-primary btn-block col-sm-0" style="border-radius: 5px;"
+                <button type="submit" class="btn btn-sm btn-primary btn-block col-sm-0" style="border-radius: 5px;"
                     name="createButton">Create</button>
             </div>
         </div>
