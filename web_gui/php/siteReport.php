@@ -119,11 +119,11 @@ if (isset($_POST['backButton'])) {
 
                 <div class="col-sm-5">
 
-                    <input type="text" class="col-sm-3" style="text-align: center;" placeholder="" name ="eventLowCountRange">
+                    <input type="number" class="col-sm-3" style="text-align: center;" placeholder="" name ="eventLowCountRange">
 
                     <label> -- </label>
 
-                    <input type="text" class="col-sm-3" style="text-align: center;" placeholder="" name ="eventUpCountRange">
+                    <input type="number" class="col-sm-3" style="text-align: center;" placeholder="" name ="eventUpCountRange">
                 </div>
                 <div class="row">
                 <div class="col-sm-0 offset-0">
@@ -132,11 +132,11 @@ if (isset($_POST['backButton'])) {
 
                 <div class="col-sm-5">
 
-                    <input type="text" class="col-sm-3" style="text-align: center;" placeholder="" name = "staffLowCountRange">
+                    <input type="number" class="col-sm-3" style="text-align: center;" placeholder="" name = "staffLowCountRange">
 
                     <label> -- </label>
 
-                    <input type="text" class="col-sm-3" style="text-align: center;" placeholder="" name = "staffUpCountRange">
+                    <input type="number" class="col-sm-3" style="text-align: center;" placeholder="" name = "staffUpCountRange">
                 </div>
 
             </div>
@@ -149,11 +149,11 @@ if (isset($_POST['backButton'])) {
 
             <div class="col-sm-5">
 
-                <input type="text" class="col-sm-3" style="text-align: center;" placeholder="" name ="lowTotalVisitRange">
+                <input type="number" class="col-sm-3" style="text-align: center;" placeholder="" name ="lowTotalVisitRange">
 
                 <label> -- </label>
 
-                <input type="text" class="col-sm-3" style="text-align: center;" placeholder="" name = "upTotalVisitRange">
+                <input type="number" class="col-sm-3" style="text-align: center;" placeholder="" name = "upTotalVisitRange">
             </div>
             <div class="row">
 
@@ -162,11 +162,11 @@ if (isset($_POST['backButton'])) {
             </div>
             <div class="col-sm-5">
 
-                <input type="text" class="col-sm-3" style="text-align: center;" placeholder="" name = "lowRevRange">
+                <input type="number" class="col-sm-3" style="text-align: center;" placeholder="" name = "lowRevRange">
 
                 <label> -- </label>
 
-                <input type="text" class="col-sm-3" style="text-align: center;" placeholder="" name = "upRevRange">
+                <input type="number" class="col-sm-3" style="text-align: center;" placeholder="" name = "upRevRange">
             </div>
 
         </div>
@@ -212,16 +212,22 @@ if (isset($_POST['backButton'])) {
                         $startDate = $_POST['startDate'];
                     }
 
+                    if (empty($_POST['endDate'])) {
+                        $endDate = "9999-00-00";
+                    } else {
+                        $endDate = $_POST['endDate'];
+                    }
+
                     if (empty($_POST['eventLowCountRange'])) {
                         $eventLowCountRange = 0;
                     } else {
-                        $lowCountRange = $_POST['eventLowCountRange'];
+                        $eventLowCountRange = $_POST['eventLowCountRange'];
                     }
 
-                    if (empty($_POST['"eventUpCountRange "'])) {
+                    if (empty($_POST['"eventUpCountRange"'])) {
                         $eventUpCountRange = 9223372036854775807;
                     } else {
-                        $eventUpCountRange  = $_POST['"eventUpCountRange "'];
+                        $eventUpCountRange  = $_POST['"eventUpCountRange"'];
                     }
 
                     if (empty($_POST['staffLowCountRange'])) {
@@ -255,7 +261,7 @@ if (isset($_POST['backButton'])) {
                     }
 
                     if (empty($_POST['upRevRange'])) {
-                        $upRevRange = 0;
+                        $upRevRange = 9223372036854775807;
                     } else {
                         $upRevRange = $_POST['upRevRange'];
                     }
@@ -271,14 +277,24 @@ if (isset($_POST['backButton'])) {
                     echo '<script>console.log("low rev range' . $lowRevRange . '")</script>';
                     echo '<script>console.log("uprevrange' . $upRevRange . '")</script>';
 
-                    $result = $conn->query("");
+                    $result = $conn->query("SELECT dates.day, coalesce(events.eventCount, 0) as eventCount, coalesce(staff.staffCount, 0) as staffCount, coalesce(totalVisits.totalVisits, 0) as totalVisits, coalesce(totalRevenue.totalRevenue, 0) as totalRevenue from
+                                        (select * from dates) as dates left join
+                                        (select day,count(eventName) as eventCount from event left join dates on dates.day between event.startDate and event.endDate group by day order by day) as events on dates.day = events.day left join
+                                        (select dates.day, event.eventName, count(staffUsername) as staffCount from assignTo left join event on assignTo.eventName = event.eventName and assignTo.startDate = event.startDate and assignTo.siteName = event.siteName left join dates on dates.day between event.startDate and event.endDate group by day order by day) as staff on dates.day = staff.day left join
+                                        (select dates.day, count(visitorUsername) as totalVisits from dates left join visitevent on dates.day = visitevent.visitEventDate group by day order by day) as totalVisits on dates.day = totalVisits.day left join
+                                        (select day, sum(eventPrice) as totalRevenue from dates left join visitevent on dates.day = visitevent.visitEventDate left join event on visitevent.eventName = event.eventName and visitevent.startDate = event.startDate and visitevent.siteName = event.siteName group by day order by day) as totalRevenue on totalRevenue.day = dates.day
+                                        where dates.day between '$startDate' and '$endDate'
+                                        and coalesce(events.eventCount, 0) between $eventLowCountRange and $eventUpCountRange
+                                        and coalesce(staff.staffCount, 0) between $staffLowCountRange and $staffUpCountRange
+                                        and coalesce(totalVisits.totalVisits, 0) between $lowTotalVisitRange and $upTotalVisitRange
+                                        and coalesce(totalRevenue.totalRevenue, 0) between $lowRevRange and $upRevRange;");
 
 
                     while ($row = $result->fetch()) {
 
                             echo "<tr>";
 
-                            echo "<td style='text-align:center'>" . $row['date'] . "</td>";
+                            echo "<td style='text-align:center'>" . $row['day'] . "</td>";
                             echo "<td style='text-align:center'>" . $row['eventCount'] . "</td>";
                             echo "<td style='text-align:center'>" . $row['staffCount'] . "</td>";
                             echo "<td style='text-align:center'>" . $row['totalVisits'] . "</td>";
@@ -289,13 +305,19 @@ if (isset($_POST['backButton'])) {
                     #default table
                  }  else {
 
-                     $result = $conn->query("");
+                     $result = $conn->query("SELECT dates.day, coalesce(events.eventCount, 0) as eventCount, coalesce(staff.staffCount, 0) as staffCount, coalesce(totalVisits.totalVisits, 0) as totalVisits, coalesce(totalRevenue.totalRevenue, 0) as totalRevenue from
+                                            (select * from dates) as dates left join
+                                            (select day,count(eventName) as eventCount from event left join dates on dates.day between event.startDate and event.endDate group by day order by day) as events on dates.day = events.day left join
+                                            (select dates.day, event.eventName, count(staffUsername) as staffCount from assignTo left join event on assignTo.eventName = event.eventName and assignTo.startDate = event.startDate and assignTo.siteName = event.siteName left join dates on dates.day between event.startDate and event.endDate group by day order by day) as staff on dates.day = staff.day left join
+                                            (select dates.day, count(visitorUsername) as totalVisits from dates left join visitevent on dates.day = visitevent.visitEventDate group by day order by day) as totalVisits on dates.day = totalVisits.day left join
+                                            (select day, sum(eventPrice) as totalRevenue from dates left join visitevent on dates.day = visitevent.visitEventDate left join event on visitevent.eventName = event.eventName and visitevent.startDate = event.startDate and visitevent.siteName = event.siteName group by day order by day) as totalRevenue on totalRevenue.day = dates.day
+;");
 
                         while ($row = $result->fetch()) {
 
                             echo "<tr>";
 
-                            echo "<td style='text-align:center'>" . $row['date'] . "</td>";
+                            echo "<td style='text-align:center'>" . $row['day'] . "</td>";
                             echo "<td style='text-align:center'>" . $row['eventCount'] . "</td>";
                             echo "<td style='text-align:center'>" . $row['staffCount'] . "</td>";
                             echo "<td style='text-align:center'>" . $row['totalVisits'] . "</td>";
