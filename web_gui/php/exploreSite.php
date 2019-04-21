@@ -39,14 +39,14 @@ if (isset($_POST['filterButton'])) {
 }
 
 if (isset($_POST['siteDetailButton'])) {
-   echo '<script>console.log("%cSuccessful Detail Button Push", "color:blue")</script>'; 
+   echo '<script>console.log("%cSuccessful Detail Button Push", "color:blue")</script>';
    if (isset($_POST['optRadio'])) {
         $data = explode("_", $_POST['optRadio']);
 
 
-    
-    
-    
+
+
+
 }
 }
 
@@ -88,7 +88,7 @@ if (isset($_POST['backButton'])) {
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <meta http-equiv="refresh" content="3">
+
 
     <link rel="stylesheet" href="..\css\_universalStyling.css">
 
@@ -154,11 +154,11 @@ if (isset($_POST['backButton'])) {
                     </div>
                     <div class="col-sm-5">
 
-                        <input type="text" class="col-sm-4" style="text-align: center;" placeholder="" name = "lowtTotalVisitsRange">
+                        <input type="number" class="col-sm-4" style="text-align: center;" placeholder="" name = "lowtTotalVisitsRange">
 
                         <label> -- </label>
 
-                        <input type="text" class="col-sm-4" style="text-align: center;" placeholder="" name ="upTotalVisitsRange">
+                        <input type="number" class="col-sm-4" style="text-align: center;" placeholder="" name ="upTotalVisitsRange">
                     </div>
 
                     <div class="row">
@@ -167,11 +167,11 @@ if (isset($_POST['backButton'])) {
                     </div>
                     <div class="col-sm-5">
 
-                        <input type="text" class="col-sm-4" style="text-align: center;" placeholder="" name ="lowEventCountRange">
+                        <input type="number" class="col-sm-4" style="text-align: center;" placeholder="" name ="lowEventCountRange">
 
                         <label> -- </label>
 
-                        <input type="text" class="col-sm-4" style="text-align: center;" placeholder="" name = "upEventCountRange">
+                        <input type="number" class="col-sm-4" style="text-align: center;" placeholder="" name = "upEventCountRange">
                     </div>
 
                 </div>
@@ -226,6 +226,8 @@ if (isset($_POST['backButton'])) {
             <?php
             if (($_SESSION['exploreSiteFilter']) == TRUE) {
 
+                $username =  $_SESSION["userName"];
+
                 if ($_POST['siteName'] == "ALL") {
                             $siteName = "%%";
 
@@ -255,7 +257,7 @@ if (isset($_POST['backButton'])) {
                 if (empty($_POST['"lowtTotalVisitsRange"'])) {
                     $lowtTotalVisitsRange = 0;
                 } else {
-                    $lowtTotalVisitsRange = $_POST['lowTotalVisitsRangetDate'];
+                    $lowtTotalVisitsRange = $_POST['lowtTotalVisitsRange'];
                 }
 
                 if (empty($_POST['upTotalVisitsRange'])) {
@@ -275,8 +277,52 @@ if (isset($_POST['backButton'])) {
                     $upEventCountRange = $_POST['upEventCountRange'];
                 }
 
-               
+               $openEveryday = $_POST['openEveryday'];
 
+
+
+               echo '<script>console.log("userName Input: ' . $username . '")</script>';
+               echo '<script>console.log("SiteName Input: ' . $siteName . '")</script>';
+               echo '<script>console.log("DEscription Input: ' . $descriptionKeyword . '")</script>';
+               echo '<script>console.log("stateDate Input: ' . $startDate . '")</script>';
+               echo '<script>console.log("endDate Input: ' . $endDate. '")</script>';
+               echo '<script>console.log("lowTotalVisitRange Input: ' . $lowtTotalVisitsRange . '")</script>';
+               echo '<script>console.log("upTotalVisitRange Input: ' . $upTotalVisitsRange . '")</script>';
+               echo '<script>console.log("upEvent Input: ' . $upEventCountRange . '")</script>';
+               echo '<script>console.log("LowEvent Input: ' . $lowEventCountRange . '")</script>';
+
+
+
+                $result = $conn->query("SELECT sites.siteName, eventCount.eventCount, totalVisits.totalVisits, coalesce(myVisits.myVisits + siteVisits.siteVisits, myVisits.myVisits, siteVisits.siteVisits, 0) as myVisits from
+                                        (select siteName from site
+                                        where openEveryday like '$openEveryday' group by siteName) as sites left join
+                                        (select siteName, count(visitorUsername) as totalVisits from visitevent
+                                        where visitEventDate between $lowtTotalVisitsRange and $upTotalVisitsRange group by siteName) as totalVisits on sites.siteName = totalVisits.siteName left join
+                                        (select siteName, count(visitorUsername) as myVisits from visitevent
+                                        where visitorUsername = '$username' and visitEventDate between $lowtTotalVisitsRange and $upTotalVisitsRange group by siteName) as myVisits on sites.siteName = myVisits.siteName left join
+                                        (select siteName, count(eventName) as eventCount from event
+                                        where (startDate between '$startDate' and '$endDate' or endDate between '$startDate' and '$endDate') group by siteName) as eventCount on sites.siteName = eventCount.siteName left join
+                                        (select *, count(*) as siteVisits from visitSite
+                                        where visitorUsername = '$username' and visitSiteDate between '$startDate' and '$endDate' group by siteName) as siteVisits on siteVisits.siteName = sites.siteName
+                                        where sites.siteName like '$siteName'
+                                        AND eventCount.eventCount between $lowEventCountRange and $upEventCountRange
+                                        group by sites.siteName, eventCount.eventCount, totalVisits.totalVisits;");
+
+
+
+
+                while ($row = $result->fetch()) {
+                echo "<tr>";
+                echo    "<td style='padding-left:2.4em;'>
+                            <div class='radio'>
+                            <label><input type='radio' id='express' name='optRadio' value ='value'>" . $row['siteName'] . "</label>
+                            </div>
+                            </td>";
+
+                echo "<td style='text-align:center'> " . $row['eventCount'] . "</td>";
+                echo "<td style='text-align:center'> " . $row['totalVisits'] . "</td>";
+                echo "<td style='text-align:center'> " . $row['myVisits'] . "</td>";
+            }
 
 
             }else{
@@ -289,20 +335,20 @@ if (isset($_POST['backButton'])) {
                 (select *, count(*) as siteVisits from visitSite where visitorUsername = 'mary.smith' and visitSiteDate between '0000-00-00' and '9999-12-12' group by siteName) as siteVisits on siteVisits.siteName = sites.siteName
                 group by sites.siteName, eventCount.eventCount, totalVisits.totalVisits;");
                 while ($row = $result->fetch()) {
-                    
-                    
+
+
                     echo "<tr>";
                     echo    "<td style='padding-left:2.4em;'>
                                 <div class='radio'>
                                 <label><input type='radio' id='express' name='optRadio' value ='value'>" . $row['siteName'] . "</label>
                                 </div>
                                 </td>";
-                   
+
                     echo "<td style='text-align:center'> " . $row['eventCount'] . "</td>";
                     echo "<td style='text-align:center'> " . $row['totalVisits'] . "</td>";
-                    echo "<td style='text-align:center'> $ " . $row['myVisits'] . ".00</td>";
+                    echo "<td style='text-align:center'> " . $row['myVisits'] . "</td>";
                 }
-                                
+
 
 
             }
