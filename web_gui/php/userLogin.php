@@ -43,9 +43,9 @@ if (isset($_POST['submit'])  && !empty($_POST['email']) && !empty($_POST['passwo
 
         $userStatus = $row["Status"];
 
-        if(strpos($userStatus, "Approved") !== false) {
+        if (strpos($userStatus, "Approved") !== false) {
 
-        $_SESSION["logged_in"] = true;
+            $_SESSION["logged_in"] = true;
 
             echo '<script>console.log("%cSuccessful Login", "color:green")</script>';
 
@@ -86,7 +86,7 @@ if (isset($_POST['submit'])  && !empty($_POST['email']) && !empty($_POST['passwo
                     }
                 } else {
                     echo '<script>console.log("%cUser is EMPLOYEE, BUT they are not in the EMPLOYEE TABLE", "color:red")</script>';;
-                    }
+                }
             } else if (strpos($userType, "Employee") === false && strpos($userType, "Visitor") !== false) {
                 echo '<script>console.log("%cUser is ONLY a VISITOR", "color:blue")</script>';
                 header('Location: http://localhost/web_gui/php/visitorFunctionality.php');
@@ -133,9 +133,9 @@ if (isset($_POST['submit'])  && !empty($_POST['email']) && !empty($_POST['passwo
             }
         } else {
             echo '<script>console.log("%cINVALID username/password", "color:red")</script>';
-        echo '<script language="javascript">';
-        echo 'alert("User status is still pending/declined")';
-        echo '</script>';
+            echo '<script language="javascript">';
+            echo 'alert("User status is still pending/declined")';
+            echo '</script>';
         }
     } else {
         echo '<script>console.log("%cINVALID username/password", "color:red")</script>';
