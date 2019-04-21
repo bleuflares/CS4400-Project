@@ -79,23 +79,63 @@ if (isset($_POST['view_editButton'])) {
     $userType  = $_SESSION["userType"];
     echo '<script>console.log("Input: ' . $_SESSION["user_employeeType"] . '")</script>';
 
-    if (strpos($_SESSION["user_employeeType"], "Manager") !== false) {
 
+    if (strpos($userType, "Employee") !== false && strpos($userType, "Visitor") === false) {
+        echo '<script>console.log("%cUser is EMPLOYEE", "color:blue")</script>';
 
-        if (isset($_POST['optRadio'])) {
-            $data = explode("_", $_POST['optRadio']);
+        if (strpos($_SESSION["user_employeeType"], "Manager") !== false) {
 
-            echo '<script>console.log("Input: ' . $_POST['optRadio'] . '")</script>';
-            echo '<script>console.log("Input: ' . $data[1] . '")</script>';
+            if (isset($_POST['optRadio'])) {
+                $data = explode("_", $_POST['optRadio']);
+
+                // echo '<script>console.log("Input: ' . $_POST['optRadio'] . '")</script>';
+                // echo '<script>console.log("Input: ' . $data[1] . '")</script>';
+
+                $_SESSION['manageEvent_eventName'] = $data[0];
+                $_SESSION['manageEvent_eventStartDate'] = $data[1];
+
+                echo '<script>console.log("%cDate: ' . $data[1] . '", "color:green")</script>';
+
+                header('Location: http://localhost/web_gui/php/view_editEvent.php');
+                exit();
+            } else {
+                echo '<script language="javascript">';
+                echo 'alert("Cannot View/Edit Event if a specific event is not chosen.")';
+                echo '</script>';
+
+                echo '<script>console.log("%cCannot View/Edit Event if a specific event is not chosen.", "color:red")</script>';;
+            }
         } else {
-            echo '<script>console.log("%cCannot View/Edit Event if a specific event is not chosen.", "color:red")</script>';;
+            echo '<script>console.log("%cUser is EMPLOYEE, BUT they are NOT a Admin, Manager, or Staff", "color:red")</script>';;
         }
+    } else if (strpos($userType, "Employee") !== false && strpos($userType, "Visitor") !== false) {
+        echo '<script>console.log("%cUser is BOTH an EMPLOYEE and VISITOR", "color:blue")</script>';
 
+        if (strpos($_SESSION["user_employeeVisitorType"], "Manager") !== false) {
 
+            if (isset($_POST['optRadio'])) {
+                $data = explode("_", $_POST['optRadio']);
 
+                // echo '<script>console.log("Input: ' . $_POST['optRadio'] . '")</script>';
+                // echo '<script>console.log("Input: ' . $data[1] . '")</script>';
 
-        // header('Location: http://localhost/web_gui/php/view_editEvent.php');
-        // exit();
+                $_SESSION['manageEvent_eventName'] = $data[0];
+                $_SESSION['manageEvent_eventStartDate'] = $data[1];
+
+                echo '<script>console.log("%cDate: ' . $data[1] . '", "color:green")</script>';
+
+                header('Location: http://localhost/web_gui/php/view_editEvent.php');
+                exit();
+            } else {
+                echo '<script language="javascript">';
+                echo 'alert("Cannot View/Edit Event if a specific event is not chosen.")';
+                echo '</script>';
+
+                echo '<script>console.log("%cCannot View/Edit Event if a specific event is not chosen.", "color:red")</script>';;
+            }
+        } else {
+            echo '<script>console.log("%cUser is EMPLOYEE and VISITOR, BUT they are NOT a Admin, Manager, or Staff", "color:red")</script>';;
+        }
     } else {
         echo '<script>console.log("%cUser is not a manager, hence should not be on this page. Please logout.", "color:red")</script>';
     }
