@@ -30,6 +30,50 @@ if (isset($_POST['filterButton'])){
     echo '<script>console.log("%c View Schedule Filter Session variable set", "color:blue")</script>';
 
 }
+
+if (isset($_POST['viewEventButton'])){
+    echo '<script>console.log("%c View Event Button variable set", "color:blue")</script>';
+    if (isset($_POST['optRadio'])) {
+        $data = explode("_", $_POST['optRadio']);
+        echo '<script>console.log("eventName: ' . $_POST['optRadio'] . '")</script>';
+        echo '<script>console.log("EventName: ' . $data[0] . '")</script>';
+        echo '<script>console.log("siteName: ' . $data[1] . '")</script>';
+        echo '<script>console.log("StartDate: ' . $data[2] . '")</script>';
+        echo '<script>console.log("Enddate: ' . $data[3] . '")</script>';
+        echo '<script>console.log("StaffCount: ' . $data[4] . '")</script>';
+        echo '<script>console.log("duration: ' . $data[5] . '")</script>';
+        echo '<script>console.log("capacity: ' . $data[6] . '")</script>';
+        echo '<script>console.log("eventprice: ' . $data[7] . '")</script>';
+        echo '<script>console.log("description: ' . $data[8] . '")</script>';
+
+
+        $_SESSION["toEventDetail2eventName"]= $data[0];
+        $_SESSION["toEventDetail2siteName"]= $data[1];
+        $_SESSION["toEventDetail2startDate"]= $data[2];
+        $_SESSION["toEventDetail2endDate"]= $data[3];
+        $_SESSION["toEventDetail2staffCount"]= $data[4];
+        $_SESSION["toEventDetail2duration"]= $data[5];
+        $_SESSION["toEventDetail2capacity"]= $data[6];
+        $_SESSION["toEventDetail2EventPrice"]= $data[7];
+        $_SESSION["toEventDetail2EventDescription"]= $data[8];
+
+        header('Location: http://localhost/web_gui/php/staffEventDetail.php');
+             exit();
+    
+
+} else{
+    echo '<script>console.log("%cINVALID username/password", "color:red")</script>';
+        echo '<script language="javascript">';
+        echo 'alert("Must choose an  Event to view Event Details")';
+        echo '</script>';
+}
+
+
+}
+
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -111,9 +155,9 @@ if (isset($_POST['filterButton'])){
                     <button class="btn btn-sm btn-primary btn-block col-sm-0"
                         style="border-radius: 5px;" name="filterButton">Filter</button>
                 </div>
-                <div class="col-sm-0 offset-5">
-                    <input id="button" class="btn btn-sm btn-primary btn-block col-sm-" type="submit" name="button"
-                        onclick="myFunction();" value="View Event" />
+                <div class="col-sm-0 offset-2">
+                    <button class="btn btn-sm btn-primary btn-block col-sm-0"
+                        style="border-radius: 5px;" name="viewEventButton">View Event </button>
                 </div>
             </div>
 
@@ -177,7 +221,7 @@ if (isset($_POST['filterButton'])){
 
 
                     while ($row = $result->fetch()) {
-                        $value = $row['eventName'] . "_" . $row['startDate'];
+                        $value = $row['eventName'] . "_" . $row['siteName'] . "_" . $row['startDate'] . "_" . $row['endDate'] . "_" . $row['staffCount'] . "_" . $row['duration'] . "_" . $row['capacity'] . "_" . $row['eventPrice'] . "_" . $row['description'];
                         echo "<tr>";
                         echo    "<td style='padding-left:2.4em;'>
                                     <div class='radio'>
@@ -195,7 +239,7 @@ if (isset($_POST['filterButton'])){
                                                 event.startDate,
                                                 event.endDate,
                                                 count(assignTo.staffUsername) as staffCount,
-                                                datediff(event.EndDate, event.StartDate) as duration,
+                                                (event.EndDate - event.StartDate) as duration,
                                                 event.capacity,
                                                 event.eventPrice,
                                                 event.description
@@ -207,7 +251,7 @@ if (isset($_POST['filterButton'])){
                                         group by event.eventName,event.siteName,event.startDate, event.endDate;");
 
                     while ($row = $result->fetch()) {
-                        $value = $row['eventName'] . "_" . $row['siteName'] . "_" . $row['startDate'] . "_" . $row['endDate'] . "_" . $row['staffCount'] . "_" . $row['duration'] . "_" . $row['capacity'] . "_" . $row['eventPrice'] . "_" . $row['description'] . "_" . $row['name'];
+                        $value = $row['eventName'] . "_" . $row['siteName'] . "_" . $row['startDate'] . "_" . $row['endDate'] . "_" . $row['staffCount'] . "_" . $row['duration'] . "_" . $row['capacity'] . "_" . $row['eventPrice'] . "_" . $row['description'];
                         echo "<tr>";
                         echo    "<td style='padding-left:2.4em;'>
                                     <div class='radio'>

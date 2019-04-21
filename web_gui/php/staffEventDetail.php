@@ -1,6 +1,15 @@
 <?php
 // Start the session
 session_start();
+$eventName =$_SESSION["toEventDetail2eventName"];
+$siteName =$_SESSION["toEventDetail2siteName"];
+$startDate = $_SESSION["toEventDetail2startDate"];
+$endDate = $_SESSION["toEventDetail2endDate"];
+$staffCount = $_SESSION["toEventDetail2staffCount"];
+$duration =$_SESSION["toEventDetail2duration"];
+$capacity =$_SESSION["toEventDetail2capacity"];
+$eventPrice =$_SESSION["toEventDetail2EventPrice"];
+$eventDescription= $_SESSION["toEventDetail2EventDescription"];
 
 // if (!$_SESSION["logged_in"]) {
 //     header("Location: http://localhost/web_gui/php/userLogin.php");
@@ -83,18 +92,12 @@ try {
 
         <div class="container">
 
-            <div class="row">
-                <!-- <div class="col-sm-6">
-                    <label>First Name</label>
-                    <?php
-                    echo '<input type="text" class="col-sm-6" style="padding: 0; margin-left: 2em;" value="' . $row['Firstname'] . '">';
-                    ?>
-                </div> -->
+        
 
                 <div class="col-sm-6">
                     <label>Event</label>
                     <?php
-                    echo '<span style="font-weight: 600; margin-left: 2.25em;">' . $row['Username'] . '</span>';
+                    echo '<span style="font-weight: 600; margin-left: 2.25em;">' . $eventName . '</span>';
                     ?>
                 </div>
 
@@ -108,7 +111,7 @@ try {
                 <div class="col-sm-6">
                     <label>Site</label>
                     <?php
-                    echo '<span style="font-weight: 600; margin-left: 2.25em;">' . $row['Username'] . '</span>';
+                    echo '<span style="font-weight: 600; margin-left: 2.25em;">' . $siteName . '</span>';
                     ?>
                 </div>
             </div>
@@ -117,7 +120,7 @@ try {
                 <div class="col-sm-4">
                     <label>Start Date</label>
                     <?php
-                    echo '<span style="font-weight: 600; margin-left: 2.25em;">' . $row['Username'] . '</span>';
+                    echo '<span style="font-weight: 600; margin-left: 2.25em;">' . $startDate . '</span>';
                     ?>
                 </div>
 
@@ -125,7 +128,7 @@ try {
                     <label>End Date</label>
                     <?php
                     if ($siteRow) {
-                        echo '<span style="font-weight: 600; margin-left: 2.25em;">' .  $siteRow['SiteName'] . '</span>';
+                        echo '<span style="font-weight: 600; margin-left: 2.25em;">' .  $endDate . '</span>';
                     } else {
                         echo '<span style="font-weight: 600; margin-left: 2.25em;">N/a</span>';
                     }
@@ -135,7 +138,7 @@ try {
                 <div class="col-sm-4">
                     <label>Duration Days</label>
                     <?php
-                    echo '<span style="font-weight: 600; margin-left: 2.25em;">' . $row['Username'] . '</span>';
+                    echo '<span style="font-weight: 600; margin-left: 2.25em;">' . $duration . '</span>';
                     ?>
                 </div>
             </div>
@@ -145,21 +148,21 @@ try {
                 <div class="col-sm-4">
                     <label>Staff Assigned</label>
                     <?php
-                    echo '<span style="font-weight: 600; margin-left: 1.15em;">' . $row['EmployeeID'] . '</span>'
+                    echo '<span style="font-weight: 600; margin-left: 1.15em;">' . $staffCount . '</span>'
                     ?>
                 </div>
 
                 <div class="col-sm-4">
                     <label>Capacity</label>
                     <?php
-                    echo '<span style="font-weight: 600; margin-left: 2.25em;">' . $row['Username'] . '</span>';
+                    echo '<span style="font-weight: 600; margin-left: 2.25em;">' . $capacity . '</span>';
                     ?>
                 </div>
 
                 <div class="col-sm-4">
                     <label>Price</label>
                     <?php
-                    echo '<span style="font-weight: 600; margin-left: 2.25em;">' . $row['Username'] . '</span>';
+                    echo '<span style="font-weight: 600; margin-left: 2.25em;">' . $eventPrice. '</span>';
                     ?>
                 </div>
             </div>
@@ -168,13 +171,9 @@ try {
                 <div class="col-sm-9">
                     <label>Description</label>
                     <?php
-                    echo '<span style="font-weight: 600; margin-left: 3.15em;">'
-                        . $row['EmployeeAddress'] . ', '
-                        . $row['EmployeeCity'] . ', '
-                        . $row['EmployeeState'] . ' '
-                        . $row['EmployeeZipcode'] .
-                        '</span>'
+                    echo '<span style="font-weight: 600; margin-left: 2.25em;">' . $eventDescription . '</span>';
                     ?>
+                
                 </div>
             </div>
 
