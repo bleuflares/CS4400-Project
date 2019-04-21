@@ -40,13 +40,13 @@ if (isset($_POST['visitDateButton'])) {
     $result = $conn->query("SELECT endDate from event where siteName = '$siteName' AND eventName = '$eventName' AND startDate = '$startDate';");
     while ($row = $result->fetch()) {
         $endDate = $row['endDate'];
-    
+
     }
 
     echo '<script>console.log("eventName: ' . $startDate . '")</script>';
     echo '<script>console.log("eventName: ' . $endDate . '")</script>';
     echo '<script>console.log("eventName: ' . $actualDateVisited . '")</script>';
-    
+
     // $conn->query("INSERT into visitevent values ('$username', '$eventName', '$startDate' ,'$siteName' , '$actualDateVisited');");
 
 
@@ -110,13 +110,13 @@ if (isset($_POST['backButton'])) {
 <body>
 
     <?php
-    $result = $conn->query("select  e.*, u.Password, 
-                                            u.Status, 
-                                            u.Firstname, 
-                                            u.Lastname, 
-                                            u.UserType 
-                                    from employee e inner join user u 
-                                    on e.Username = u.Username 
+    $result = $conn->query("select  e.*, u.Password,
+                                            u.Status,
+                                            u.Firstname,
+                                            u.Lastname,
+                                            u.UserType
+                                    from employee e inner join user u
+                                    on e.Username = u.Username
                                     where u.Username = '" . $_SESSION["userName"] . "';");
 
     $row = $result->fetch();
@@ -139,7 +139,7 @@ if (isset($_POST['backButton'])) {
         <div class="container">
 
             <div class="row">
-               
+
 
                 <div class="col-sm-6">
                     <label>Event</label>
@@ -216,9 +216,9 @@ if (isset($_POST['backButton'])) {
             <div class="form-row">
                 <div class="col-sm-6">
                     <label>Visit Date</label>
-                    
-                    '<input type="date" class="col-sm-6" style="padding: 0; margin-left: 3.85em;" name ="actualDateVisited">
-                    
+
+                    <input type="date" class="col-sm-6" style="padding: 0; margin-left: 3.85em;" name ="actualDateVisited">
+
                 </div>
                 <div class="form-group row col-sm-6 ">
                     <button type="submit" class="btn btn-primary" id="registerButton"

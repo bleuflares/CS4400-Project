@@ -38,9 +38,9 @@ if (isset($_POST['siteDetailButton'])) {
         // $_SESSION["toEventDetailStartDate"]= $data[2];
         // $_SESSION["toEventDetailEndDate"]= $data[3];
 
-        
-    // header('Location: http://localhost/web_gui/php/visitorEventDetail.php');
-    //      exit();
+
+     header('Location: http://localhost/web_gui/php/siteDetail.php');
+          exit();
     } else {
         echo '<script>console.log("%cINVALID username/password", "color:red")</script>';
     echo '<script language="javascript">';
@@ -48,7 +48,7 @@ if (isset($_POST['siteDetailButton'])) {
     echo '</script>';
     }
 
-   
+
 
 }
 
@@ -65,12 +65,12 @@ if (isset($_POST['siteTransitButton'])) {
         $_SESSION["exploreSiteTransitName"]= $data[0];
         $test =$_SESSION["exploreSiteTransitName"];
         echo '<script>console.log("Transit ' . $test . '")</script>';
-        
+
         // $_SESSION["toEventDetailSiteName"]= $data[1];
         // $_SESSION["toEventDetailStartDate"]= $data[2];
         // $_SESSION["toEventDetailEndDate"]= $data[3];
 
-        
+
     // header('Location: http://localhost/web_gui/php/visitorEventDetail.php');
     //      exit();
     } else {
@@ -80,7 +80,7 @@ if (isset($_POST['siteTransitButton'])) {
     echo '</script>';
     }
 
-   
+
 
 }
 
