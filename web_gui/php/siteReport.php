@@ -166,7 +166,7 @@ if (isset($_POST['backButton'])) {
 
                 <label> -- </label>
 
-                <input type="text" class="col-sm-3" style="text-align: center;" placeholder=""name = "upRevRange">
+                <input type="text" class="col-sm-3" style="text-align: center;" placeholder="" name = "upRevRange">
             </div>
 
         </div>
@@ -175,7 +175,7 @@ if (isset($_POST['backButton'])) {
         <div class="row col-sm-12">
 
             <div class="col-sm-0 offset-2">
-                <button class="btn btn-sm btn-primary btn-block col-sm-0" style="border-radius: 5px;" nzmd = "filterButton">Filter</button>
+                <button class="btn btn-sm btn-primary btn-block col-sm-0" style="border-radius: 5px;" name = "filterButton">Filter</button>
             </div>
 
             <div class="col-sm-0 offset-7">
@@ -201,10 +201,11 @@ if (isset($_POST['backButton'])) {
             <tbody>
                 <?php
                 #filter statement
-                if ($_SESSION['siteReportFilterButton'] == True) {
+                if ($_SESSION['staffReportFilterButton'] == True) {
+
                     echo '<script>console.log("%cSuccessful Filter", "color:blue")</script>';
 
-                    
+
                     if (empty($_POST['startDate'])) {
                         $startDate = "0000-00-00";
                     } else {
@@ -216,7 +217,7 @@ if (isset($_POST['backButton'])) {
                     } else {
                         $lowCountRange = $_POST['eventLowCountRange'];
                     }
-                    
+
                     if (empty($_POST['"eventUpCountRange "'])) {
                         $eventUpCountRange = 9223372036854775807;
                     } else {
@@ -269,17 +270,7 @@ if (isset($_POST['backButton'])) {
                     echo '<script>console.log("up total visit range' . $upTotalVisitRange . '")</script>';
                     echo '<script>console.log("low rev range' . $lowRevRange . '")</script>';
                     echo '<script>console.log("uprevrange' . $upRevRange . '")</script>';
-                    
 
-
-
-
-                    
-
-                    
-
-                    
-                    
                     $result = $conn->query("");
 
 
@@ -300,7 +291,6 @@ if (isset($_POST['backButton'])) {
 
                      $result = $conn->query("");
 
-
                         while ($row = $result->fetch()) {
 
                             echo "<tr>";
@@ -314,8 +304,8 @@ if (isset($_POST['backButton'])) {
                         }
 
 
- 
-                    
+
+
                 }
                 ?>
 

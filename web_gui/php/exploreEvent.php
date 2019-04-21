@@ -46,15 +46,38 @@ if (isset($_POST['eventDetail'])) {
             $data = explode("_", $_POST['optRadio']);
 
             echo '<script>console.log("Input: ' . $_POST['optRadio'] . '")</script>';
+            echo '<script>console.log("eventName: ' . $data[0] . '")</script>';
             echo '<script>console.log("siteName: ' . $data[1] . '")</script>';
+            echo '<script>console.log("startDate: ' . $data[2] . '")</script>';
+            echo '<script>console.log("endDate: ' . $data[3] . '")</script>';
+            echo '<script>console.log("eventPrice: ' . $data[4] . '")</script>';
+            echo '<script>console.log("tix remaining: ' . $data[5] . '")</script>';
+            echo '<script>console.log("tix remaining: ' . $data[6] . '")</script>';
+
+
+            $_SESSION["toEventDetailEventName"]= $data[0];
+            $_SESSION["toEventDetailSiteName"]= $data[1];
+            $_SESSION["toEventDetailStartDate"]= $data[2];
+            $_SESSION["toEventDetailEndDate"]= $data[3];
+            $_SESSION["toEventDetailEEventPrice"]= $data[4];
+            $_SESSION["toEventDetailTixRemaining"]= $data[5];
+            $_SESSION["toEventDetailEventDecription"]= $data[6];
+            
+        header('Location: http://localhost/web_gui/php/visitorEventDetail.php');
+             exit();
         } else {
-            echo '<script>console.log("%cCannot View/Edit Event if a specific event is not chosen.", "color:red")</script>';;
+            echo '<script>console.log("%cINVALID username/password", "color:red")</script>';
+        echo '<script language="javascript">';
+        echo 'alert("Must choose and Event to view Event Details")';
+        echo '</script>';
         }
 
-        // header('Location: http://localhost/web_gui/php/view_editEvent.php');
-             // exit();
-    
+       
+   
 }
+
+
+
 
 if (isset($_POST['backButton'])) {
 
@@ -374,7 +397,7 @@ if (isset($_POST['backButton'])) {
 
 
                     else {$result = $conn->query("SELECT event.eventName, event.siteName, event.eventPrice, event.capacity - count(a.visitorUsername) as ticketsRemaining,
-                                        count(a.visitorUsername) as totalVisits, count(b.visitorUsername) as myVisits
+                                        count(a.visitorUsername) as totalVisits, count(b.visitorUsername) as myVisits,event.startDate,event.endDate, event.description
                                         from event 
                                         left join visitevent as a on event.eventName = a.eventName 
                                         and event.siteName = a.siteName
@@ -394,11 +417,12 @@ if (isset($_POST['backButton'])) {
                     }
                  
                     while ($row = $result->fetch()) {
+                        $value = $row['eventName'] . "_" . $row['siteName']. "_" . $row['startDate']. "_" . $row['endDate'] . "_" . $row['eventPrice']. "_" . $row['ticketsRemaining']. "_" . $row['event.description'];
                         $eventName = $row['eventName'];
                         echo "<tr>";
                         echo    "<td style='padding-left:2.4em;'>
                         <div class='radio'>
-                        <label><input type='radio' id='express' name='optRadio' value ='$eventName'>" . $row['eventName'] . "</label>
+                        <label><input type='radio' id='express' name='optRadio' value ='$value'>" . $row['eventName'] . "</label>
                         </div>
                         </td>";
     
@@ -417,7 +441,7 @@ if (isset($_POST['backButton'])) {
                     
 
                     $result = $conn->query("SELECT event.eventName, event.siteName, event.eventPrice, event.capacity - count(a.visitorUsername) as ticketsRemaining,
-                    count(a.visitorUsername) as totalVisits, count(b.visitorUsername) as myVisits
+                    count(a.visitorUsername) as totalVisits, count(b.visitorUsername) as myVisits,event.startDate,event.endDate, event.description
                     from event 
                     left join visitevent as a on event.eventName = a.eventName 
                     and event.siteName = a.siteName
@@ -432,12 +456,13 @@ if (isset($_POST['backButton'])) {
                 
                 while ($row = $result->fetch()) {
                     $eventName = $row['eventName'];
+                    $value = $row['eventName'] . "_" . $row['siteName']. "_" . $row['startDate']. "_" . $row['endDate'] . "_" . $row['eventPrice']. "_" . $row['ticketsRemaining']. "_" . $row['description'];
                     
 
                     echo "<tr>";
                     echo    "<td style='padding-left:2.4em;'>
                     <div class='radio'>
-                    <label><input type='radio' id='express' name='optRadio'  value ='$eventName'>" . $row['eventName'] . "</label>
+                    <label><input type='radio' id='express' name='optRadio'  value ='$value'>" . $row['eventName'] . "</label>
                     </div>
                     </td>";
                     
