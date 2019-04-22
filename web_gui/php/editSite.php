@@ -42,7 +42,7 @@ if (isset($_POST['backButton'])) {
 
 if (isset($_SESSION['manageSite_siteName'])){
     $siteName = $_SESSION['manageSite_siteName'];
-    
+
     $result = $conn->query("SELECT siteName, siteAddress, siteZipcode,openEveryday, managerUsername, concat(firstname, ' ', lastname) AS name  from site s
         inner join user u
         on s.managerUsername = u.userName
@@ -63,7 +63,7 @@ if (isset($_SESSION['manageSite_siteName'])){
 ?>
 
 
-<?php 
+<?php
 
 if (isset($_POST['updateButton'])){
      echo '<script>console.log("%cSuccessful  Push", "color:blue")</script>';
@@ -79,50 +79,54 @@ if (isset($_POST['updateButton'])){
      $siteManagerName2 = $_POST['siteManagerName'];
 
      $openEveryday2 =  $_POST['openEveryday'];
-     
+
      $result = $conn->query("SELECT username from user u where concat(firstname, ' ', lastname)='$siteManagerName2';");
 
      if ($result->rowCount() > 0) {
          while ($row = $result->fetch()) {
              $username2 = $row['username'];
             }
-    
+
          echo '<script>console.log("siteName Input: ' . $siteName . '")</script>';
          echo '<script>console.log("siteName Input: ' . $siteName2 . '")</script>';
-    
-    
+
+
          echo '<script>console.log("siteZipcodeO Input: ' . $siteZipCode     . '")</script>';
          echo '<script>console.log("siteZipcodeO Input: ' . $siteZipCode2     . '")</script>';
-    
-    
+
+
          echo '<script>console.log("siteAddressO Input: ' . $siteAddress     . '")</script>';
           echo '<script>console.log("siteAddressO Input: ' . $siteAddress2     . '")</script>';
-    
-    
-    
-    
-    
+
+
+
+
+
          echo '<script>console.log("openEverydayO Input: ' . $openEveryday     . '")</script>';
          echo '<script>console.log("openEverydayO Input: ' . $openEveryday2     . '")</script>';
-    
-    
+
+
          echo '<script>console.log("managerUsernameO Input: ' . $managerUsername   . '")</script>';
          echo '<script>console.log("managerUsernameO Input: ' . $username2   . '")</script>';
 
          $testIfSiteNameExistResult = $conn->query("SELECT * from site WHERE sitename = '$siteName2';");
 
-         if($testIfSiteNameExistResult->rowCount() == 0) {
-             
-             $result = $conn->query("UPDATE site 
-                                     SET SiteName = '$siteName2', SiteAddress = '$siteAddress2' , SiteZipCode = $siteZipCode2, OpenEveryday = '$openEveryday2' , ManagerUsername = '$username2' 
+         $testSiteRow = $testIfSiteNameExistResult->fetch();
+
+         echo '<script>console.log("managerUsernameO Input: ' . $testSiteRow['siteName']   . '")</script>';
+
+         if($testIfSiteNameExistResult->rowCount() == 0 || $testSiteRow['siteName'] == $siteName) {
+
+             $result = $conn->query("UPDATE site
+                                     SET SiteName = '$siteName2', SiteAddress = '$siteAddress2' , SiteZipCode = $siteZipCode2, OpenEveryday = '$openEveryday2' , ManagerUsername = '$username2'
                                      WHERE SiteName ='$siteName';");
-        
+
             $siteName = $siteName2;
             $siteZipCode = $siteZipCode2;
             $siteAddress = $siteAddress2;
             $openEveryday = $openEveryday2;
             $managerUsername = $username2;
-    
+
             $newNameResult = $conn->query("SELECT siteName, siteAddress, siteZipcode,openEveryday, managerUsername, concat(firstname, ' ', lastname) AS name  from site s
                     inner join user u
                     on s.managerUsername = u.userName
@@ -134,7 +138,7 @@ if (isset($_POST['updateButton'])){
             echo 'alert("Cannot edit site to have the same site name as another site. Please try again.")';
             echo '</script>';
          }
-    
+
 
      } else {
         echo '<script language="javascript">';
@@ -225,9 +229,9 @@ if (isset($_POST['updateButton'])){
                         //                         where managerUsername != '$managerUsername'");
 
                         // List of managers who are not managing any sites.
-                        $result = $conn->query("SELECT concat(firstname, ' ', lastname) AS name 
-                                                from user as u inner join employee as e on u.username = e.username 
-                                                where employeeType = 'Manager' and e.username not in (select managerUsername from site);");
+                        $result = $conn->query("SELECT concat(firstname, ' ', lastname) AS name
+                                                from user as u inner join employee as e on u.username = e.username
+                                                where employeeType = 'Manager' and e.username not in (select managerUsername from site) and status = 'Approved';");
 
                         while ($row = $result->fetch()) {
                             echo "<option>" . $row['name'] . "</option>";
