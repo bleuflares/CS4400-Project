@@ -72,6 +72,15 @@ if (isset($_POST['submit'])  && !empty($_POST['email']) && !empty($_POST['passwo
                     $_SESSION["user_employeeZipcode"] = $employee_rowData["employeeZipcode"];
                     $_SESSION["user_employeeType"] = $employee_rowData["employeeType"];
 
+                    // CLEARING OUT OTHER SESSION VARIABLES
+                    $_SESSION["user_employeeVisitorID"] = "";
+                    $_SESSION["user_employeeVisitorPhone"] = "";
+                    $_SESSION["user_employeeVisitorAddress"] = "";
+                    $_SESSION["user_employeeVisitorCity"] = "";
+                    $_SESSION["user_employeeVisitorState"] = "";
+                    $_SESSION["user_employeeVisitorZipcode"] = "";
+                    $_SESSION["user_employeeVisitorType"] = "";
+
                     if (strpos($_SESSION["user_employeeType"], "Admin") !== false) {
                         header('Location: http://localhost/web_gui/php/administratorFunctionality.php');
                         exit();
@@ -108,6 +117,15 @@ if (isset($_POST['submit'])  && !empty($_POST['email']) && !empty($_POST['passwo
                     $_SESSION["user_employeeVisitorState"] = $employeeVisitor_rowData["employeeState"];
                     $_SESSION["user_employeeVisitorZipcode"] = $employeeVisitor_rowData["employeeZipcode"];
                     $_SESSION["user_employeeVisitorType"] = $employeeVisitor_rowData["employeeType"];
+
+                    // CLEARING OUT OTHER SESSION VARIABLES
+                    $_SESSION["user_employeeID"] = "";
+                    $_SESSION["user_employeePhone"] = "";
+                    $_SESSION["user_employeeAddress"] = "";
+                    $_SESSION["user_employeeCity"] = "";
+                    $_SESSION["user_employeeState"] = "";
+                    $_SESSION["user_employeeZipcode"] = "";
+                    $_SESSION["user_employeeType"] = "";
 
 
                     if (strpos($_SESSION["user_employeeVisitorType"], "Admin") !== false) {
