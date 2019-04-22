@@ -68,18 +68,18 @@ if (isset($_POST['createButton'])) {
 
          if($testIfSiteNameExistResult->rowCount() == 0) {
 
-            
+
 
              $result = $conn->query("SELECT username from user u where concat(firstname, ' ', lastname)='$managerInput';");
              while ($row = $result->fetch()) {
                  $username = $row['username'];
              }
-     
+
              echo '<script>console.log("got Username")</script>';
-     
+
              $result = $conn->query("INSERT into site VALUES('$nameInput', '$addressInput', '$zipInput', '$openInput', '$username')");
-             
-             
+
+
              echo '<script language="javascript">';
              echo 'alert("Successful Creation of Site!")';
              echo '</script>';
@@ -179,7 +179,7 @@ if (isset($_POST['createButton'])) {
                         id="firstNameLabel">Manager</label>
                     <select class="col-sm-6" style="margin-left: 1em;" name="managerInput">
                         <?php
-                        // $result = $conn->query("SELECT concat(firstname, ' ', lastname) AS name FROM user u 
+                        // $result = $conn->query("SELECT concat(firstname, ' ', lastname) AS name FROM user u
                         //                         INNER Join site s on
                         //                         u.username = s.managerUsername
                         //                         where managerUsername != '$managerUsername'");
@@ -188,9 +188,9 @@ if (isset($_POST['createButton'])) {
                         //     echo "<option>" . $row['name'] . "</option>";
                         // };
 
-                        $result = $conn->query("SELECT concat(firstname, ' ', lastname) AS name 
-                                                from user as u inner join employee as e on u.username = e.username 
-                                                where employeeType = 'Manager' and e.username not in (select managerUsername from site);");
+                        $result = $conn->query("SELECT concat(firstname, ' ', lastname) AS name
+                                                from user as u inner join employee as e on u.username = e.username
+                                                where employeeType = 'Manager' and e.username not in (select managerUsername from site) and status = 'Approved';");
 
                         while ($row = $result->fetch()) {
                             echo "<option>" . $row['name'] . "</option>";
