@@ -132,9 +132,16 @@ if (isset($_POST['backButton'])) {
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script> <script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script> 
+<link rel="stylesheet" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css"/>
 
-    <script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
+   <!-- choose a theme file -->
+<link rel="stylesheet" href="/path/to/theme.default.css">
+<!-- load jQuery and tablesorter scripts -->
+<script type="text/javascript" src="/path/to/jquery-latest.js"></script>
+<script type="text/javascript" src="/path/to/jquery.tablesorter.js"></script>
+
+
 
 
     <!-- <script type="text/javascript">
@@ -317,12 +324,14 @@ if (isset($_POST['backButton'])) {
 </body>
 
 <script>
-$(document).keypress(
-    function(event) {
-        if (event.which == '13') {
-            event.preventDefault();
-        }
-    });
+<script>
+
+$(function(){
+    $(function() {
+  $("#test").tablesorter();
+});
+
 </script>
+
 
 </html>
