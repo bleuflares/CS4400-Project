@@ -58,6 +58,55 @@ if (isset($_POST['backButton'])) {
     }
 }
 
+
+if (isset($_POST['dailyDetail'])){
+    echo '<script>console.log("Daily Button Pushed")</script>';
+        if (isset($_POST['optRadio'])){
+         echo '<script>console.log("Daily Button Pushed")</script>';
+         $data = explode("_", $_POST['optRadio']);
+
+         // echo '<script>console.log("Input: ' . $_POST['optRadio'] . '")</script>';
+         echo '<script>console.log("Event Name: ' . $data[0] . '")</script>';
+         echo '<script>console.log("Staff Count: ' . $data[1] . '")</script>';
+         echo '<script>console.log("Visits: ' . $data[2] . '")</script>';
+         echo '<script>console.log("Revenue ' . $data[3] . '")</script>';
+
+        //  $_SESSION['manageEvent_eventName'] = $data[0];
+        //  $_SESSION['manageEvent_eventStartDate'] = $data[1];
+        //  $route = $_POST['optRadio'];
+        //  $_SESSION["route"] = $_POST['optRadio'];
+        //  echo '<script>console.log("route name : ' . $route     . '")</script>';
+    
+        //  echo '<script>console.log("edit Session Variable Created")</script>';
+                 header('Location: http://localhost/web_gui/php/dailyDetail.php');
+                exit();
+
+         $_SESSION['eventName_dailyDetail'] = $data[0];
+         $_SESSION['siteReport_dailyDetail'] = $data[1];
+         $_SESSION['visits_dailyDetail'] = $data[2];
+         $_SESSION['Rev_dailyDetail'] = $data[3];
+    
+    
+    
+    }
+
+}
+else {
+                echo '<script language="javascript">';
+                echo 'alert("Cannot View Daily Detail if a specific site is not chosen.")';
+                echo '</script>';
+
+                echo '<script>console.log("%cCannot View/Edit Event if a specific event is not chosen.", "color:red")</script>';;
+            }
+
+
+
+
+
+
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -179,8 +228,7 @@ if (isset($_POST['backButton'])) {
             </div>
 
             <div class="col-sm-0 offset-7">
-                <input id="button" class="btn btn-sm btn-primary btn-block col-sm-" type="submit" name="button"
-                    onclick="myFunction();" value="Daily Detail" />
+            <button class="btn btn-sm btn-primary btn-block col-sm-0" style="border-radius: 5px;" name = "dailyDetail">Daily Detail</button>
             </div>
         </div>
 
@@ -291,10 +339,14 @@ if (isset($_POST['backButton'])) {
 
 
                     while ($row = $result->fetch()) {
-
+                            $value = $row['day']."_" . $row['eventName'] . "_" . $row['staffCount'] . "_" . $row['totalVisits']. "_" . $row['totalRevenue']; 
                             echo "<tr>";
-
-                            echo "<td style='text-align:center'>" . $row['day'] . "</td>";
+                            echo    "<td style='padding-left:2.4em;'>
+                            <div class='radio'>
+                            <label><input type='radio' id='express' name='optRadio' value ='$value'>" . $row['day'] . "</label>
+                            </div>
+                            </td>";
+                            
                             echo "<td style='text-align:center'>" . $row['eventCount'] . "</td>";
                             echo "<td style='text-align:center'>" . $row['staffCount'] . "</td>";
                             echo "<td style='text-align:center'>" . $row['totalVisits'] . "</td>";
@@ -305,7 +357,7 @@ if (isset($_POST['backButton'])) {
                     #default table
                  }  else {
 
-                     $result = $conn->query("SELECT dates.day, coalesce(events.eventCount, 0) as eventCount, coalesce(staff.staffCount, 0) as staffCount, coalesce(totalVisits.totalVisits, 0) as totalVisits, coalesce(totalRevenue.totalRevenue, 0) as totalRevenue from
+                     $result = $conn->query("SELECT dates.day, coalesce(events.eventCount, 0) as eventCount, coalesce(staff.staffCount, 0) as staffCount, coalesce(totalVisits.totalVisits, 0) as totalVisits, coalesce(totalRevenue.totalRevenue, 0) as totalRevenue, eventName from
                                             (select * from dates) as dates left join
                                             (select day,count(eventName) as eventCount from event left join dates on dates.day between event.startDate and event.endDate group by day order by day) as events on dates.day = events.day left join
                                             (select dates.day, event.eventName, count(staffUsername) as staffCount from assignTo left join event on assignTo.eventName = event.eventName and assignTo.startDate = event.startDate and assignTo.siteName = event.siteName left join dates on dates.day between event.startDate and event.endDate group by day order by day) as staff on dates.day = staff.day left join
@@ -314,10 +366,15 @@ if (isset($_POST['backButton'])) {
 ;");
 
                         while ($row = $result->fetch()) {
-
+                            $value =$row['day']."_" . $row['eventName'] . "_" . $row['staffCount'] . "_" . $row['totalVisits']. "_" . $row['totalRevenue']; 
                             echo "<tr>";
 
-                            echo "<td style='text-align:center'>" . $row['day'] . "</td>";
+                            echo "<td style='padding-left:2.4em;'>
+                            <div class='radio'>
+                            <label><input type='radio' id='express' name='optRadio' value ='$value'>" . $row['day'] . "</label>
+                            </div>
+                            </td>";
+                           
                             echo "<td style='text-align:center'>" . $row['eventCount'] . "</td>";
                             echo "<td style='text-align:center'>" . $row['staffCount'] . "</td>";
                             echo "<td style='text-align:center'>" . $row['totalVisits'] . "</td>";

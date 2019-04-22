@@ -3,6 +3,11 @@
 // Start the session
 session_start();
 
+$eventName =$_SESSION['eventName_dailyDetail'] = $data[0];
+$siteReport = $_SESSION['siteReport_dailyDetail'] = $data[1];
+$visits= $_SESSION['visits_dailyDetail'] = $data[2];
+$revenue = $_SESSION['Rev_dailyDetail'] = $data[3];
+
 if (!$_SESSION["logged_in"]) {
     header("Location: http://localhost/web_gui/php/userLogin.php");
     exit();
@@ -79,7 +84,7 @@ try {
             <thead>
                 <tr>
                     <th style='text-align:center'>Event Name</th>
-                    <th style='text-align:center'>Staff names</th>
+                    <th style='text-align:center'>Staff count</th>
                     <th style='text-align:center'>Visits</th>
                     <th style='text-align:center'>Revenue ($)</th>
 
@@ -87,8 +92,27 @@ try {
             </thead>
 
             <tbody>
+            <?php
 
+        $result = $conn->query("");
+
+
+                    while ($row = $result->fetch()) {
+                            
+                          
+                            
+                            echo "<td style='text-align:center'>" . $row['eventName'] . "</td>";
+                            echo "<td style='text-align:center'>" . $row['staffCount'] . "</td>";
+                            echo "<td style='text-align:center'>" . $row['Visits'] . "</td>";
+                            echo "<td style='text-align:center'>" . $row['Revenue'] . "</td>";
+                            echo "<tr>";
+                        }
+            
+            ?>
             </tbody>
+
+
+
         </table>
 
 
