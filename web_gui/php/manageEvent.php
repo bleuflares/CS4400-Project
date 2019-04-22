@@ -5,7 +5,7 @@ session_start();
 $_SESSION['manageEventFilter'] = false;
 $_SESSION['deleteButton'] = false;
 
-echo '<script>console.log("Input: ' . $_SESSION["user_employeeType"] . '")</script>';
+
 
 
 if (!$_SESSION["logged_in"]) {
@@ -149,7 +149,7 @@ if (isset($_POST['createButton'])) {
 
     $userType  = $_SESSION["userType"];
 
-    if (strpos($_SESSION["user_employeeType"], "Manager") !== false) {
+    if (strpos($_SESSION["user_employeeType"], "Manager") !== false || strpos($_SESSION["user_employeeVisitorType"], "Manager") !== false) {
         header('Location: http://localhost/web_gui/php/createEvent.php');
         exit();
     } else {

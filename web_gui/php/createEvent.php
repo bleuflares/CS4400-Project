@@ -56,13 +56,54 @@ if (isset($_POST['backButton'])) {
 
 if (isset($_POST['createButton'])) {
 
-    if (
-        isset($_POST['siteName'])  && !empty($_POST['fname']) && !empty($_POST['price'])
+
+    if (isset($_POST['siteName'])  && !empty($_POST['fname']) && !empty($_POST['price'])
         && !empty($_POST['capacity'])  && !empty($_POST['minStaffReq']) && !empty($_POST['textDescription'])
-        && isset($_POST['staffSelect']) && isset($_POST['startDate']) && isset($_POST['endDate'])
-    ) {
-        echo '<script>console.log("%cClicked the Create Button", "color:green")</script>';
+        && isset($_POST['staffSelect']) && isset($_POST['startDate']) && isset($_POST['endDate'])){
+    
+        
+        if($_POST['endDate'] < $_POST['startDate']){
+            echo '<script language="javascript">';
+                echo 'alert("Cannot create an event that ends before it starts!.")';
+                echo '</script>';
+        } else {
+
+            $siteName = $_POST['siteName'];
+            $eventName = $_POST['fname'];
+            $price = $_POST['price'];
+            $capacity = $_POST['capacity'];
+            $minStaffReq = $_POST['minStaffReq'];
+            $textDescription = $_POST['textDescription'];
+            $staffSelect = $_POST['staffSelect'];
+            $startDate = $_POST['startDate'];
+            $endDate = $_POST['endDate'];
+            
+            
+         $conn->query("insert into event VALUES('$eventName','$startDate','$siteName','$endDate',$price,$capacity,$minStaffReq,'$textDescription');");
+            foreach ($_POST['staffSelect'] as $selectedOption) {
+                $result = $conn->query("select user.username from user left join employee on user.username = employee.username
+                where concat(firstname,' ',lastname) = '$selectedOption';");
+                while ($row = $result->fetch()) {
+                    $staffUsername = $row['username'];
+                }
+                       
+                    echo '<script>console.log("LowEvent Input: ' . $selectedOption . '")</script>';
+                    $conn->query("insert into assignTo values('$staffUsername', '$eventName','$startDate','$siteName');");
+                        
+            }
+        
+            
+
+
+
+
+           
+          
+
+        }
+
     }
+}
 
     if (isset($_POST['textDescription'])) {
         echo '<script>console.log("%c Found Text:", "color:green")</script>';
@@ -77,7 +118,7 @@ if (isset($_POST['createButton'])) {
     // echo htmlspecialchars($_POST['textDescription']);
 
     // echo '<script>console.log("%cSet? : ' . $test . ' ", "color:green")</script>';
-}
+
 
 ?>
 
@@ -196,7 +237,9 @@ if (isset($_POST['createButton'])) {
                     <label>Description</label>
                 </div>
                 <div class="col-sm-4 offset-1">
-                    <textarea name="paragraph_text" cols="50" rows="8" name="textDescription"></textarea>
+                    <!-- <textarea name="paragraph_text" cols="50" rows="8" name="textDescription"></textarea>
+ -->
+                    <input type="text" class="col-sm-3 offset-0" style="padding: 0;" name="textDescription" value="">;
 
                 </div>
 
@@ -206,7 +249,7 @@ if (isset($_POST['createButton'])) {
                 <label for="exampleFormControlSelect2" style="">Assign Staff</label>
 
                 <select multiple style="display: inline; margin-left: 6em;" class="form-control col-sm-6 offset-1"
-                    id="exampleFormControlSelect2" name="staffSelect">
+                    id="exampleFormControlSelect2" name="staffSelect[]" >
                     <?php
 
                     // echo '<script>console.log("%cDate ' . $_POST['startDate'] . '", "color:green")</script>';
@@ -218,24 +261,24 @@ if (isset($_POST['createButton'])) {
                     // echo '<script>console.log("%cStopped", "color:green")</script>';
 
 
-                    $availableStaffResult = $conn->query("SELECT concat(user.firstName,' ' ,user.lastName) as Name 
+                    $availableStaffResult = $conn->query("SELECT concat(user.firstName,' ' ,user.lastName) as Name
                                                             from user inner join employee on user.Username = employee.Username where employeeType = 'Staff';");
 
                     // $startDate = date('Y-m-d', strtotime($_SESSION['manageEvent_eventStartDate']));
                     // $endDate = date('Y-m-d', strtotime($_SESSION['manageEvent_eventEndDate']));
 
-                    // $availableStaffResult = $conn->query("SELECT distinct concat(user.firstName,' ',user.lastName) as Name 
+                    // $availableStaffResult = $conn->query("SELECT distinct concat(user.firstName,' ',user.lastName) as Name
                     //                                     from employee left join user on user.username = employee.username
                     //                                     where concat(user.firstName,' ',user.lastName) not in (
-                    //                                         select distinct concat(user.firstName,' ',user.lastName) as Name 
+                    //                                         select distinct concat(user.firstName,' ',user.lastName) as Name
                     //                                         from employee left join user on user.username = employee.username
                     //                                         left join assignTo on employee.username = assignTo.staffUsername
                     //                                         left join event on event.eventName = assignTo.eventName
                     //                                         and event.startDate = assignTo.startDate
                     //                                         and event.siteName = assignTo.siteName
                     //                                         and (
-                    //                                             (event.startDate between '$startDate' and '$endDate') 
-                    //                                             or (event.endDate between '$startDate' and '$endDate') 
+                    //                                             (event.startDate between '$startDate' and '$endDate')
+                    //                                             or (event.endDate between '$startDate' and '$endDate')
                     //                                             or (event.startDate <= '$startDate' and event.endDate >= '$endDate'))
                     //                                     where event.eventName is not null)
                     //                                     and employee.employeeType = 'Staff';");
