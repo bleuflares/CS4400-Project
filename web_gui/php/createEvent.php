@@ -56,17 +56,18 @@ if (isset($_POST['backButton'])) {
 
 if (isset($_POST['createButton'])) {
 
-    if (
-        isset($_POST['siteName'])  && !empty($_POST['fname']) && !empty($_POST['price'])
+
+    if (isset($_POST['siteName'])  && !empty($_POST['fname']) && !empty($_POST['price'])
         && !empty($_POST['capacity'])  && !empty($_POST['minStaffReq']) && !empty($_POST['textDescription'])
-        && isset($_POST['staffSelect']) && isset($_POST['startDate']) && isset($_POST['endDate'])
-    ) {
-        echo '<script>console.log("%cClicked the Create Button", "color:green")</script>';
+        && isset($_POST['staffSelect']) && isset($_POST['startDate']) && isset($_POST['endDate'])){
+    
+        
         if($_POST['endDate'] < $_POST['startDate']){
             echo '<script language="javascript">';
                 echo 'alert("Cannot create an event that ends before it starts!.")';
                 echo '</script>';
         } else {
+
             $siteName = $_POST['siteName'];
             $eventName = $_POST['fname'];
             $price = $_POST['price'];
@@ -76,14 +77,33 @@ if (isset($_POST['createButton'])) {
             $staffSelect = $_POST['staffSelect'];
             $startDate = $_POST['startDate'];
             $endDate = $_POST['endDate'];
+            
+            
+         $conn->query("insert into event VALUES('$eventName','$startDate','$siteName','$endDate',$price,$capacity,$minStaffReq,'$textDescription');");
+            foreach ($_POST['staffSelect'] as $selectedOption) {
+                $result = $conn->query("select user.username from user left join employee on user.username = employee.username
+                where concat(firstname,' ',lastname) = '$selectedOption';");
+                while ($row = $result->fetch()) {
+                    $staffUsername = $row['username'];
+                }
+                       
+                    echo '<script>console.log("LowEvent Input: ' . $selectedOption . '")</script>';
+                    $conn->query("insert into assignTo values('$staffUsername', '$eventName','$startDate','$siteName');");
+                        
+            }
+        
+            
 
 
-            insert into site values(sitename,siteaddress,sitezipcode,openeveryday,managerusername)
-            insert into event(eventName,startDate,siteName,endDate,eventPrice,capacity,minstaffrequired,description)
-            insert into assignTo values(staffusername,eventname,startDate,siteName)
+
+
+           
+          
 
         }
+
     }
+}
 
     if (isset($_POST['textDescription'])) {
         echo '<script>console.log("%c Found Text:", "color:green")</script>';
@@ -98,7 +118,7 @@ if (isset($_POST['createButton'])) {
     // echo htmlspecialchars($_POST['textDescription']);
 
     // echo '<script>console.log("%cSet? : ' . $test . ' ", "color:green")</script>';
-}
+
 
 ?>
 
@@ -229,7 +249,7 @@ if (isset($_POST['createButton'])) {
                 <label for="exampleFormControlSelect2" style="">Assign Staff</label>
 
                 <select multiple style="display: inline; margin-left: 6em;" class="form-control col-sm-6 offset-1"
-                    id="exampleFormControlSelect2" name="staffSelect">
+                    id="exampleFormControlSelect2" name="staffSelect[]" >
                     <?php
 
                     // echo '<script>console.log("%cDate ' . $_POST['startDate'] . '", "color:green")</script>';
