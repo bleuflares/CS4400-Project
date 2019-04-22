@@ -127,32 +127,41 @@ if (isset($_POST['updateButton'])) {
         echo '<script>console.log("NEW User Type (from Session): ' . $_SESSION["userType"] . '")</script>';
 
 
+        foreach ($_POST['email'] as $email) {
+            if ($email !== "") {
+                $emailExist = $conn->query("SELECT * from useremail where email = '$email';");
 
-
-        // echo '<script>console.log("%cIs employee a vistor: ' . $stillVisitor . ' ", "color:green")</script>';
-
-
-        // $result = $conn->query("UPDATE user SET STATUS = 'Approved' WHERE user.username = '$selectUsername';");
-
-
-
-
-        // foreach ($_POST['email'] as $email) {
-        //     if ($email !== "") {
-        //         $result = $conn->query("INSERT into useremail VALUES('$username', '$email')");
-        //     }
-        // }
-        //     echo '<script>console.log("%cSuccessful Update", "color:green")</script>';
-        // } else {
-        //     echo '<script language="javascript">';
-        //     echo 'alert("Passwords Do Not Match. Please try registering again.")';
-        //     echo '</script>';
-        // }
+                if ($emailExist->rowCount() == 0) {
+                    $result = $conn->query("INSERT into useremail VALUES('$username', '$email')");
+                    // echo '<script>console.log("NEW User Type (from Session): ' . $email . '")</script>';
+                } else {
+                    echo '<script language="javascript">';
+                    echo 'alert("Cannot add an email that already exists and is associated with this user. Try again.")';
+                    echo '</script>';
+                }
+            }
+        }
     } else {
         echo '<script language="javascript">';
         echo 'alert("Failed to Update. There was an empty field. Please try updating again.")';
         echo '</script>';
     }
+}
+
+?>
+
+<?php
+
+if(isset($_POST["removeDBEmail"])) {
+
+    echo '<script>console.log("Deleted DB EMAIL: ' .$_POST["removeDBEmail"] . '")</script>';
+
+    $emailToBeDelete = $_POST["removeDBEmail"];
+    $username = $_SESSION["userName"];
+
+    $conn->query("DELETE from useremail where email = '$emailToBeDelete' and username = '$username';");
+
+
 }
 
 ?>
@@ -287,25 +296,33 @@ if (isset($_POST['updateButton'])) {
 
 
             <div class="form-row">
-                <div class="form-group row col-sm-12">
+                <div class="form-group row col-sm-12 emailContainer" id="emailContainer">
                     <label for="inputEmail" class="label .col-form-label col-sm-2" id="emailLabel">Email</label>
 
                     <?php
                     $currEmail = $emailsResults->fetch();
 
+                    $currentEmail = $currEmail['email'];
+
+                    
+
                     echo '<div class="col-sm-8">';
                     echo '<span class="col-sm-8">' . $currEmail['email'] . '</span>';
                     echo '</div>';
-                    echo '<button type="submit" class="btn btn-outline-dark">Remove</button>';
+                    echo '<button type="submit" class="btn btn-outline-dark" name="removeDBEmail" value="'.$currentEmail.'">Remove</button>';
                     while ($currEmail = $emailsResults->fetch()) {
+                        $currentEmail = $currEmail['email'];
+
                         echo '<div class="col-sm-10">';
                         echo '<span class="col-sm-8" style="margin-left: 6.5em;">' . $currEmail['email'] . '</span>';
                         echo '</div>';
-                        echo '<button type="submit" class="btn btn-outline-dark">Remove</button>';
+                        echo '<button type="submit" class="btn btn-outline-dark" name="removeDBEmail" value="'.$currentEmail.'" >Remove</button>';
                     }
                     ?>
 
                 </div>
+
+                <button type="button" class="btn btn-outline-dark" onclick="addField()" name="addEmail">Add Email</button>
 
             </div>
 
@@ -340,6 +357,58 @@ if (isset($_POST['updateButton'])) {
         </div>
 
     </form>
+
+    <script type='text/javascript'>
+    var i;
+
+    function addField() {
+        // Container <div> where dynamic content will be placed
+        var container = document.getElementById("emailContainer");
+
+        if (i == null) {
+            i = 0;
+        } else {
+            i++;
+        }
+
+        // Create an <input> element, set its type and name attributes
+        var input = document.createElement("input");
+        input.type = "text";
+        input.name = "email[]";
+        input.id = "email" + i;
+        input.pattern = "[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]{1,}$";
+        input.className = "form-control removableEmail";
+        input.style = "margin-left: 8em; width:25em;"
+
+        container.appendChild(input);
+
+        var button = document.createElement("button");
+        button.innerHTML = "Remove";
+        button.value = "email" + i;
+        button.type = "button";
+        button.onclick = function() {
+            console.log(this.value);
+
+            var totalEmailInputsLeft = document.querySelectorAll(".removableEmail").length;
+
+            if (totalEmailInputsLeft > 1) {
+                var removeID = this.value;
+                document.getElementById(removeID).nextSibling.nextSibling.remove();
+                document.getElementById(removeID).nextSibling.remove();
+                document.getElementById(removeID).remove();
+            }
+        };
+
+        container.appendChild(button);
+
+        // Append a line break 
+        container.appendChild(document.createElement("br"));
+    }
+
+    window.onload = function() {
+        addField();
+    };
+    </script>
 
 </body>
 
