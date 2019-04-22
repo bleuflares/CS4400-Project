@@ -53,7 +53,7 @@ try {
 
             <div class="row">
                 <div class="col-md-12">
-                    <a class="btn btn-lg btn-primary btn-block" type="visitorOnly" href="./viewSchedule.php">View
+                    <a class="btn btn-lg btn-primary btn-block" type="visitorOnly" href="./staffViewSchedule.php">View
                         Schedule</a>
                 </div>
             </div>

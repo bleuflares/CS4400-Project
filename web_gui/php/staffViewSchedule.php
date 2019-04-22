@@ -24,14 +24,13 @@ try {
 }
 
 
-if (isset($_POST['filterButton'])){
+if (isset($_POST['filterButton'])) {
     echo '<script>console.log("%cSuccessful Filter Button Push", "color:blue")</script>';
     $_SESSION['staffViewScheduleFilter'] = true;
     echo '<script>console.log("%c View Schedule Filter Session variable set", "color:blue")</script>';
-
 }
 
-if (isset($_POST['viewEventButton'])){
+if (isset($_POST['viewEventButton'])) {
     echo '<script>console.log("%c View Event Button variable set", "color:blue")</script>';
     if (isset($_POST['optRadio'])) {
         $data = explode("_", $_POST['optRadio']);
@@ -47,32 +46,57 @@ if (isset($_POST['viewEventButton'])){
         echo '<script>console.log("description: ' . $data[8] . '")</script>';
 
 
-        $_SESSION["toEventDetail2eventName"]= $data[0];
-        $_SESSION["toEventDetail2siteName"]= $data[1];
-        $_SESSION["toEventDetail2startDate"]= $data[2];
-        $_SESSION["toEventDetail2endDate"]= $data[3];
-        $_SESSION["toEventDetail2staffCount"]= $data[4];
-        $_SESSION["toEventDetail2duration"]= $data[5];
-        $_SESSION["toEventDetail2capacity"]= $data[6];
-        $_SESSION["toEventDetail2EventPrice"]= $data[7];
-        $_SESSION["toEventDetail2EventDescription"]= $data[8];
+        $_SESSION["toEventDetail2eventName"] = $data[0];
+        $_SESSION["toEventDetail2siteName"] = $data[1];
+        $_SESSION["toEventDetail2startDate"] = $data[2];
+        $_SESSION["toEventDetail2endDate"] = $data[3];
+        $_SESSION["toEventDetail2staffCount"] = $data[4];
+        $_SESSION["toEventDetail2duration"] = $data[5];
+        $_SESSION["toEventDetail2capacity"] = $data[6];
+        $_SESSION["toEventDetail2EventPrice"] = $data[7];
+        $_SESSION["toEventDetail2EventDescription"] = $data[8];
 
         header('Location: http://localhost/web_gui/php/staffEventDetail.php');
-             exit();
-    
-
-} else{
-    echo '<script>console.log("%cINVALID username/password", "color:red")</script>';
+        exit();
+    } else {
+        echo '<script>console.log("%cINVALID username/password", "color:red")</script>';
         echo '<script language="javascript">';
         echo 'alert("Must choose an  Event to view Event Details")';
         echo '</script>';
+    }
 }
 
 
+
+
+?>
+
+<?php
+
+if (isset($_POST['backButton'])) {
+
+    $userType  = $_SESSION["userType"];
+
+    if (strpos($userType, "Employee") !== false && strpos($userType, "Visitor") === false) {
+        echo '<script>console.log("%cUser is EMPLOYEE", "color:blue")</script>';
+
+        if (strpos($_SESSION["user_employeeType"], "Staff") !== false) {
+            header('Location: http://localhost/web_gui/php/staffFunctionality.php');
+            exit();
+        } else {
+            echo '<script>console.log("%cUser is EMPLOYEE, BUT they are NOT a Admin, Manager, or Staff", "color:red")</script>';
+        }
+    } else if (strpos($userType, "Employee") !== false && strpos($userType, "Visitor") !== false) {
+        echo '<script>console.log("%cUser is BOTH an EMPLOYEE and VISITOR", "color:blue")</script>';
+
+        if (strpos($_SESSION["user_employeeVisitorType"], "Staff") !== false) {
+            header('Location: http://localhost/web_gui/php/staffVisitorFunctionality.php');
+            exit();
+        } else {
+            echo '<script>console.log("%cUser is EMPLOYEE and VISITOR, BUT they are NOT a Admin, Manager, or Staff", "color:red")</script>';
+        }
+    }
 }
-
-
-
 
 ?>
 
@@ -106,7 +130,7 @@ if (isset($_POST['viewEventButton'])){
 </head>
 
 <body>
-    <form class="form-signin" method = "post">
+    <form class="form-signin" method="post">
         <h1 class="h3 mb-3 font-weight-heavy" id="titleOfForm">View Schedule</h1>
 
 
@@ -116,7 +140,7 @@ if (isset($_POST['viewEventButton'])){
                     <label>Event Name</label>
                 </div>
                 <div class="col-sm-3 offset-0">
-                    <input type="text" class="form-control col-sm-0 offset-0" id="inputAdress" name = "eventName">
+                    <input type="text" class="form-control col-sm-0 offset-0" id="inputAdress" name="eventName">
 
                 </div>
 
@@ -125,7 +149,7 @@ if (isset($_POST['viewEventButton'])){
                     <label>Description Keyword</label>
                 </div>
                 <div class="col-sm-2 offset-0">
-                    <input type="text" class="form-control col-sm-0 offset-0" id="inputAdress" name = "descKeyword">
+                    <input type="text" class="form-control col-sm-0 offset-0" id="inputAdress" name="descKeyword">
 
                 </div>
             </div>
@@ -135,7 +159,7 @@ if (isset($_POST['viewEventButton'])){
                     <label>Start Date</label>
                 </div>
                 <div class="col-sm-4 offset-0">
-                    <input type="Date" class="form-control col-sm-0 offset-0" id="inputAdress" name = "startDate">
+                    <input type="Date" class="form-control col-sm-0 offset-0" id="inputAdress" name="startDate">
 
                 </div>
 
@@ -144,7 +168,7 @@ if (isset($_POST['viewEventButton'])){
                     <label>End Date</label>
                 </div>
                 <div class="col-sm-4 offset-0">
-                    <input type="Date" class="form-control col-sm-0 offset-0" id="inputAdress" name = "endDate">
+                    <input type="Date" class="form-control col-sm-0 offset-0" id="inputAdress" name="endDate">
 
                 </div>
             </div>
@@ -152,12 +176,12 @@ if (isset($_POST['viewEventButton'])){
             <div class="row col-sm-12">
 
                 <div class="col-sm-0 offset-2">
-                    <button class="btn btn-sm btn-primary btn-block col-sm-0"
-                        style="border-radius: 5px;" name="filterButton">Filter</button>
+                    <button class="btn btn-sm btn-primary btn-block col-sm-0" style="border-radius: 5px;"
+                        name="filterButton">Filter</button>
                 </div>
                 <div class="col-sm-0 offset-2">
-                    <button class="btn btn-sm btn-primary btn-block col-sm-0"
-                        style="border-radius: 5px;" name="viewEventButton">View Event </button>
+                    <button class="btn btn-sm btn-primary btn-block col-sm-0" style="border-radius: 5px;"
+                        name="viewEventButton">View Event </button>
                 </div>
             </div>
 
@@ -179,32 +203,32 @@ if (isset($_POST['viewEventButton'])){
             </thead>
 
             <tbody>
-            <?php
-            if (($_SESSION['staffViewScheduleFilter']) == TRUE) {
-                     echo '<script>console.log("hi", "color:blue")</script>';
+                <?php
+                if (($_SESSION['staffViewScheduleFilter']) == TRUE) {
+                    echo '<script>console.log("hi", "color:blue")</script>';
 
-                if (empty($_POST['eventName'])){
+                    if (empty($_POST['eventName'])) {
                         $eventName = "%%";
                     } else {
                         $eventName = $_POST['eventName'];
                     }
-                if (empty($_POST['descKeyword'])) {
+                    if (empty($_POST['descKeyword'])) {
                         $descKey = "%%";
                     } else {
                         $descKey = '%' . $_POST['descKeyword'] . '%';
                     }
-                if (empty($_POST['startDate'])) {
+                    if (empty($_POST['startDate'])) {
                         $startDate = "0000-00-00";
                     } else {
                         $startDate = $_POST['startDate'];
                     }
 
-                if (empty($_POST['endDate'])) {
+                    if (empty($_POST['endDate'])) {
                         $endDate = "9999-12-31";
                     } else {
                         $endDate = $_POST['endDate'];
                     }
-                $result = $conn->query("SELECT event.eventName,
+                    $result = $conn->query("SELECT event.eventName,
                                         event.siteName,
                                         event.startDate,
                                         event.endDate,
@@ -236,9 +260,9 @@ if (isset($_POST['viewEventButton'])){
                         echo "<td style='text-align:center'> " . $row['startDate'] . "</td>";
                         echo "<td style='text-align:center'> " . $row['endDate'] . "</td>";
                     }
-            } else {
+                } else {
                     echo '<script>console.log("hello", "color:blue")</script>';
-                $result = $conn->query("SELECT event.eventName,
+                    $result = $conn->query("SELECT event.eventName,
                                                 event.siteName,
                                                 event.startDate,
                                                 event.endDate,
@@ -265,15 +289,16 @@ if (isset($_POST['viewEventButton'])){
                         echo "<td style='text-align:center'>" . $row['siteName'] . "</td>";
                         echo "<td style='text-align:center'> " . $row['startDate'] . "</td>";
                         echo "<td style='text-align:center'> " . $row['endDate'] . "</td>";
-            }
-        }
+                    }
+                }
 
-            ?>
+                ?>
             </tbody>
         </table>
         <div class="container">
             <div class="col-sm-2 offset-5">
-                <button class="btn btn-sm btn-primary btn-block col-sm-0" style="border-radius: 5px;">Back</button>
+                <button class="btn btn-sm btn-primary btn-block col-sm-0" style="border-radius: 5px;"
+                    name="backButton">Back</button>
             </div>
         </div>
 
