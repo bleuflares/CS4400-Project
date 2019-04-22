@@ -59,11 +59,11 @@ if (isset($_POST['createButton'])) {
 
     if (isset($_POST['siteName'])  && !empty($_POST['fname']) && !empty($_POST['price'])
         && !empty($_POST['capacity'])  && !empty($_POST['minStaffReq']) && !empty($_POST['textDescription'])
-        && isset($_POST['staffSelect']) && isset($_POST['startDate']) && isset($_POST['endDate'])){
-    
-        
+        && !empty($_POST['scandir(directory)taffSelect']) && isset($_POST['startDate']) && isset($_POST['endDate'])){
+
+
         if($_POST['endDate'] < $_POST['startDate']){
-            echo '<script language="javascript">';
+                echo '<script language="javascript">';
                 echo 'alert("Cannot create an event that ends before it starts!.")';
                 echo '</script>';
         } else {
@@ -77,8 +77,8 @@ if (isset($_POST['createButton'])) {
             $staffSelect = $_POST['staffSelect'];
             $startDate = $_POST['startDate'];
             $endDate = $_POST['endDate'];
-            
-            
+
+
          $conn->query("insert into event VALUES('$eventName','$startDate','$siteName','$endDate',$price,$capacity,$minStaffReq,'$textDescription');");
             foreach ($_POST['staffSelect'] as $selectedOption) {
                 $result = $conn->query("select user.username from user left join employee on user.username = employee.username
@@ -86,22 +86,17 @@ if (isset($_POST['createButton'])) {
                 while ($row = $result->fetch()) {
                     $staffUsername = $row['username'];
                 }
-                       
+
                     echo '<script>console.log("LowEvent Input: ' . $selectedOption . '")</script>';
                     $conn->query("insert into assignTo values('$staffUsername', '$eventName','$startDate','$siteName');");
-                        
+
             }
-        
-            
-
-
-
-
-           
-          
-
         }
 
+    } else {
+            echo '<script language="javascript">';
+            echo 'alert("There were one or more blank fields. Please try again.")';
+            echo '</script>';
     }
 }
 
