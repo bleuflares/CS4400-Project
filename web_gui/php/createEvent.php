@@ -62,6 +62,27 @@ if (isset($_POST['createButton'])) {
         && isset($_POST['staffSelect']) && isset($_POST['startDate']) && isset($_POST['endDate'])
     ) {
         echo '<script>console.log("%cClicked the Create Button", "color:green")</script>';
+        if($_POST['endDate'] < $_POST['startDate']){
+            echo '<script language="javascript">';
+                echo 'alert("Cannot create an event that ends before it starts!.")';
+                echo '</script>';
+        } else {
+            $siteName = $_POST['siteName'];
+            $eventName = $_POST['fname'];
+            $price = $_POST['price'];
+            $capacity = $_POST['capacity'];
+            $minStaffReq = $_POST['minStaffReq'];
+            $textDescription = $_POST['textDescription'];
+            $staffSelect = $_POST['staffSelect'];
+            $startDate = $_POST['startDate'];
+            $endDate = $_POST['endDate'];
+
+
+            insert into site values(sitename,siteaddress,sitezipcode,openeveryday,managerusername)
+            insert into event(eventName,startDate,siteName,endDate,eventPrice,capacity,minstaffrequired,description)
+            insert into assignTo values(staffusername,eventname,startDate,siteName)
+
+        }
     }
 
     if (isset($_POST['textDescription'])) {
@@ -196,7 +217,9 @@ if (isset($_POST['createButton'])) {
                     <label>Description</label>
                 </div>
                 <div class="col-sm-4 offset-1">
-                    <textarea name="paragraph_text" cols="50" rows="8" name="textDescription"></textarea>
+                    <!-- <textarea name="paragraph_text" cols="50" rows="8" name="textDescription"></textarea>
+ -->
+                    <input type="text" class="col-sm-3 offset-0" style="padding: 0;" name="textDescription" value="">;
 
                 </div>
 
@@ -218,24 +241,24 @@ if (isset($_POST['createButton'])) {
                     // echo '<script>console.log("%cStopped", "color:green")</script>';
 
 
-                    $availableStaffResult = $conn->query("SELECT concat(user.firstName,' ' ,user.lastName) as Name 
+                    $availableStaffResult = $conn->query("SELECT concat(user.firstName,' ' ,user.lastName) as Name
                                                             from user inner join employee on user.Username = employee.Username where employeeType = 'Staff';");
 
                     // $startDate = date('Y-m-d', strtotime($_SESSION['manageEvent_eventStartDate']));
                     // $endDate = date('Y-m-d', strtotime($_SESSION['manageEvent_eventEndDate']));
 
-                    // $availableStaffResult = $conn->query("SELECT distinct concat(user.firstName,' ',user.lastName) as Name 
+                    // $availableStaffResult = $conn->query("SELECT distinct concat(user.firstName,' ',user.lastName) as Name
                     //                                     from employee left join user on user.username = employee.username
                     //                                     where concat(user.firstName,' ',user.lastName) not in (
-                    //                                         select distinct concat(user.firstName,' ',user.lastName) as Name 
+                    //                                         select distinct concat(user.firstName,' ',user.lastName) as Name
                     //                                         from employee left join user on user.username = employee.username
                     //                                         left join assignTo on employee.username = assignTo.staffUsername
                     //                                         left join event on event.eventName = assignTo.eventName
                     //                                         and event.startDate = assignTo.startDate
                     //                                         and event.siteName = assignTo.siteName
                     //                                         and (
-                    //                                             (event.startDate between '$startDate' and '$endDate') 
-                    //                                             or (event.endDate between '$startDate' and '$endDate') 
+                    //                                             (event.startDate between '$startDate' and '$endDate')
+                    //                                             or (event.endDate between '$startDate' and '$endDate')
                     //                                             or (event.startDate <= '$startDate' and event.endDate >= '$endDate'))
                     //                                     where event.eventName is not null)
                     //                                     and employee.employeeType = 'Staff';");
