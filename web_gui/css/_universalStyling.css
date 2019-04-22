@@ -1,6 +1,7 @@
 html,
 body {
     height: 100%;
+    
 }
 
 body {
@@ -10,15 +11,16 @@ body {
     align-items: center;
     padding-top: 40px;
     padding-bottom: 40px;
-    background-color: #f5f5f5;
+    background-image: url("http://alt.coxnewsweb.com/ajc/_digital_producers/shanepages/0830BLcover27.JPG") !important;
 }
 
 .form-signin {
+    background-color: white;
     width: 100%;
     max-width: 700px;
     padding: 15px;
     margin: auto;
-    border: 3px #4472c4 solid;
+    border: 10px #4472c4 solid;
 }
 
 .row {

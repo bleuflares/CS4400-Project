@@ -100,6 +100,8 @@ if (isset($_POST['createButton'])) {
 
     <script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
 
+    <link rel="stylesheet" href="..\css\_universalStyling.css">
+
 
     <!-- <script type="text/javascript">
 
